@@ -816,7 +816,7 @@ const AdminPage = () => {
               <div>
                 <h2 className="font-serif text-2xl">Images du site</h2>
                 <p className="text-gray-500 text-sm mt-1">
-                  Modifiez les images principales affichées sur votre site
+                  Modifiez les images de chaque page de votre site
                 </p>
               </div>
               <Button
@@ -830,86 +830,112 @@ const AdminPage = () => {
               </Button>
             </div>
 
+            {/* Page Navigation */}
+            <div className="flex gap-2 flex-wrap border-b border-gray-200 pb-4">
+              {Object.entries(SITE_IMAGE_PAGES).map(([pageKey, pageConfig]) => (
+                <Button
+                  key={pageKey}
+                  variant={activeImagePage === pageKey ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setActiveImagePage(pageKey)}
+                  className={activeImagePage === pageKey ? 'bg-[#2e2e2e] text-white' : ''}
+                  data-testid={`image-page-tab-${pageKey}`}
+                >
+                  {pageConfig.label}
+                </Button>
+              ))}
+            </div>
+
             {loadingImages ? (
               <div className="text-center py-12 text-gray-500">Chargement...</div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(SITE_IMAGE_KEYS).map(([key, config]) => (
-                  <div
-                    key={key}
-                    className="bg-white border border-gray-100 p-6 space-y-4"
-                    data-testid={`site-image-${key}`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <Label className="font-medium">{config.label}</Label>
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">{config.page}</span>
-                      </div>
-                      <p className="text-xs text-gray-500">{config.description}</p>
-                    </div>
-                    
-                    {/* Drag & Drop Zone + Image Preview */}
+              <div className="space-y-6">
+                <div className="bg-gray-50 px-4 py-3 rounded-lg">
+                  <h3 className="font-medium text-lg">
+                    Page: {SITE_IMAGE_PAGES[activeImagePage]?.label}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {Object.keys(SITE_IMAGE_PAGES[activeImagePage]?.images || {}).length} image(s) configurables
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.entries(SITE_IMAGE_PAGES[activeImagePage]?.images || {}).map(([key, config]) => (
                     <div
-                      className={`aspect-video bg-gray-100 overflow-hidden relative border-2 border-dashed transition-colors cursor-pointer ${
-                        dragOverKey === key
-                          ? 'border-[#2e2e2e] bg-gray-200'
-                          : 'border-transparent hover:border-gray-300'
-                      }`}
-                      onDragOver={(e) => handleDragOver(e, key)}
-                      onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, key)}
-                      onClick={() => document.getElementById(`file-input-${key}`)?.click()}
+                      key={key}
+                      className="bg-white border border-gray-100 p-6 space-y-4"
+                      data-testid={`site-image-${key}`}
                     >
-                      {uploadingKey === key ? (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
-                          <Loader2 className="w-8 h-8 animate-spin mb-2" />
-                          <span className="text-sm">Téléchargement...</span>
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <Label className="font-medium">{config.label}</Label>
                         </div>
-                      ) : siteImages[key] ? (
-                        <>
-                          <img
-                            src={siteImages[key]}
-                            alt={config.label}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
-                              e.target.className = 'hidden';
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
-                            <div className="text-white text-center">
-                              <Upload className="w-6 h-6 mx-auto mb-1" />
-                              <span className="text-sm">Glissez une image ou cliquez</span>
-                            </div>
+                        <p className="text-xs text-gray-500">{config.description}</p>
+                      </div>
+                      
+                      {/* Drag & Drop Zone + Image Preview */}
+                      <div
+                        className={`aspect-video bg-gray-100 overflow-hidden relative border-2 border-dashed transition-colors cursor-pointer ${
+                          dragOverKey === key
+                            ? 'border-[#2e2e2e] bg-gray-200'
+                            : 'border-transparent hover:border-gray-300'
+                        }`}
+                        onDragOver={(e) => handleDragOver(e, key)}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, key)}
+                        onClick={() => document.getElementById(`file-input-${key}`)?.click()}
+                      >
+                        {uploadingKey === key ? (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+                            <Loader2 className="w-8 h-8 animate-spin mb-2" />
+                            <span className="text-sm">Téléchargement...</span>
                           </div>
-                        </>
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                          <Upload className="w-8 h-8 mb-2" />
-                          <span className="text-sm">Glissez une image ici</span>
-                          <span className="text-xs">ou cliquez pour parcourir</span>
-                        </div>
-                      )}
-                      <input
-                        id={`file-input-${key}`}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        className="hidden"
-                        onChange={(e) => handleFileInputChange(e, key)}
-                      />
+                        ) : siteImages[key] ? (
+                          <>
+                            <img
+                              src={siteImages[key]}
+                              alt={config.label}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
+                                e.target.className = 'hidden';
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                              <div className="text-white text-center">
+                                <Upload className="w-6 h-6 mx-auto mb-1" />
+                                <span className="text-sm">Glissez une image ou cliquez</span>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
+                            <Upload className="w-8 h-8 mb-2" />
+                            <span className="text-sm">Glissez une image ici</span>
+                            <span className="text-xs">ou cliquez pour parcourir</span>
+                          </div>
+                        )}
+                        <input
+                          id={`file-input-${key}`}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          className="hidden"
+                          onChange={(e) => handleFileInputChange(e, key)}
+                        />
+                      </div>
+                      
+                      {/* URL Input */}
+                      <div className="flex gap-2">
+                        <Input
+                          value={siteImages[key] || ''}
+                          onChange={(e) => handleSiteImageChange(key, e.target.value)}
+                          placeholder="https://example.com/image.jpg ou glissez une image"
+                          className="text-sm flex-1"
+                        />
+                      </div>
                     </div>
-                    
-                    {/* URL Input */}
-                    <div className="flex gap-2">
-                      <Input
-                        value={siteImages[key] || ''}
-                        onChange={(e) => handleSiteImageChange(key, e.target.value)}
-                        placeholder="https://example.com/image.jpg ou glissez une image"
-                        className="text-sm flex-1"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
