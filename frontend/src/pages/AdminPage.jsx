@@ -14,6 +14,9 @@ import {
   Lock,
   LogOut,
   Link as LinkIcon,
+  LayoutDashboard,
+  ImageIcon,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
