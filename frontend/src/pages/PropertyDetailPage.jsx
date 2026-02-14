@@ -70,6 +70,15 @@ const PropertyDetailPage = () => {
     specialRequests: '',
   });
   const [submitting, setSubmitting] = useState(false);
+  
+  // Contact form for showcase properties
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+  const [submittingContact, setSubmittingContact] = useState(false);
 
   useEffect(() => {
     const loadProperty = async () => {
