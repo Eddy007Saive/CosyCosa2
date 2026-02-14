@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Check, Download, Phone, Clock, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSiteImages } from '@/lib/api';
+import { ServicesSEO } from '@/components/SEO';
 
 const DEFAULT_IMAGES = {
   services_hero: "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=1920&q=80",
@@ -11,7 +12,7 @@ const DEFAULT_IMAGES = {
 };
 
 const ServicesPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
 
   useEffect(() => {
