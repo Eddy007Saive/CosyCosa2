@@ -33,7 +33,7 @@ import {
 import { toast } from 'sonner';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { getProperty, getPriceQuote, createBooking } from '@/lib/api';
+import { getProperty, getPriceQuote, createBooking, submitContact } from '@/lib/api';
 
 const locales = { fr, en: enUS, es, it };
 
