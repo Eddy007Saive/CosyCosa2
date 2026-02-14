@@ -301,7 +301,7 @@ const HomePage = () => {
             {/* Image */}
             <div className="relative aspect-[4/5] overflow-hidden">
               <img
-                src={siteImages.concept_interior}
+                src={siteImages.home_concept}
                 alt="Intérieur luxueux"
                 className="w-full h-full object-cover"
               />
