@@ -11,19 +11,42 @@ import {
 } from '@/components/ui/popover';
 import { format, addDays } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { getCategories } from '@/lib/api';
+import { getCategories, getSiteImages } from '@/lib/api';
 
 const locales = { fr, en: enUS, es, it };
+
+// Default images as fallback
+const DEFAULT_IMAGES = {
+  hero_home: "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
+  category_vue_mer: "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
+  category_plage_a_pieds: "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
+  category_pieds_dans_eau: "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
+  concept_interior: "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
+  cta_background: "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+};
 
 const HomePage = () => {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState([]);
+  const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(2);
   const locale = locales[i18n.language] || fr;
 
   useEffect(() => {
+    // Load site images
+    const loadSiteImages = async () => {
+      try {
+        const data = await getSiteImages();
+        if (data?.images) {
+          setSiteImages({ ...DEFAULT_IMAGES, ...data.images });
+        }
+      } catch (error) {
+        console.error('Failed to load site images:', error);
+      }
+    };
+    
     const loadCategories = async () => {
       try {
         const data = await getCategories();
@@ -36,12 +59,14 @@ const HomePage = () => {
         console.error('Failed to load categories:', error);
         // Use default categories
         setCategories([
-          { id: 'vue_mer', name: 'Vue Mer', image: 'https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800' },
-          { id: 'plage_a_pieds', name: 'Plage à Pieds', image: 'https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800' },
-          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau", image: 'https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800' },
+          { id: 'vue_mer', name: 'Vue Mer', image: DEFAULT_IMAGES.category_vue_mer },
+          { id: 'plage_a_pieds', name: 'Plage à Pieds', image: DEFAULT_IMAGES.category_plage_a_pieds },
+          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau", image: DEFAULT_IMAGES.category_pieds_dans_eau },
         ]);
       }
     };
+    
+    loadSiteImages();
     loadCategories();
   }, []);
 
