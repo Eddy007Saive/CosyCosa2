@@ -88,7 +88,7 @@ const HomePage = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80"
+            src={siteImages.hero_home}
             alt="Villa de luxe en Corse"
             className="w-full h-full object-cover"
           />
