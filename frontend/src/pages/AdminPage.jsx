@@ -51,12 +51,9 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { getProperties, getSiteImages, updateSiteImages, uploadImage, getAdminProperties, getSyncStatus, triggerSync } from '@/lib/api';
+import { getProperties, getSiteImages, updateSiteImages, uploadImage, getAdminProperties, getSyncStatus, triggerSync, adminLogin } from '@/lib/api';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
-
-// Simple password protection - change this password!
-const ADMIN_PASSWORD = 'orso2024';
 
 // Site image configuration - organized by page
 const SITE_IMAGE_PAGES = {
