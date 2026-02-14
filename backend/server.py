@@ -46,6 +46,65 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ============== SITE SETTINGS ==============
+
+class SiteSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "site_settings"
+    images: Dict[str, str] = {}
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Default site images
+DEFAULT_SITE_IMAGES = {
+    "hero_home": "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
+    "category_vue_mer": "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
+    "category_plage_a_pieds": "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
+    "category_pieds_dans_eau": "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
+    "concept_interior": "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
+    "services_lifestyle": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80",
+    "cta_background": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+}
+
+@api_router.get("/settings/images")
+async def get_site_images():
+    """Get all site images"""
+    settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
+    if settings and settings.get("images"):
+        # Merge with defaults (in case new image keys are added)
+        images = {**DEFAULT_SITE_IMAGES, **settings["images"]}
+        return {"images": images}
+    return {"images": DEFAULT_SITE_IMAGES}
+
+@api_router.put("/settings/images")
+async def update_site_images(images: Dict[str, str]):
+    """Update site images"""
+    await db.site_settings.update_one(
+        {"id": "site_settings"},
+        {
+            "$set": {
+                "images": images,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    return {"success": True, "message": "Images updated"}
+
+@api_router.put("/settings/images/{image_key}")
+async def update_single_image(image_key: str, url: str):
+    """Update a single site image"""
+    await db.site_settings.update_one(
+        {"id": "site_settings"},
+        {
+            "$set": {
+                f"images.{image_key}": url,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    return {"success": True, "message": f"Image {image_key} updated"}
+
 # ============== MODELS ==============
 
 class PropertyCategory(BaseModel):
