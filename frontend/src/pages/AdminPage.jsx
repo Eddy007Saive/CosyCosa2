@@ -171,6 +171,36 @@ const AdminPage = () => {
     }
   };
 
+  const loadSiteImages = async () => {
+    setLoadingImages(true);
+    try {
+      const data = await getSiteImages();
+      setSiteImages(data.images || {});
+    } catch (error) {
+      console.error('Failed to load site images:', error);
+      toast.error('Erreur de chargement des images');
+    } finally {
+      setLoadingImages(false);
+    }
+  };
+
+  const handleSiteImageChange = (key, value) => {
+    setSiteImages(prev => ({ ...prev, [key]: value }));
+  };
+
+  const saveSiteImages = async () => {
+    setSavingImages(true);
+    try {
+      await updateSiteImages(siteImages);
+      toast.success('Images du site enregistrées');
+    } catch (error) {
+      console.error('Failed to save site images:', error);
+      toast.error('Erreur lors de la sauvegarde');
+    } finally {
+      setSavingImages(false);
+    }
+  };
+
   const syncBeds24 = async () => {
     setSyncing(true);
     try {
