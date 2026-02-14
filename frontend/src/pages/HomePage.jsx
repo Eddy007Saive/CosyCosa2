@@ -275,7 +275,7 @@ const HomePage = () => {
                 data-testid={`category-card-${category.id}`}
               >
                 <img
-                  src={siteImages[`category_${category.id}`] || category.image}
+                  src={siteImages[`home_category_${category.id}`] || category.image}
                   alt={category.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
