@@ -275,7 +275,7 @@ const HomePage = () => {
                 data-testid={`category-card-${category.id}`}
               >
                 <img
-                  src={category.image}
+                  src={siteImages[`category_${category.id}`] || category.image}
                   alt={category.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -301,7 +301,7 @@ const HomePage = () => {
             {/* Image */}
             <div className="relative aspect-[4/5] overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80"
+                src={siteImages.concept_interior}
                 alt="Intérieur luxueux"
                 className="w-full h-full object-cover"
               />
