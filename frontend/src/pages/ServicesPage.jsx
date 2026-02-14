@@ -54,6 +54,9 @@ const ServicesPage = () => {
 
   return (
     <div className="pt-24 md:pt-32" data-testid="services-page">
+      {/* SEO */}
+      <ServicesSEO lang={i18n.language} />
+      
       {/* Hero Section */}
       <section className="orso-container py-12 md:py-20">
         <div className="max-w-3xl">
