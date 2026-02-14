@@ -10,17 +10,17 @@ const SEO_CONFIG = {
 };
 
 const SEO = ({
-  title,
-  description,
-  image,
-  url,
+  title = '',
+  description = '',
+  image = '',
+  url = '',
   type = 'website',
-  keywords,
+  keywords = null,
   noIndex = false,
-  structuredData,
+  structuredData = null,
   lang = 'fr',
 }) => {
-  const fullTitle = title 
+  const fullTitle = title && title.length > 0
     ? `${title} | ${SEO_CONFIG.siteName}` 
     : `${SEO_CONFIG.siteName} | Conciergerie de Luxe & Locations d'Exception en Corse du Sud`;
   
@@ -43,7 +43,7 @@ const SEO = ({
     'villa piscine corse',
   ];
   
-  const metaKeywords = keywords 
+  const metaKeywords = keywords && keywords.length > 0
     ? [...keywords, ...defaultKeywords].join(', ')
     : defaultKeywords.join(', ');
 
