@@ -502,31 +502,66 @@ const AdminPage = () => {
         </div>
       </header>
 
+      {/* Tab Navigation */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <nav className="flex gap-8">
+            <button
+              onClick={() => setActiveTab('properties')}
+              className={`py-4 text-sm uppercase tracking-widest border-b-2 transition-colors ${
+                activeTab === 'properties'
+                  ? 'border-[#2e2e2e] text-[#2e2e2e]'
+                  : 'border-transparent text-gray-400 hover:text-gray-600'
+              }`}
+              data-testid="tab-properties"
+            >
+              <LayoutDashboard className="w-4 h-4 inline mr-2" />
+              Propriétés
+            </button>
+            <button
+              onClick={() => setActiveTab('site-images')}
+              className={`py-4 text-sm uppercase tracking-widest border-b-2 transition-colors ${
+                activeTab === 'site-images'
+                  ? 'border-[#2e2e2e] text-[#2e2e2e]'
+                  : 'border-transparent text-gray-400 hover:text-gray-600'
+              }`}
+              data-testid="tab-site-images"
+            >
+              <ImageIcon className="w-4 h-4 inline mr-2" />
+              Images du site
+            </button>
+          </nav>
+        </div>
+      </div>
+
       {/* Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 border border-gray-100">
-            <p className="text-3xl font-serif">{properties.length}</p>
-            <p className="text-xs uppercase tracking-widest text-gray-500">Total propriétés</p>
-          </div>
-          <div className="bg-white p-6 border border-gray-100">
-            <p className="text-3xl font-serif">{properties.filter(p => p.beds24_id).length}</p>
-            <p className="text-xs uppercase tracking-widest text-gray-500">Connectées Beds24</p>
-          </div>
-          <div className="bg-white p-6 border border-gray-100">
-            <p className="text-3xl font-serif">{properties.filter(p => p.is_active).length}</p>
-            <p className="text-xs uppercase tracking-widest text-gray-500">Visibles</p>
-          </div>
-          <div className="bg-white p-6 border border-gray-100">
-            <p className="text-3xl font-serif">{properties.filter(p => p.is_showcase).length}</p>
-            <p className="text-xs uppercase tracking-widest text-gray-500">Vitrines</p>
-          </div>
-        </div>
+        {/* Properties Tab */}
+        {activeTab === 'properties' && (
+          <>
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+              <div className="bg-white p-6 border border-gray-100">
+                <p className="text-3xl font-serif">{properties.length}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Total propriétés</p>
+              </div>
+              <div className="bg-white p-6 border border-gray-100">
+                <p className="text-3xl font-serif">{properties.filter(p => p.beds24_id).length}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Connectées Beds24</p>
+              </div>
+              <div className="bg-white p-6 border border-gray-100">
+                <p className="text-3xl font-serif">{properties.filter(p => p.is_active).length}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Visibles</p>
+              </div>
+              <div className="bg-white p-6 border border-gray-100">
+                <p className="text-3xl font-serif">{properties.filter(p => p.is_showcase).length}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Vitrines</p>
+              </div>
+            </div>
 
-        {/* Properties Table */}
-        <div className="bg-white border border-gray-100 overflow-hidden">
-          <Table>
+            {/* Properties Table */}
+            <div className="bg-white border border-gray-100 overflow-hidden">
+              <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12"></TableHead>
