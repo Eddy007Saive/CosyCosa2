@@ -1355,6 +1355,152 @@ async def send_contact_notification(name: str, email: str, subject: str, message
     except Exception as e:
         logger.error(f"Failed to send contact notification: {e}")
 
+# ============== AUTO SYNC BEDS24 ==============
+
+async def auto_sync_beds24():
+    """Background task to sync properties from Beds24 automatically"""
+    logger.info("🔄 Starting automatic Beds24 synchronization...")
+    
+    try:
+        beds24_properties = await beds24_service.get_properties()
+        
+        if not beds24_properties:
+            logger.warning("No properties returned from Beds24 API")
+            await db.sync_status.update_one(
+                {"id": "beds24_sync"},
+                {
+                    "$set": {
+                        "last_sync": datetime.now(timezone.utc).isoformat(),
+                        "status": "warning",
+                        "message": "No properties returned from API",
+                        "synced": 0,
+                        "updated": 0
+                    }
+                },
+                upsert=True
+            )
+            return
+        
+        synced = 0
+        updated = 0
+        
+        for b24_prop in beds24_properties:
+            beds24_id = str(b24_prop.get("id"))
+            existing = await db.properties.find_one(
+                {"beds24_id": beds24_id},
+                {"_id": 0}
+            )
+            
+            rooms = b24_prop.get("roomTypes", [])
+            max_guests = b24_prop.get("maxGuests", 4)
+            
+            price_from = None
+            for room in rooms:
+                if room.get("price1"):
+                    if price_from is None or room.get("price1") < price_from:
+                        price_from = room.get("price1")
+            
+            prop_name = b24_prop.get("name", "Propriété Sans Nom")
+            
+            import re
+            slug = re.sub(r'[^a-z0-9]+', '-', prop_name.lower()).strip('-')
+            desc = b24_prop.get("description", "") or ""
+            
+            property_data = {
+                "beds24_id": beds24_id,
+                "name": prop_name,
+                "slug": slug,
+                "description": {"fr": desc, "en": desc, "es": desc, "it": desc},
+                "short_description": {"fr": desc[:200], "en": desc[:200], "es": desc[:200], "it": desc[:200]},
+                "location": f"{b24_prop.get('address', '')}".strip(),
+                "city": b24_prop.get("city", "") or "Corse du Sud",
+                "category": "vue_mer",
+                "images": [],
+                "max_guests": max_guests,
+                "bedrooms": b24_prop.get("numRooms", 1) or 1,
+                "bathrooms": 1,
+                "amenities": [],
+                "price_from": price_from,
+                "currency": b24_prop.get("currency", "EUR"),
+                "is_showcase": False,
+                "is_active": True,
+                "coordinates": {
+                    "lat": float(b24_prop.get("latitude")) if b24_prop.get("latitude") else None,
+                    "lng": float(b24_prop.get("longitude")) if b24_prop.get("longitude") else None
+                },
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            if not existing:
+                property_data["id"] = f"beds24-{beds24_id}"
+                property_data["created_at"] = datetime.now(timezone.utc).isoformat()
+                property_data["is_active"] = False  # Hidden by default
+                await db.properties.insert_one(property_data)
+                synced += 1
+                logger.info(f"  ➕ New property: {prop_name} (hidden)")
+            else:
+                update_data = {
+                    "name": prop_name,
+                    "max_guests": max_guests,
+                    "bedrooms": property_data["bedrooms"],
+                    "price_from": price_from,
+                    "coordinates": property_data["coordinates"],
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+                await db.properties.update_one({"beds24_id": beds24_id}, {"$set": update_data})
+                updated += 1
+        
+        await db.sync_status.update_one(
+            {"id": "beds24_sync"},
+            {
+                "$set": {
+                    "last_sync": datetime.now(timezone.utc).isoformat(),
+                    "status": "success",
+                    "message": f"Synced {synced} new, updated {updated} existing",
+                    "synced": synced,
+                    "updated": updated,
+                    "total_beds24": len(beds24_properties)
+                }
+            },
+            upsert=True
+        )
+        
+        logger.info(f"✅ Auto-sync complete: {synced} new, {updated} updated")
+        
+    except Exception as e:
+        logger.error(f"❌ Auto-sync failed: {e}")
+        await db.sync_status.update_one(
+            {"id": "beds24_sync"},
+            {"$set": {"last_sync": datetime.now(timezone.utc).isoformat(), "status": "error", "message": str(e)}},
+            upsert=True
+        )
+
+@api_router.get("/sync/status")
+async def get_sync_status():
+    """Get the status of the last Beds24 sync"""
+    status = await db.sync_status.find_one({"id": "beds24_sync"}, {"_id": 0})
+    
+    next_run = None
+    if scheduler.running:
+        jobs = scheduler.get_jobs()
+        if jobs:
+            next_run = jobs[0].next_run_time.isoformat() if jobs[0].next_run_time else None
+    
+    return {
+        "sync_enabled": BEDS24_SYNC_ENABLED,
+        "sync_interval_hours": BEDS24_SYNC_INTERVAL_HOURS,
+        "scheduler_running": scheduler.running,
+        "next_sync": next_run,
+        "last_sync": status
+    }
+
+@api_router.post("/sync/trigger")
+async def trigger_sync():
+    """Manually trigger a Beds24 sync"""
+    await auto_sync_beds24()
+    status = await db.sync_status.find_one({"id": "beds24_sync"}, {"_id": 0})
+    return {"success": True, "status": status}
+
 # Include the router in the main app
 app.include_router(api_router)
 
