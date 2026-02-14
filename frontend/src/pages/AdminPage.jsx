@@ -55,38 +55,68 @@ const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 // Simple password protection - change this password!
 const ADMIN_PASSWORD = 'orso2024';
 
-// Site image configuration
-const SITE_IMAGE_KEYS = {
-  hero_home: {
-    label: 'Image d\'accueil (Hero)',
-    description: 'Grande image de fond sur la page d\'accueil',
-    page: 'Accueil'
+// Site image configuration - organized by page
+const SITE_IMAGE_PAGES = {
+  home: {
+    label: 'Accueil',
+    images: {
+      home_hero: {
+        label: "Image d'accueil (Hero)",
+        description: 'Grande image de fond sur la page d\'accueil',
+      },
+      home_category_vue_mer: {
+        label: 'Catégorie Vue Mer',
+        description: 'Image de la catégorie Vue Mer',
+      },
+      home_category_plage_a_pieds: {
+        label: 'Catégorie Plage à Pieds',
+        description: 'Image de la catégorie Plage à Pieds',
+      },
+      home_category_pieds_dans_eau: {
+        label: 'Catégorie Pieds dans l\'Eau',
+        description: 'Image de la catégorie Pieds dans l\'Eau',
+      },
+      home_concept: {
+        label: 'Image Notre Concept',
+        description: 'Photo d\'intérieur pour la section concept',
+      },
+      home_cta: {
+        label: 'Fond section CTA',
+        description: 'Image de fond pour l\'appel à l\'action',
+      },
+    },
   },
-  category_vue_mer: {
-    label: 'Catégorie Vue Mer',
-    description: 'Image de la catégorie Vue Mer',
-    page: 'Accueil'
+  services: {
+    label: 'Services',
+    images: {
+      services_hero: {
+        label: 'Image Hero Services',
+        description: 'Grande image en haut de la page Services',
+      },
+      services_lifestyle: {
+        label: 'Image Lifestyle',
+        description: 'Photo lifestyle sur le côté droit',
+      },
+    },
   },
-  category_plage_a_pieds: {
-    label: 'Catégorie Plage à Pieds',
-    description: 'Image de la catégorie Plage à Pieds',
-    page: 'Accueil'
+  contact: {
+    label: 'Contact',
+    images: {
+      contact_hero: {
+        label: 'Image Hero Contact',
+        description: 'Grande image de fond page Contact',
+      },
+    },
   },
-  category_pieds_dans_eau: {
-    label: 'Catégorie Pieds dans l\'Eau',
-    description: 'Image de la catégorie Pieds dans l\'Eau',
-    page: 'Accueil'
+  properties: {
+    label: 'Propriétés',
+    images: {
+      properties_hero: {
+        label: 'Image Hero Propriétés',
+        description: 'Grande image en haut de la page Propriétés',
+      },
+    },
   },
-  concept_interior: {
-    label: 'Image Notre Concept',
-    description: 'Photo d\'intérieur pour la section concept',
-    page: 'Accueil'
-  },
-  cta_background: {
-    label: 'Fond section CTA',
-    description: 'Image de fond pour l\'appel à l\'action en bas de page',
-    page: 'Accueil'
-  }
 };
 
 const AdminPage = () => {
