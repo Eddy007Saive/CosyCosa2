@@ -543,6 +543,28 @@ const PropertyDetailPage = () => {
                         </div>
                       </div>
                     )}
+                    
+                    {/* Availability Loading/Error State */}
+                    {loadingAvailability && (
+                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Chargement des disponibilités...</span>
+                      </div>
+                    )}
+                    
+                    {availabilityError && (
+                      <div className="flex items-center gap-2 text-sm text-amber-600 mb-4 p-3 bg-amber-50 rounded">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>{availabilityError}</span>
+                      </div>
+                    )}
+                    
+                    {blockedDates.length > 0 && !loadingAvailability && (
+                      <div className="text-xs text-gray-500 mb-3 flex items-center gap-2">
+                        <div className="w-3 h-3 bg-gray-200 rounded-sm"></div>
+                        <span>Dates non disponibles</span>
+                      </div>
+                    )}
 
                     {/* Date Selection */}
                     <div className="mb-6">
@@ -553,14 +575,36 @@ const PropertyDetailPage = () => {
                         mode="range"
                         selected={{ from: checkIn, to: checkOut }}
                         onSelect={(range) => {
+                          // Check if selected range has blocked dates
+                          if (range?.from && range?.to) {
+                            if (hasBlockedDatesInRange(range.from, range.to)) {
+                              toast.error('Certaines dates de votre sélection ne sont pas disponibles');
+                              return;
+                            }
+                          }
                           setCheckIn(range?.from || null);
                           setCheckOut(range?.to || null);
                         }}
-                        disabled={(date) => date < new Date()}
+                        disabled={(date) => {
+                          // Disable past dates
+                          if (date < new Date()) return true;
+                          // Disable blocked dates from Beds24
+                          return isDateBlocked(date);
+                        }}
                         locale={locale}
                         numberOfMonths={1}
                         className="border border-gray-200 p-4"
                         data-testid="booking-calendar"
+                        modifiers={{
+                          blocked: blockedDates
+                        }}
+                        modifiersStyles={{
+                          blocked: { 
+                            backgroundColor: '#f3f4f6',
+                            color: '#9ca3af',
+                            textDecoration: 'line-through'
+                          }
+                        }}
                       />
                     </div>
 
