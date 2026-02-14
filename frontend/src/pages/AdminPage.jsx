@@ -691,9 +691,13 @@ const AdminPage = () => {
                 </TableRow>
               ) : (
                 properties.map((property) => (
-                  <TableRow key={property.id} className={!property.is_active ? 'opacity-50' : ''}>
+                  <TableRow 
+                    key={property.id} 
+                    className={!property.is_active ? 'bg-gray-50' : ''}
+                    data-testid={`property-row-${property.id}`}
+                  >
                     <TableCell>
-                      <div className="w-10 h-10 bg-gray-100 overflow-hidden">
+                      <div className={`w-10 h-10 bg-gray-100 overflow-hidden ${!property.is_active ? 'opacity-50' : ''}`}>
                         {property.images?.[0] ? (
                           <img
                             src={property.images[0]}
@@ -708,14 +712,22 @@ const AdminPage = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div>
-                        <p className="font-medium">{property.name}</p>
+                      <div className={!property.is_active ? 'opacity-60' : ''}>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium">{property.name}</p>
+                          {!property.is_active && (
+                            <Badge variant="outline" className="text-xs bg-gray-100 text-gray-500">
+                              <EyeOff className="w-3 h-3 mr-1" />
+                              Masqué
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-xs text-gray-500">
                           {property.max_guests} pers · {property.bedrooms} ch · {property.bathrooms} sdb
                         </p>
                       </div>
                     </TableCell>
-                    <TableCell>{property.city}</TableCell>
+                    <TableCell className={!property.is_active ? 'opacity-60' : ''}>{property.city}</TableCell>
                     <TableCell>
                       <Select
                         value={property.category}
