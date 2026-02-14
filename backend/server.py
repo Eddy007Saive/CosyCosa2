@@ -375,6 +375,23 @@ class Beds24Service:
             logger.error(f"Error fetching Beds24 property {property_id}: {e}")
         return None
     
+    async def get_rooms_for_property(self, property_id: str) -> List[str]:
+        """Get room IDs for a property from Beds24"""
+        try:
+            prop_data = await self.get_property(property_id)
+            if prop_data and "data" in prop_data:
+                rooms = prop_data["data"].get("rooms", [])
+                # Return list of room IDs
+                return [str(room.get("id")) for room in rooms if room.get("id")]
+            elif prop_data:
+                # Single property response
+                rooms = prop_data.get("rooms", [])
+                return [str(room.get("id")) for room in rooms if room.get("id")]
+        except Exception as e:
+            logger.error(f"Error getting rooms for property {property_id}: {e}")
+        return []
+        return None
+    
     async def get_property_images(self, property_id: str) -> List[str]:
         """Get images for a property from Beds24"""
         try:
