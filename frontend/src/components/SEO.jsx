@@ -95,18 +95,22 @@ export const PropertiesSEO = ({ lang, category }) => {
 };
 
 // Single property detail page SEO
-export const PropertySEO = ({ property, lang = 'fr' }) => {
+export const PropertySEO = ({ property, lang }) => {
+  const currentLang = lang || 'fr';
+  
   if (!property) return null;
 
-  const title = `${property.name || 'Propriété'} | Location Luxe ${property.location || 'Corse'} | ORSO RS`;
+  const propertyName = property.name || 'Propriété';
+  const propertyLocation = property.location || 'Corse';
+  const title = `${propertyName} | Location Luxe ${propertyLocation} | ORSO RS`;
   const description = property.description 
     ? property.description.substring(0, 155) + '...'
-    : `Découvrez ${property.name || 'cette propriété d\'exception'} en ${property.location || 'Corse du Sud'}. Location de luxe avec conciergerie premium.`;
+    : `Découvrez ${propertyName} en ${propertyLocation}. Location de luxe avec conciergerie premium.`;
   const image = property.images?.[0] || defaults.image;
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
