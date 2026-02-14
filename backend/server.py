@@ -717,8 +717,16 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
     
     beds24_id = property_data.get("beds24_id")
     if beds24_id:
+        # Get room IDs for this property
+        room_ids = await beds24_service.get_rooms_for_property(beds24_id)
+        if not room_ids:
+            room_ids = [beds24_id]
+        
+        # Use first room for availability and pricing
+        room_id = room_ids[0]
+        
         # First check availability via calendar
-        calendar = await beds24_service.get_calendar(beds24_id, check.check_in, check.check_out)
+        calendar = await beds24_service.get_calendar(room_id, check.check_in, check.check_out)
         calendar_data = calendar.get("data", [])
         
         # Check if any date in range is blocked
@@ -738,7 +746,7 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
         
         # Get price offers
         offers = await beds24_service.get_offers(
-            beds24_id,
+            room_id,
             check.check_in,
             check.check_out,
             check.guests
