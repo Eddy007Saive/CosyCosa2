@@ -15,14 +15,14 @@ import { getCategories, getSiteImages } from '@/lib/api';
 
 const locales = { fr, en: enUS, es, it };
 
-// Default images as fallback
+// Default images as fallback (using new key structure)
 const DEFAULT_IMAGES = {
-  hero_home: "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
-  category_vue_mer: "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
-  category_plage_a_pieds: "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
-  category_pieds_dans_eau: "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
-  concept_interior: "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
-  cta_background: "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+  home_hero: "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
+  home_category_vue_mer: "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
+  home_category_plage_a_pieds: "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
+  home_category_pieds_dans_eau: "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
+  home_concept: "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
+  home_cta: "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
 };
 
 const HomePage = () => {
