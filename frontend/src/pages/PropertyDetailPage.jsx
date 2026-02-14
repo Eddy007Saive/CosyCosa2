@@ -639,7 +639,10 @@ const PropertyDetailPage = () => {
                     {/* Price Quote */}
                     {loadingPrice && (
                       <div className="mb-6 py-4 border-t border-gray-200">
-                        <Skeleton className="h-6 w-full" />
+                        <div className="flex items-center gap-2 text-gray-500">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span className="text-sm">Vérification des disponibilités...</span>
+                        </div>
                       </div>
                     )}
 
@@ -648,33 +651,62 @@ const PropertyDetailPage = () => {
                         className="mb-6 py-4 border-t border-gray-200"
                         data-testid="price-quote"
                       >
-                        <div className="flex justify-between mb-2">
-                          <span className="text-gray-600">
-                            {priceQuote.price_per_night}€ x {priceQuote.nights}{' '}
-                            {priceQuote.nights > 1
-                              ? t('property.nights')
-                              : t('property.night')}
-                          </span>
-                          <span>{priceQuote.total_price}€</span>
-                        </div>
-                        <div className="flex justify-between font-medium pt-4 border-t border-gray-200">
-                          <span>{t('property.totalPrice')}</span>
-                          <span className="font-serif text-xl">
-                            {priceQuote.total_price}€
-                          </span>
-                        </div>
+                        {priceQuote.available ? (
+                          <>
+                            <div className="flex justify-between mb-2">
+                              <span className="text-gray-600">
+                                {Math.round(priceQuote.price_per_night)}€ x {priceQuote.nights}{' '}
+                                {priceQuote.nights > 1
+                                  ? t('property.nights')
+                                  : t('property.night')}
+                              </span>
+                              <span>{Math.round(priceQuote.total_price)}€</span>
+                            </div>
+                            <div className="flex justify-between font-medium pt-4 border-t border-gray-200">
+                              <span>{t('property.totalPrice')}</span>
+                              <span className="font-serif text-xl">
+                                {Math.round(priceQuote.total_price)}€
+                              </span>
+                            </div>
+                            <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                              <Check className="w-3 h-3" />
+                              Dates disponibles - Prix garanti
+                            </p>
+                          </>
+                        ) : (
+                          <div className="text-center py-4">
+                            <div className="flex items-center justify-center gap-2 text-red-600 mb-2">
+                              <X className="w-5 h-5" />
+                              <span className="font-medium">Dates non disponibles</span>
+                            </div>
+                            <p className="text-sm text-gray-500">
+                              {priceQuote.message || 'Veuillez sélectionner d\'autres dates'}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
 
                     {/* Book Button */}
                     <Button
                       className="orso-btn-primary w-full"
-                      disabled={!priceQuote || !priceQuote.available}
+                      disabled={!priceQuote || !priceQuote.available || loadingPrice}
                       onClick={() => setShowBookingModal(true)}
                       data-testid="book-now-btn"
                     >
-                      {t('property.bookNow')}
+                      {loadingPrice ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : null}
+                      {priceQuote?.available === false 
+                        ? 'Non disponible' 
+                        : t('property.bookNow')}
                     </Button>
+                    
+                    {!property.beds24_id && (
+                      <p className="text-xs text-amber-600 mt-3 text-center">
+                        ⚠️ Propriété non connectée à Beds24 - Prix indicatifs
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
