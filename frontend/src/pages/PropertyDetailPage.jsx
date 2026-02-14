@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 import { format, addDays, differenceInDays, addMonths, parseISO, isWithinInterval, eachDayOfInterval } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { getProperty, getPriceQuote, createBooking, submitContact, getPropertyAvailability } from '@/lib/api';
+import { PropertySEO } from '@/components/SEO';
 
 const locales = { fr, en: enUS, es, it };
 
