@@ -73,6 +73,16 @@ export const syncBeds24 = async () => {
   return response.data;
 };
 
+export const getSyncStatus = async () => {
+  const response = await apiClient.get('/sync/status');
+  return response.data;
+};
+
+export const triggerSync = async () => {
+  const response = await apiClient.post('/sync/trigger');
+  return response.data;
+};
+
 // Site Images
 export const getSiteImages = async () => {
   const response = await apiClient.get('/settings/images');
