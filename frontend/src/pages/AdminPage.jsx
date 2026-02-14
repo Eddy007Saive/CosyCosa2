@@ -46,7 +46,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { getProperties, getSiteImages, updateSiteImages } from '@/lib/api';
+import { getProperties, getSiteImages, updateSiteImages, uploadImage } from '@/lib/api';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
