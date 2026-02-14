@@ -636,30 +636,42 @@ async def get_property_availability(
     blocked_dates = []
     
     if beds24_id:
-        calendar = await beds24_service.get_calendar(beds24_id, from_date, to_date)
-        calendar_data = calendar.get("data", [])
+        # Get room IDs for this property
+        room_ids = await beds24_service.get_rooms_for_property(beds24_id)
         
-        # Parse calendar data to extract blocked dates
-        for day_data in calendar_data:
-            # Beds24 calendar format: each entry has date and availability info
-            date = day_data.get("date")
-            # Check if date is blocked (booked, closed, or no availability)
-            is_blocked = (
-                day_data.get("numAvail", 1) == 0 or
-                day_data.get("closed", False) or
-                day_data.get("booked", False)
-            )
+        if not room_ids:
+            # Try using property ID as room ID (sometimes they're the same)
+            room_ids = [beds24_id]
+        
+        all_calendar_data = []
+        
+        # Get calendar for each room and merge blocked dates
+        for room_id in room_ids:
+            calendar = await beds24_service.get_calendar(room_id, from_date, to_date)
+            calendar_data = calendar.get("data", [])
+            all_calendar_data.extend(calendar_data)
             
-            if is_blocked and date:
-                blocked_dates.append(date)
+            # Parse calendar data to extract blocked dates
+            for day_data in calendar_data:
+                date = day_data.get("date")
+                # Check if date is blocked (booked, closed, or no availability)
+                is_blocked = (
+                    day_data.get("numAvail", 1) == 0 or
+                    day_data.get("closed", False) or
+                    day_data.get("booked", False)
+                )
+                
+                if is_blocked and date and date not in blocked_dates:
+                    blocked_dates.append(date)
         
         return {
             "property_id": property_id,
             "beds24_id": beds24_id,
+            "room_ids": room_ids,
             "from_date": from_date,
             "to_date": to_date,
-            "blocked_dates": blocked_dates,
-            "calendar_raw": calendar_data,  # Include raw data for debugging
+            "blocked_dates": sorted(blocked_dates),
+            "calendar_raw": all_calendar_data[:10],  # Sample for debugging
             "available": True
         }
     
