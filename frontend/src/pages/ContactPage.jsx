@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { submitContact } from '@/lib/api';
+import { ContactSEO } from '@/components/SEO';
 
 const ContactPage = () => {
   const { t, i18n } = useTranslation();
