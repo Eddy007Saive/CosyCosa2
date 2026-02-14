@@ -95,26 +95,34 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [x] Propriétés vitrine - Formulaire de contact intégré
 - [x] Lien admin dans le footer
 - [x] **Flux de réservation complet avec création dans Beds24**
+- [x] **Synchronisation automatique Beds24 (toutes les heures)**
 - [ ] Configuration Resend pour emails réels
 - [ ] Sécuriser mot de passe admin (variable d'environnement)
 
 ### P2 (Nice to have)
-- [ ] Synchronisation automatique Beds24 (tâche de fond)
 - [ ] Optimisation SEO/GEO pour la Corse
 - [ ] Carte interactive Google Maps
 - [ ] Avis clients / témoignages
 - [ ] Blog / Actualités
 
 ## Technical Stack
-- **Backend**: FastAPI, MongoDB, Motor
+- **Backend**: FastAPI, MongoDB, Motor, APScheduler
 - **Frontend**: React, TailwindCSS, Shadcn/UI
 - **Integrations**: Beds24 API V2, Resend (email), Stripe (via Beds24)
 - **i18n**: react-i18next
 - **File Upload**: Images stockées dans /app/backend/uploads/
+- **Auto-Sync**: APScheduler pour synchronisation automatique Beds24
 
 ## Admin Credentials
 - URL: /admin (ou cliquer sur "Admin" dans le footer)
 - Mot de passe: orso2024
+
+## Configuration Auto-Sync
+- Intervalle: 1 heure (configurable via `BEDS24_SYNC_INTERVAL_HOURS`)
+- Activer/Désactiver: `BEDS24_SYNC_ENABLED=true/false`
+- Endpoints:
+  - `GET /api/sync/status` - Statut de la synchronisation
+  - `POST /api/sync/trigger` - Déclencher une sync manuelle
 
 ## Notes techniques importantes
 - Le calendrier Beds24 retourne des données vides pour les dates sans réservations configurées
