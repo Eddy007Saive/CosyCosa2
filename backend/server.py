@@ -597,7 +597,7 @@ async def get_property_availability(
     from_date: str,
     to_date: str
 ):
-    """Get availability calendar for a property"""
+    """Get availability calendar for a property with blocked dates"""
     property_data = await db.properties.find_one(
         {"id": property_id, "is_active": True},
         {"_id": 0}
@@ -610,24 +610,51 @@ async def get_property_availability(
         return {
             "property_id": property_id,
             "is_showcase": True,
-            "message": "This property requires direct contact for availability"
+            "message": "This property requires direct contact for availability",
+            "blocked_dates": [],
+            "available": False
         }
     
     beds24_id = property_data.get("beds24_id")
+    blocked_dates = []
+    
     if beds24_id:
         calendar = await beds24_service.get_calendar(beds24_id, from_date, to_date)
+        calendar_data = calendar.get("data", [])
+        
+        # Parse calendar data to extract blocked dates
+        for day_data in calendar_data:
+            # Beds24 calendar format: each entry has date and availability info
+            date = day_data.get("date")
+            # Check if date is blocked (booked, closed, or no availability)
+            is_blocked = (
+                day_data.get("numAvail", 1) == 0 or
+                day_data.get("closed", False) or
+                day_data.get("booked", False) or
+                day_data.get("departure", False) == False and day_data.get("arrival", False) == False and day_data.get("numAvail", 1) == 0
+            )
+            
+            if is_blocked and date:
+                blocked_dates.append(date)
+        
         return {
             "property_id": property_id,
+            "beds24_id": beds24_id,
             "from_date": from_date,
             "to_date": to_date,
-            "calendar": calendar.get("data", [])
+            "blocked_dates": blocked_dates,
+            "calendar_raw": calendar_data,  # Include raw data for debugging
+            "available": True
         }
     
+    # Property not connected to Beds24 - all dates available
     return {
         "property_id": property_id,
         "from_date": from_date,
         "to_date": to_date,
-        "calendar": []
+        "blocked_dates": [],
+        "available": True,
+        "note": "Property not connected to Beds24 - availability not synced"
     }
 
 @api_router.post("/properties/{property_id}/price-quote")
