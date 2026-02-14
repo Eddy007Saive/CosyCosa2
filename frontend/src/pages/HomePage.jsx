@@ -419,7 +419,7 @@ const HomePage = () => {
       >
         <div className="absolute inset-0">
           <img
-            src={siteImages.cta_background}
+            src={siteImages.home_cta}
             alt="Lifestyle"
             className="w-full h-full object-cover"
           />
