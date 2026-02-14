@@ -10,7 +10,9 @@ const defaults = {
 };
 
 // Main SEO component for homepage
-const SEO = ({ lang = 'fr' }) => {
+const SEO = ({ lang }) => {
+  const currentLang = lang || 'fr';
+  
   const titles = {
     fr: 'ORSO RS | Conciergerie de Luxe & Locations d\'Exception en Corse du Sud',
     en: 'ORSO RS | Luxury Concierge & Exceptional Rentals in Southern Corsica',
@@ -25,12 +27,12 @@ const SEO = ({ lang = 'fr' }) => {
     it: 'Scopri ORSO RENTAL SELECTION, una selezione di ville di lusso in Corsica del Sud. Affitti eccezionali con vista mare a Porto-Vecchio, Bonifacio e Calvi.',
   };
 
-  const title = titles[lang] || titles.fr;
-  const description = descriptions[lang] || descriptions.fr;
+  const title = titles[currentLang] || titles.fr;
+  const description = descriptions[currentLang] || descriptions.fr;
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={`${BASE_URL}/`} />
