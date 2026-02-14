@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Mail, Phone } from 'lucide-react';
+import { MapPin, Mail, Phone, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -28,9 +28,20 @@ const Footer = () => {
                 Rental Selection
               </span>
             </Link>
-            <p className="text-white/70 text-base leading-relaxed max-w-md">
+            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
               {t('footer.tagline')}
             </p>
+            {/* Google My Business Link */}
+            <a
+              href="https://share.google/AJqwlTVKrw5cqQIyD"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm border border-white/20 px-4 py-2 hover:border-white/40"
+              data-testid="footer-gmb-link"
+            >
+              <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
+              {t('footer.googleMyBusiness', 'Voir sur Google')}
+            </a>
           </div>
 
           {/* Quick Links */}
@@ -80,6 +91,16 @@ const Footer = () => {
                 <span className="text-white/80 text-sm">
                   {t('contact.info.address')}
                 </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-white/60 flex-shrink-0" strokeWidth={1.5} />
+                <a
+                  href="tel:+33615875470"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                  data-testid="footer-phone"
+                >
+                  +33 6 15 87 54 70
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-white/60 flex-shrink-0" strokeWidth={1.5} />

@@ -216,6 +216,31 @@ const ContactPage = () => {
                         Porto-Vecchio<br />
                         Corse du Sud, France
                       </p>
+                      <a
+                        href="https://share.google/AJqwlTVKrw5cqQIyD"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#2e2e2e] hover:underline text-sm mt-2 inline-block"
+                        data-testid="contact-gmb-link"
+                      >
+                        Voir sur Google Maps →
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-white flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-5 h-5" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <p className="orso-caption mb-1">Téléphone</p>
+                      <a
+                        href="tel:+33615875470"
+                        className="text-gray-600 hover:text-[#2e2e2e] transition-colors"
+                        data-testid="contact-phone-link"
+                      >
+                        +33 6 15 87 54 70
+                      </a>
                     </div>
                   </div>
 
