@@ -111,11 +111,11 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [x] Lien admin dans le footer
 - [x] **Flux de réservation complet avec création dans Beds24**
 - [x] **Synchronisation automatique Beds24 (toutes les heures)**
+- [x] **Sécuriser mot de passe admin (variable d'environnement)**
 - [ ] Configuration Resend pour emails réels
-- [ ] Sécuriser mot de passe admin (variable d'environnement)
 
-### P2 (Nice to have)
-- [ ] Optimisation SEO/GEO pour la Corse
+### P2 (Nice to have) - EN COURS ✅
+- [x] **Optimisation SEO/GEO pour la Corse** (meta tags, structured data, geo tags)
 - [ ] Carte interactive Google Maps
 - [ ] Avis clients / témoignages
 - [ ] Blog / Actualités
