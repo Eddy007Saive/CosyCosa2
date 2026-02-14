@@ -244,6 +244,26 @@ class Beds24Service:
             logger.error(f"Error fetching Beds24 property {property_id}: {e}")
         return None
     
+    async def get_property_images(self, property_id: str) -> List[str]:
+        """Get images for a property from Beds24"""
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.get(
+                    f"{self.base_url}/properties/{property_id}/images",
+                    headers=await self._get_headers()
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    images = []
+                    if isinstance(data, list):
+                        for img in data:
+                            if img.get("url"):
+                                images.append(img["url"])
+                    return images
+        except Exception as e:
+            logger.error(f"Error fetching images for property {property_id}: {e}")
+        return []
+    
     async def get_calendar(self, room_id: str, from_date: str, to_date: str) -> Dict:
         """Get calendar availability and pricing"""
         try:
