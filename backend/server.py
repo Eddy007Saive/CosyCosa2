@@ -659,7 +659,7 @@ async def get_property_availability(
 
 @api_router.post("/properties/{property_id}/price-quote")
 async def get_price_quote(property_id: str, check: AvailabilityCheck):
-    """Get price quote for specific dates"""
+    """Get price quote for specific dates - checks availability first"""
     property_data = await db.properties.find_one(
         {"id": property_id, "is_active": True},
         {"_id": 0}
@@ -680,8 +680,35 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
     to_dt = datetime.strptime(check.check_out, "%Y-%m-%d")
     nights = (to_dt - from_dt).days
     
+    if nights <= 0:
+        return PriceQuote(
+            available=False,
+            nights=0,
+            message="Invalid date range"
+        )
+    
     beds24_id = property_data.get("beds24_id")
     if beds24_id:
+        # First check availability via calendar
+        calendar = await beds24_service.get_calendar(beds24_id, check.check_in, check.check_out)
+        calendar_data = calendar.get("data", [])
+        
+        # Check if any date in range is blocked
+        is_available = True
+        for day_data in calendar_data:
+            if day_data.get("numAvail", 1) == 0 or day_data.get("closed", False):
+                is_available = False
+                break
+        
+        if not is_available:
+            return PriceQuote(
+                available=False,
+                nights=nights,
+                currency=property_data.get("currency", "EUR"),
+                message="Dates not available"
+            )
+        
+        # Get price offers
         offers = await beds24_service.get_offers(
             beds24_id,
             check.check_in,
@@ -690,19 +717,25 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
         )
         
         if offers.get("data"):
-            offer = offers["data"][0] if isinstance(offers["data"], list) else offers["data"]
-            total_price = offer.get("price", 0)
+            offer_data = offers.get("data", [])
+            if isinstance(offer_data, list) and len(offer_data) > 0:
+                offer = offer_data[0]
+            else:
+                offer = offer_data
             
-            return PriceQuote(
-                available=True,
-                total_price=total_price,
-                currency=property_data.get("currency", "EUR"),
-                nights=nights,
-                price_per_night=total_price / nights if nights > 0 else 0,
-                breakdown=offer.get("breakdown", [])
-            )
+            total_price = offer.get("price", 0) if isinstance(offer, dict) else 0
+            
+            if total_price > 0:
+                return PriceQuote(
+                    available=True,
+                    total_price=total_price,
+                    currency=property_data.get("currency", "EUR"),
+                    nights=nights,
+                    price_per_night=total_price / nights if nights > 0 else 0,
+                    breakdown=offer.get("breakdown", []) if isinstance(offer, dict) else []
+                )
     
-    # Fallback to base price
+    # Fallback to base price (for properties not connected to Beds24 or if API fails)
     base_price = property_data.get("price_from", 150)
     total = base_price * nights
     
