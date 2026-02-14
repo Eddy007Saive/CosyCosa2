@@ -92,52 +92,27 @@ export const PropertySEO = ({ property, lang = 'fr' }) => {
     pieds_dans_eau: 'Pieds dans l\'Eau',
   };
   
-  const categoryName = categoryNames[property.category] || property.category;
-  
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "VacationRental",
-    "name": property.name,
-    "description": property.description?.[lang] || property.description?.fr || '',
-    "url": `${SEO_CONFIG.siteUrl}/properties/${property.id}`,
-    "image": property.images?.[0] || SEO_CONFIG.defaultImage,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": property.city || 'Porto-Vecchio',
-      "addressRegion": "Corse du Sud",
-      "addressCountry": "France"
-    },
-    "numberOfRooms": property.bedrooms,
-    "numberOfBathroomsTotal": property.bathrooms,
-    "occupancy": {
-      "@type": "QuantitativeValue",
-      "maxValue": property.max_guests
-    },
-    "amenityFeature": property.amenities?.map(a => ({
-      "@type": "LocationFeatureSpecification",
-      "name": a
-    })) || [],
-    "priceRange": property.price_from ? `À partir de ${property.price_from}€/nuit` : "Sur demande",
-  };
-  
-  if (property.coordinates?.lat && property.coordinates?.lng) {
-    structuredData.geo = {
-      "@type": "GeoCoordinates",
-      "latitude": property.coordinates.lat,
-      "longitude": property.coordinates.lng
-    };
-  }
+  const categoryName = categoryNames[property.category] || property.category || '';
+  const propertyName = property.name || 'Villa';
+  const propertyCity = property.city || 'Corse du Sud';
   
   return (
     <SEO
-      title={`${property.name} - ${categoryName} à ${property.city || 'Corse du Sud'}`}
-      description={`Location de luxe ${property.name} en Corse du Sud. ${property.bedrooms} chambres, ${property.max_guests} personnes. ${categoryName}. ${property.city ? `À ${property.city}.` : ''} Réservez votre séjour d'exception.`}
-      image={property.images?.[0]}
+      title={`${propertyName} - ${categoryName} à ${propertyCity}`}
+      description={`Location de luxe ${propertyName} en Corse du Sud. ${property.bedrooms || 0} chambres, ${property.max_guests || 0} personnes. ${categoryName}. ${property.city ? `À ${property.city}.` : ''} Réservez votre séjour d'exception.`}
+      image={property.images?.[0] || ''}
       url={`${SEO_CONFIG.siteUrl}/properties/${property.id}`}
       type="product"
       keywords={[
-        `location ${property.name}`,
-        `villa ${property.city || 'corse'}`,
+        `location ${propertyName}`,
+        `villa ${propertyCity}`,
+        `location ${categoryName.toLowerCase()} corse`,
+        `vacances ${propertyCity}`,
+      ].filter(Boolean)}
+      lang={lang}
+    />
+  );
+};
         `location ${categoryName.toLowerCase()} corse`,
         `vacances ${property.city || 'corse du sud'}`,
       ]}
