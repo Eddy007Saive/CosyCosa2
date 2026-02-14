@@ -419,7 +419,7 @@ const HomePage = () => {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80"
+            src={siteImages.cta_background}
             alt="Lifestyle"
             className="w-full h-full object-cover"
           />
