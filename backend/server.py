@@ -13,6 +13,9 @@ from datetime import datetime, timezone, timedelta
 import httpx
 import resend
 import shutil
+import asyncio
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -31,6 +34,10 @@ BEDS24_API_URL = "https://api.beds24.com/v2"
 BEDS24_TOKEN = os.environ.get('BEDS24_TOKEN', '')
 BEDS24_REFRESH_TOKEN = os.environ.get('BEDS24_REFRESH_TOKEN', '')
 
+# Sync Configuration
+BEDS24_SYNC_ENABLED = os.environ.get('BEDS24_SYNC_ENABLED', 'true').lower() == 'true'
+BEDS24_SYNC_INTERVAL_HOURS = int(os.environ.get('BEDS24_SYNC_INTERVAL_HOURS', '1'))
+
 # Resend Configuration
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'hello@conciergerie-cosycasa.fr')
@@ -44,6 +51,9 @@ app = FastAPI(title="ORSO RS API", version="1.0.0")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Initialize scheduler
+scheduler = AsyncIOScheduler()
 
 # Configure logging
 logging.basicConfig(
