@@ -145,9 +145,8 @@ async def upload_image(file: UploadFile = File(...)):
     with open(file_path, 'wb') as f:
         f.write(content)
     
-    # Return URL
-    base_url = os.environ.get('REACT_APP_BACKEND_URL', '')
-    image_url = f"{base_url}/api/uploads/{safe_filename}"
+    # Return relative URL (frontend will prepend the base URL)
+    image_url = f"/api/uploads/{safe_filename}"
     
     logger.info(f"Image uploaded: {safe_filename}")
     return {
