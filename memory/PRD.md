@@ -35,6 +35,8 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ Upload d'images (/api/upload/image)
 - ✅ API de gestion des images du site **par page**
 - ✅ **API include_hidden pour l'admin** (retourne toutes les propriétés)
+- ✅ **Authentification admin via API** (mot de passe sécurisé en variable d'environnement)
+- ✅ **Synchronisation automatique Beds24 (APScheduler, toutes les heures)**
 
 ### Frontend (React)
 - ✅ Design minimaliste avec fonts Cormorant Garamond + Manrope
@@ -52,6 +54,19 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ Page Services (ORSO Essentiel / Premium) **avec images configurables**
 - ✅ Page Contact avec formulaire
 - ✅ Internationalisation i18n (FR/EN/ES/IT)
+
+### SEO/GEO Optimisé pour la Corse
+- ✅ **Meta tags complets** (title, description, keywords, robots)
+- ✅ **Open Graph** pour partage Facebook/LinkedIn
+- ✅ **Twitter Cards** pour partage Twitter
+- ✅ **Geo tags** pour SEO local (FR-2A, Porto-Vecchio)
+- ✅ **Balises hreflang** pour multilingue (fr, en, es, it)
+- ✅ **Données structurées Schema.org:**
+  - Organization
+  - LocalBusiness
+  - LodgingBusiness
+  - BreadcrumbList
+  - FAQPage
 
 ### Admin Panel (/admin - mot de passe: orso2024)
 - ✅ Tableau de bord avec statistiques **(5 stats: Total, Beds24, Visibles, Masquées, Vitrines)**
