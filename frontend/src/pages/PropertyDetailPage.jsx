@@ -310,6 +310,9 @@ const PropertyDetailPage = () => {
 
   return (
     <div className="pt-20 md:pt-24" data-testid="property-detail-page">
+      {/* SEO */}
+      <PropertySEO property={property} lang={i18n.language} />
+      
       {/* Back Button */}
       <div className="orso-container py-4">
         <button
@@ -326,7 +329,7 @@ const PropertyDetailPage = () => {
       <section className="relative h-[50vh] md:h-[70vh] bg-gray-100">
         <img
           src={images[currentImageIndex]}
-          alt={property.name}
+          alt={`${property.name} - Location de luxe en Corse du Sud`}
           className="w-full h-full object-cover"
           data-testid="property-main-image"
         />
