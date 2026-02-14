@@ -1368,15 +1368,45 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database indexes"""
+    """Initialize database indexes and start scheduler"""
+    # Create indexes
     await db.properties.create_index("id", unique=True)
     await db.properties.create_index("beds24_id")
     await db.properties.create_index("category")
     await db.properties.create_index("city")
     await db.bookings.create_index("id", unique=True)
     await db.contact_requests.create_index("id", unique=True)
+    await db.sync_status.create_index("id", unique=True)
     logger.info("Database indexes created")
+    
+    # Start scheduler for auto-sync
+    if BEDS24_SYNC_ENABLED and BEDS24_TOKEN:
+        scheduler.add_job(
+            auto_sync_beds24,
+            IntervalTrigger(hours=BEDS24_SYNC_INTERVAL_HOURS),
+            id='beds24_auto_sync',
+            name='Beds24 Auto Sync',
+            replace_existing=True
+        )
+        scheduler.start()
+        logger.info(f"🚀 Beds24 auto-sync scheduler started (every {BEDS24_SYNC_INTERVAL_HOURS} hour(s))")
+        
+        # Run initial sync after 30 seconds to let the server start
+        import asyncio
+        asyncio.create_task(delayed_initial_sync())
+    else:
+        logger.info("⏸️ Beds24 auto-sync is disabled or no token configured")
+
+async def delayed_initial_sync():
+    """Run initial sync after a short delay"""
+    await asyncio.sleep(30)
+    logger.info("Running initial Beds24 sync...")
+    await auto_sync_beds24()
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
+    """Shutdown scheduler and close database connection"""
+    if scheduler.running:
+        scheduler.shutdown()
+        logger.info("Scheduler stopped")
     client.close()
