@@ -95,7 +95,14 @@ export const uploadImage = async (file) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return response.data;
+  
+  // Convert relative URL to absolute URL
+  const data = response.data;
+  if (data.url && data.url.startsWith('/api/')) {
+    data.url = `${BACKEND_URL}${data.url}`;
+  }
+  
+  return data;
 };
 
 export default apiClient;
