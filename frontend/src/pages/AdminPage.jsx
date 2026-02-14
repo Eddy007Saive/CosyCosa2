@@ -53,6 +53,40 @@ const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 // Simple password protection - change this password!
 const ADMIN_PASSWORD = 'orso2024';
 
+// Site image configuration
+const SITE_IMAGE_KEYS = {
+  hero_home: {
+    label: 'Image d\'accueil (Hero)',
+    description: 'Grande image de fond sur la page d\'accueil',
+    page: 'Accueil'
+  },
+  category_vue_mer: {
+    label: 'Catégorie Vue Mer',
+    description: 'Image de la catégorie Vue Mer',
+    page: 'Accueil'
+  },
+  category_plage_a_pieds: {
+    label: 'Catégorie Plage à Pieds',
+    description: 'Image de la catégorie Plage à Pieds',
+    page: 'Accueil'
+  },
+  category_pieds_dans_eau: {
+    label: 'Catégorie Pieds dans l\'Eau',
+    description: 'Image de la catégorie Pieds dans l\'Eau',
+    page: 'Accueil'
+  },
+  concept_interior: {
+    label: 'Image Notre Concept',
+    description: 'Photo d\'intérieur pour la section concept',
+    page: 'Accueil'
+  },
+  cta_background: {
+    label: 'Fond section CTA',
+    description: 'Image de fond pour l\'appel à l\'action en bas de page',
+    page: 'Accueil'
+  }
+};
+
 const AdminPage = () => {
   const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,6 +94,14 @@ const AdminPage = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  
+  // Tab state
+  const [activeTab, setActiveTab] = useState('properties');
+  
+  // Site images state
+  const [siteImages, setSiteImages] = useState({});
+  const [loadingImages, setLoadingImages] = useState(false);
+  const [savingImages, setSavingImages] = useState(false);
   
   // Modal states
   const [showPropertyModal, setShowPropertyModal] = useState(false);
@@ -96,6 +138,7 @@ const AdminPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       loadProperties();
+      loadSiteImages();
     }
   }, [isAuthenticated]);
 
