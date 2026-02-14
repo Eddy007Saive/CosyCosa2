@@ -19,6 +19,9 @@ import {
   Home,
   Upload,
   Loader2,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
