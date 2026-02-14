@@ -184,6 +184,36 @@ const PropertyDetailPage = () => {
     }
   };
 
+  // Handle contact form submission for showcase properties
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    if (!contactForm.name || !contactForm.email || !contactForm.message) {
+      toast.error('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    setSubmittingContact(true);
+    try {
+      await submitContact({
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        subject: `Demande d'information: ${property?.name}`,
+        message: contactForm.message,
+        property_id: property?.id,
+        language: i18n.language,
+      });
+      
+      toast.success('Votre demande a été envoyée. Nous vous contacterons rapidement.');
+      setContactForm({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Contact submission failed:', error);
+      toast.error('Erreur lors de l\'envoi. Veuillez réessayer.');
+    } finally {
+      setSubmittingContact(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="pt-24 md:pt-32 orso-container">
