@@ -52,8 +52,9 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ Formulaire de contact intégré pour propriétés vitrine
 - ✅ Lien admin discret dans le footer
 - ✅ Page Services (ORSO Essentiel / Premium) **avec images configurables**
-- ✅ Page Contact avec formulaire
+- ✅ Page Contact avec formulaire + téléphone + lien Google Maps
 - ✅ Internationalisation i18n (FR/EN/ES/IT)
+- ✅ **Pages Légales** (Mentions Légales + Politique de Confidentialité)
 
 ### SEO/GEO Optimisé pour la Corse
 - ✅ **Meta tags complets** (title, description, keywords, robots)
@@ -67,8 +68,10 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
   - LodgingBusiness
   - BreadcrumbList
   - FAQPage
+- ✅ **sitemap.xml** avec toutes les pages et hreflang
+- ✅ **robots.txt** configuré
 
-### Admin Panel (/admin - mot de passe: orso2024)
+### Admin Panel (/admin)
 - ✅ Tableau de bord avec statistiques **(5 stats: Total, Beds24, Visibles, Masquées, Vitrines)**
 - ✅ **Propriétés masquées visibles** avec badge "Masqué" et fond grisé
 - ✅ Gestion des propriétés (ajouter, modifier, supprimer)
@@ -81,6 +84,12 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
   - Contact (1 image)
   - Propriétés (1 image)
 - ✅ Upload d'images par drag-and-drop
+
+### Informations de Contact
+- ✅ **Téléphone**: +33 6 15 87 54 70
+- ✅ **Email**: hello@conciergerie-cosycasa.fr
+- ✅ **Google My Business**: https://share.google/AJqwlTVKrw5cqQIyD
+- ✅ Tous les liens présents dans le Footer et la page Contact
 
 ### Integrations
 - ✅ **Beds24 API V2** - Intégration complète:
@@ -105,6 +114,8 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [x] Prix dynamiques depuis Beds24
 - [x] **Propriétés masquées visibles dans l'admin**
 - [x] **Gestion des images par page (Accueil, Services, Contact, Propriétés)**
+- [x] **Téléphone + Google My Business ajoutés**
+- [x] **Pages légales créées**
 
 ### P1 (Important) - COMPLÉTÉ ✅
 - [x] Propriétés vitrine - Formulaire de contact intégré
@@ -112,13 +123,15 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [x] **Flux de réservation complet avec création dans Beds24**
 - [x] **Synchronisation automatique Beds24 (toutes les heures)**
 - [x] **Sécuriser mot de passe admin (variable d'environnement)**
+- [x] **sitemap.xml et robots.txt générés**
 - [ ] Configuration Resend pour emails réels
 
-### P2 (Nice to have) - EN COURS ✅
+### P2 (Nice to have)
 - [x] **Optimisation SEO/GEO pour la Corse** (meta tags, structured data, geo tags)
-- [ ] Carte interactive Google Maps
+- [ ] Carte interactive Google Maps (recommandé seulement avec 10+ propriétés)
 - [ ] Avis clients / témoignages
 - [ ] Blog / Actualités
+- [ ] SEO dynamique par page (react-helmet-async a causé des bugs, reporté)
 
 ## Technical Stack
 - **Backend**: FastAPI, MongoDB, Motor, APScheduler
@@ -130,7 +143,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 
 ## Admin Credentials
 - URL: /admin (ou cliquer sur "Admin" dans le footer)
-- Mot de passe: orso2024
+- Mot de passe: Variable d'environnement ADMIN_PASSWORD
 
 ## Configuration Auto-Sync
 - Intervalle: 1 heure (configurable via `BEDS24_SYNC_INTERVAL_HOURS`)
@@ -144,6 +157,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - Le système fait un fallback automatique au prix de base si l'API Beds24 ne retourne pas de prix
 - Les propriétés non connectées à Beds24 affichent un avertissement "Prix indicatifs"
 - Les nouvelles propriétés synchronisées depuis Beds24 sont **masquées par défaut** (is_active: false)
+- **SEO dynamique via react-helmet-async**: Tentative d'implémentation a échoué (erreur Helmet). Le SEO statique dans index.html reste la solution active.
 
 ## Test Coverage
 - **47 tests pytest** dans /app/backend/tests/
