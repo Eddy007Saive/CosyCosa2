@@ -684,6 +684,45 @@ const AdminPage = () => {
         {/* Properties Tab */}
         {activeTab === 'properties' && (
           <>
+            {/* Sync Status Banner */}
+            {syncStatus?.last_sync && (
+              <div className={`mb-6 p-4 border rounded-lg flex items-center justify-between ${
+                syncStatus.last_sync.status === 'success' 
+                  ? 'bg-green-50 border-green-200' 
+                  : syncStatus.last_sync.status === 'error'
+                  ? 'bg-red-50 border-red-200'
+                  : 'bg-yellow-50 border-yellow-200'
+              }`} data-testid="sync-status-banner">
+                <div className="flex items-center gap-3">
+                  {syncStatus.last_sync.status === 'success' ? (
+                    <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  ) : syncStatus.last_sync.status === 'error' ? (
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                  ) : (
+                    <Clock className="w-5 h-5 text-yellow-600" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium">
+                      {syncStatus.scheduler_running ? (
+                        <>Synchronisation automatique <span className="text-green-600">activée</span> (toutes les {syncStatus.sync_interval_hours}h)</>
+                      ) : (
+                        <>Synchronisation automatique <span className="text-gray-500">désactivée</span></>
+                      )}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Dernière sync: {new Date(syncStatus.last_sync.last_sync).toLocaleString('fr-FR')}
+                      {syncStatus.last_sync.message && ` — ${syncStatus.last_sync.message}`}
+                    </p>
+                    {syncStatus.next_sync && (
+                      <p className="text-xs text-gray-500">
+                        Prochaine sync: {new Date(syncStatus.next_sync).toLocaleString('fr-FR')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
               <div className="bg-white p-6 border border-gray-100">
