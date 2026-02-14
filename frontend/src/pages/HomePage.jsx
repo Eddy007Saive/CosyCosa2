@@ -12,6 +12,7 @@ import {
 import { format, addDays } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { getCategories, getSiteImages } from '@/lib/api';
+import SEO from '@/components/SEO';
 
 const locales = { fr, en: enUS, es, it };
 
