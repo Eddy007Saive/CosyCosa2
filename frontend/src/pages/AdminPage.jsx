@@ -642,7 +642,7 @@ const AdminPage = () => {
         {activeTab === 'properties' && (
           <>
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
               <div className="bg-white p-6 border border-gray-100">
                 <p className="text-3xl font-serif">{properties.length}</p>
                 <p className="text-xs uppercase tracking-widest text-gray-500">Total propriétés</p>
@@ -652,8 +652,12 @@ const AdminPage = () => {
                 <p className="text-xs uppercase tracking-widest text-gray-500">Connectées Beds24</p>
               </div>
               <div className="bg-white p-6 border border-gray-100">
-                <p className="text-3xl font-serif">{properties.filter(p => p.is_active).length}</p>
+                <p className="text-3xl font-serif text-green-600">{properties.filter(p => p.is_active).length}</p>
                 <p className="text-xs uppercase tracking-widest text-gray-500">Visibles</p>
+              </div>
+              <div className="bg-white p-6 border border-gray-100">
+                <p className="text-3xl font-serif text-gray-400">{properties.filter(p => !p.is_active).length}</p>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Masquées</p>
               </div>
               <div className="bg-white p-6 border border-gray-100">
                 <p className="text-3xl font-serif">{properties.filter(p => p.is_showcase).length}</p>
