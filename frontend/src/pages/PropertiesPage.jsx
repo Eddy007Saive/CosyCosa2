@@ -5,6 +5,7 @@ import { MapPin, Users, Bed, Bath, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProperties, getCategories } from '@/lib/api';
+import { PropertiesSEO } from '@/components/SEO';
 
 const PropertiesPage = () => {
   const { t, i18n } = useTranslation();
