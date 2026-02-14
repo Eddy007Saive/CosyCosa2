@@ -114,6 +114,13 @@ const Footer = () => {
               >
                 {t('footer.privacy')}
               </Link>
+              <Link
+                to="/admin"
+                className="text-white/30 hover:text-white/50 text-xs uppercase tracking-widest transition-colors"
+                data-testid="footer-admin-link"
+              >
+                Admin
+              </Link>
             </div>
           </div>
         </div>
