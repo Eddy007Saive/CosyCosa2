@@ -11,6 +11,7 @@ import PropertiesPage from "@/pages/PropertiesPage";
 import PropertyDetailPage from "@/pages/PropertyDetailPage";
 import ServicesPage from "@/pages/ServicesPage";
 import ContactPage from "@/pages/ContactPage";
+import AdminPage from "@/pages/AdminPage";
 
 // Components
 import Navbar from "@/components/layout/Navbar";
@@ -41,17 +42,27 @@ function App() {
   return (
     <div className="App min-h-screen flex flex-col">
       <BrowserRouter>
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/properties" element={<PropertiesPage />} />
-            <Route path="/properties/:id" element={<PropertyDetailPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </main>
-        <Footer />
+        <Routes>
+          {/* Admin route without Navbar/Footer */}
+          <Route path="/admin" element={<AdminPage />} />
+          
+          {/* Public routes with Navbar/Footer */}
+          <Route path="*" element={
+            <>
+              <Navbar />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/properties" element={<PropertiesPage />} />
+                  <Route path="/properties/:id" element={<PropertyDetailPage />} />
+                  <Route path="/services" element={<ServicesPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                </Routes>
+              </main>
+              <Footer />
+            </>
+          } />
+        </Routes>
         <Toaster position="bottom-right" />
       </BrowserRouter>
     </div>
