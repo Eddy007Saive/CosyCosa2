@@ -644,6 +644,192 @@ async def submit_contact(contact: ContactRequestCreate, background_tasks: Backgr
     }
 
 # --- Beds24 Sync ---
+@api_router.post("/init-demo-data")
+async def init_demo_data():
+    """Initialize demo properties for display"""
+    demo_properties = [
+        {
+            "id": "villa-mare-1",
+            "beds24_id": None,
+            "name": "Villa Mare Vista",
+            "slug": "villa-mare-vista",
+            "description": {
+                "fr": "Une villa d'exception perchée sur les hauteurs de Porto-Vecchio, offrant une vue panoramique à 180° sur la mer Méditerranée et les îles de Sardaigne.\n\nCette propriété de prestige allie le charme authentique de l'architecture corse à un confort moderne de haut standing.",
+                "en": "An exceptional villa perched on the heights of Porto-Vecchio, offering a 180° panoramic view of the Mediterranean Sea and the Sardinian islands.",
+                "es": "Una villa excepcional encaramada en las alturas de Porto-Vecchio, que ofrece una vista panorámica de 180° del mar Mediterráneo.",
+                "it": "Una villa eccezionale arroccata sulle alture di Porto-Vecchio, che offre una vista panoramica a 180° sul Mar Mediterraneo."
+            },
+            "short_description": {
+                "fr": "Villa d'exception avec vue mer panoramique à 180°",
+                "en": "Exceptional villa with 180° panoramic sea view",
+                "es": "Villa excepcional con vista panorámica al mar de 180°",
+                "it": "Villa eccezionale con vista panoramica sul mare a 180°"
+            },
+            "location": "Porto-Vecchio",
+            "city": "Porto-Vecchio",
+            "category": "vue_mer",
+            "images": [
+                "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1200",
+                "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=1200",
+                "https://images.unsplash.com/photo-1766603636578-1da99a6dd236?w=1200"
+            ],
+            "max_guests": 8,
+            "bedrooms": 4,
+            "bathrooms": 3,
+            "amenities": ["Piscine", "Vue mer", "Climatisation", "WiFi", "Parking", "Cuisine équipée"],
+            "price_from": 450,
+            "currency": "EUR",
+            "is_showcase": False,
+            "is_active": True,
+            "coordinates": {"lat": 41.5917, "lng": 9.2794}
+        },
+        {
+            "id": "casa-palombaggia-1",
+            "beds24_id": None,
+            "name": "Casa Palombaggia",
+            "slug": "casa-palombaggia",
+            "description": {
+                "fr": "À quelques pas de la célèbre plage de Palombaggia, cette villa contemporaine vous offre le meilleur de la Corse du Sud. Les eaux turquoise de l'une des plus belles plages de Méditerranée sont à portée de main.",
+                "en": "Just steps from the famous Palombaggia beach, this contemporary villa offers you the best of Southern Corsica.",
+                "es": "A pocos pasos de la famosa playa de Palombaggia, esta villa contemporánea le ofrece lo mejor del sur de Córcega.",
+                "it": "A pochi passi dalla famosa spiaggia di Palombaggia, questa villa contemporanea vi offre il meglio della Corsica del Sud."
+            },
+            "short_description": {
+                "fr": "À 2 minutes à pied de la plage de Palombaggia",
+                "en": "2-minute walk to Palombaggia beach",
+                "es": "A 2 minutos a pie de la playa de Palombaggia",
+                "it": "A 2 minuti a piedi dalla spiaggia di Palombaggia"
+            },
+            "location": "Palombaggia",
+            "city": "Porto-Vecchio",
+            "category": "plage_a_pieds",
+            "images": [
+                "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=1200",
+                "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=1200"
+            ],
+            "max_guests": 6,
+            "bedrooms": 3,
+            "bathrooms": 2,
+            "amenities": ["Terrasse", "Jardin", "Parking", "WiFi", "Barbecue"],
+            "price_from": 350,
+            "currency": "EUR",
+            "is_showcase": False,
+            "is_active": True,
+            "coordinates": {"lat": 41.5125, "lng": 9.3167}
+        },
+        {
+            "id": "villa-pieds-eau-1",
+            "beds24_id": None,
+            "name": "Villa Pieds dans l'Eau",
+            "slug": "villa-pieds-dans-leau",
+            "description": {
+                "fr": "Le luxe ultime: accès direct à la mer depuis votre terrasse. Cette villa exceptionnelle vous offre une expérience unique avec un accès privatif à une crique de sable fin. Le rêve méditerranéen incarné.",
+                "en": "Ultimate luxury: direct sea access from your terrace. This exceptional villa offers you a unique experience with private access to a fine sand cove.",
+                "es": "El lujo supremo: acceso directo al mar desde su terraza. Esta villa excepcional le ofrece una experiencia única.",
+                "it": "Il lusso supremo: accesso diretto al mare dalla vostra terrazza. Questa villa eccezionale vi offre un'esperienza unica."
+            },
+            "short_description": {
+                "fr": "Accès privatif à la mer et ponton privé",
+                "en": "Private sea access and private jetty",
+                "es": "Acceso privado al mar y muelle privado",
+                "it": "Accesso privato al mare e pontile privato"
+            },
+            "location": "Bonifacio",
+            "city": "Bonifacio",
+            "category": "pieds_dans_eau",
+            "images": [
+                "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=1200",
+                "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1200"
+            ],
+            "max_guests": 10,
+            "bedrooms": 5,
+            "bathrooms": 4,
+            "amenities": ["Piscine", "Accès mer", "Jacuzzi", "Climatisation", "Bateau", "Personnel"],
+            "price_from": 800,
+            "currency": "EUR",
+            "is_showcase": False,
+            "is_active": True,
+            "coordinates": {"lat": 41.3875, "lng": 9.1583}
+        },
+        {
+            "id": "domaine-exclusif-1",
+            "beds24_id": None,
+            "name": "Domaine Exclusif",
+            "slug": "domaine-exclusif",
+            "description": {
+                "fr": "Un domaine privé exceptionnel niché sur les hauteurs de Calvi. Cette propriété unique offre une intimité absolue et des prestations dignes des plus grands palaces. Disponible sur demande uniquement.",
+                "en": "An exceptional private estate nestled on the heights of Calvi. This unique property offers absolute privacy and services worthy of the finest palaces.",
+                "es": "Una finca privada excepcional enclavada en las alturas de Calvi. Esta propiedad única ofrece privacidad absoluta.",
+                "it": "Una tenuta privata eccezionale incastonata sulle alture di Calvi. Questa proprietà unica offre privacy assoluta."
+            },
+            "short_description": {
+                "fr": "Domaine privé de prestige - Sur demande",
+                "en": "Prestigious private estate - On request",
+                "es": "Finca privada de prestigio - Bajo petición",
+                "it": "Tenuta privata di prestigio - Su richiesta"
+            },
+            "location": "Calvi",
+            "city": "Calvi",
+            "category": "vue_mer",
+            "images": [
+                "https://images.unsplash.com/photo-1766603636578-1da99a6dd236?w=1200"
+            ],
+            "max_guests": 12,
+            "bedrooms": 6,
+            "bathrooms": 5,
+            "amenities": ["Piscine", "Tennis", "Personnel de maison", "Héliport", "Spa"],
+            "price_from": None,
+            "currency": "EUR",
+            "is_showcase": True,
+            "is_active": True,
+            "coordinates": {"lat": 42.5667, "lng": 8.7583}
+        },
+        {
+            "id": "villa-santa-giulia-1",
+            "beds24_id": None,
+            "name": "Villa Santa Giulia",
+            "slug": "villa-santa-giulia",
+            "description": {
+                "fr": "Face au lagon turquoise de Santa Giulia, cette villa moderne offre un cadre idyllique pour des vacances en famille ou entre amis. La plage de sable blanc n'est qu'à quelques minutes à pied.",
+                "en": "Facing the turquoise lagoon of Santa Giulia, this modern villa offers an idyllic setting for family or friends vacations.",
+                "es": "Frente a la laguna turquesa de Santa Giulia, esta villa moderna ofrece un entorno idílico.",
+                "it": "Di fronte alla laguna turchese di Santa Giulia, questa villa moderna offre un ambiente idilliaco."
+            },
+            "short_description": {
+                "fr": "Vue sur le lagon de Santa Giulia, plage à 3 min",
+                "en": "View of Santa Giulia lagoon, beach 3 min away",
+                "es": "Vista de la laguna de Santa Giulia, playa a 3 min",
+                "it": "Vista sulla laguna di Santa Giulia, spiaggia a 3 min"
+            },
+            "location": "Santa Giulia",
+            "city": "Porto-Vecchio",
+            "category": "plage_a_pieds",
+            "images": [
+                "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=1200"
+            ],
+            "max_guests": 8,
+            "bedrooms": 4,
+            "bathrooms": 3,
+            "amenities": ["Piscine", "Vue mer", "Terrasse", "WiFi", "Climatisation"],
+            "price_from": 400,
+            "currency": "EUR",
+            "is_showcase": False,
+            "is_active": True,
+            "coordinates": {"lat": 41.5083, "lng": 9.2750}
+        }
+    ]
+    
+    inserted = 0
+    for prop in demo_properties:
+        existing = await db.properties.find_one({"id": prop["id"]})
+        if not existing:
+            prop["created_at"] = datetime.now(timezone.utc).isoformat()
+            prop["updated_at"] = datetime.now(timezone.utc).isoformat()
+            await db.properties.insert_one(prop)
+            inserted += 1
+    
+    return {"success": True, "inserted": inserted, "total": len(demo_properties)}
+
 @api_router.post("/sync/beds24")
 async def sync_beds24_properties():
     """Sync properties from Beds24"""
