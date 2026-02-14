@@ -198,7 +198,8 @@ const AdminPage = () => {
   const loadProperties = async () => {
     setLoading(true);
     try {
-      const data = await getProperties();
+      // Use admin endpoint to get all properties including hidden ones
+      const data = await getAdminProperties();
       setProperties(data.properties || []);
     } catch (error) {
       console.error('Failed to load properties:', error);
