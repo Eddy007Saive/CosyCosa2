@@ -60,15 +60,22 @@ class SiteSettings(BaseModel):
     images: Dict[str, str] = {}
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Default site images
+# Default site images - organized by page
 DEFAULT_SITE_IMAGES = {
-    "hero_home": "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
-    "category_vue_mer": "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
-    "category_plage_a_pieds": "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
-    "category_pieds_dans_eau": "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
-    "concept_interior": "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
+    # Page d'accueil
+    "home_hero": "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
+    "home_category_vue_mer": "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
+    "home_category_plage_a_pieds": "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
+    "home_category_pieds_dans_eau": "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
+    "home_concept": "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
+    "home_cta": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+    # Page Services
+    "services_hero": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=1920&q=80",
     "services_lifestyle": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80",
-    "cta_background": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+    # Page Contact
+    "contact_hero": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+    # Page Propriétés
+    "properties_hero": "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
 }
 
 @api_router.get("/settings/images")
@@ -552,10 +559,16 @@ async def get_properties(
     category: Optional[str] = None,
     city: Optional[str] = None,
     guests: Optional[int] = None,
-    is_showcase: Optional[bool] = None
+    is_showcase: Optional[bool] = None,
+    include_hidden: Optional[bool] = False
 ):
     """Get all properties with optional filters"""
-    query = {"is_active": True}
+    query = {}
+    
+    # By default, only return active properties (for public site)
+    # Admin can request all properties with include_hidden=true
+    if not include_hidden:
+        query["is_active"] = True
     
     if category:
         query["category"] = category
