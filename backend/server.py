@@ -470,12 +470,12 @@ class Beds24Service:
             logger.error(f"Error fetching offers for room {room_id}: {e}")
         return {}
     
-    async def create_booking(self, booking_data: Dict) -> Dict:
+    async def create_booking(self, booking_data: Dict, retry: bool = True) -> Dict:
         """Create a booking in Beds24"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 payload = [{
-                    "roomId": booking_data.get("room_id"),
+                    "roomId": int(booking_data.get("room_id")) if booking_data.get("room_id") else None,
                     "arrival": booking_data.get("check_in"),
                     "departure": booking_data.get("check_out"),
                     "numAdult": booking_data.get("guests", 1),
@@ -489,16 +489,29 @@ class Beds24Service:
                     "source": "website"
                 }]
                 
+                logger.info(f"Beds24 booking payload: {payload}")
+                
                 response = await client.post(
                     f"{self.base_url}/bookings",
                     headers=await self._get_headers(),
                     json=payload
                 )
                 
+                logger.info(f"Beds24 booking response status: {response.status_code}")
+                
                 if response.status_code == 200:
                     result = response.json()
-                    if result and len(result) > 0:
+                    logger.info(f"Beds24 booking response: {result}")
+                    if result and isinstance(result, list) and len(result) > 0:
                         return result[0]
+                    return result if result else {"success": False, "error": "Empty response"}
+                elif response.status_code == 401 and retry:
+                    # Token expired, refresh and retry
+                    await self.refresh_access_token()
+                    return await self.create_booking(booking_data, retry=False)
+                else:
+                    logger.error(f"Beds24 booking error: {response.status_code} - {response.text}")
+                    return {"success": False, "error": f"API error: {response.status_code}"}
         except Exception as e:
             logger.error(f"Error creating Beds24 booking: {e}")
         return {"success": False, "error": "Failed to create booking"}
