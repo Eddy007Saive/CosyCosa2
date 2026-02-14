@@ -113,6 +113,71 @@ async def update_single_image(image_key: str, url: str = None):
     )
     return {"success": True, "message": f"Image {image_key} updated"}
 
+# ============== FILE UPLOAD ==============
+
+ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
+@api_router.post("/upload/image")
+async def upload_image(file: UploadFile = File(...)):
+    """Upload an image file and return its URL"""
+    # Validate file extension
+    file_ext = Path(file.filename).suffix.lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Invalid file type. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+    
+    # Read file content
+    content = await file.read()
+    
+    # Validate file size
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="File too large. Max 10MB")
+    
+    # Generate unique filename
+    unique_id = str(uuid.uuid4())[:8]
+    safe_filename = f"{unique_id}{file_ext}"
+    file_path = UPLOADS_DIR / safe_filename
+    
+    # Save file
+    with open(file_path, 'wb') as f:
+        f.write(content)
+    
+    # Return URL
+    base_url = os.environ.get('REACT_APP_BACKEND_URL', '')
+    image_url = f"{base_url}/api/uploads/{safe_filename}"
+    
+    logger.info(f"Image uploaded: {safe_filename}")
+    return {
+        "success": True,
+        "url": image_url,
+        "filename": safe_filename
+    }
+
+@api_router.get("/uploads/{filename}")
+async def get_uploaded_image(filename: str):
+    """Serve uploaded images"""
+    from fastapi.responses import FileResponse
+    
+    file_path = UPLOADS_DIR / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    # Determine content type
+    ext = Path(filename).suffix.lower()
+    content_types = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.webp': 'image/webp',
+        '.gif': 'image/gif'
+    }
+    content_type = content_types.get(ext, 'application/octet-stream')
+    
+    return FileResponse(file_path, media_type=content_type)
+
 # ============== MODELS ==============
 
 class PropertyCategory(BaseModel):
