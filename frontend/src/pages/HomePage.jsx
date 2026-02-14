@@ -82,20 +82,7 @@ const HomePage = () => {
   return (
     <div data-testid="home-page">
       {/* SEO */}
-      <SEO 
-        lang={i18n.language}
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": "ORSO RENTAL SELECTION",
-          "url": "https://orso-rs.com",
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://orso-rs.com/properties?search={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
-        }}
-      />
+      <SEO lang={i18n.language} />
       
       {/* Hero Section */}
       <section
