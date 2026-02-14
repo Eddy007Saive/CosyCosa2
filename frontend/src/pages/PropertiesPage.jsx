@@ -162,9 +162,24 @@ const PropertiesPage = () => {
 
 const PropertyCard = ({ property, index, language }) => {
   const { t } = useTranslation();
+  
+  // Default luxury images for properties without images
+  const defaultImages = [
+    'https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=600',
+    'https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=600',
+    'https://images.unsplash.com/photo-1766603636578-1da99a6dd236?w=600',
+    'https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=600',
+    'https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=600',
+    'https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=600',
+    'https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=600',
+    'https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=600',
+  ];
+  
+  // Use property image or pick from defaults based on index
   const mainImage =
-    property.images?.[0] ||
-    'https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=600';
+    property.images?.length > 0 
+      ? property.images[0]
+      : defaultImages[index % defaultImages.length];
   const description =
     property.short_description?.[language] ||
     property.short_description?.fr ||
