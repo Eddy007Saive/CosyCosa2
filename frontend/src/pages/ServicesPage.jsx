@@ -133,7 +133,7 @@ const ServicesPage = () => {
             <div className="hidden lg:block relative">
               <div className="sticky top-32 h-[calc(100vh-8rem)]">
                 <img
-                  src="https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80"
+                  src={siteImages.services_lifestyle}
                   alt="Service de luxe"
                   className="w-full h-full object-cover"
                 />
