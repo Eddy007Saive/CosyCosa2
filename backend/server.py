@@ -412,7 +412,7 @@ class Beds24Service:
             logger.error(f"Error fetching images for property {property_id}: {e}")
         return []
     
-    async def get_calendar(self, room_id: str, from_date: str, to_date: str) -> Dict:
+    async def get_calendar(self, room_id: str, from_date: str, to_date: str, retry: bool = True) -> Dict:
         """Get calendar availability and pricing"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -427,11 +427,17 @@ class Beds24Service:
                 )
                 if response.status_code == 200:
                     return response.json()
+                elif response.status_code == 401 and retry:
+                    # Token expired, refresh and retry
+                    await self.refresh_access_token()
+                    return await self.get_calendar(room_id, from_date, to_date, retry=False)
+                else:
+                    logger.warning(f"Calendar API returned {response.status_code}: {response.text[:200]}")
         except Exception as e:
             logger.error(f"Error fetching calendar for room {room_id}: {e}")
         return {"data": []}
     
-    async def get_offers(self, room_id: str, from_date: str, to_date: str, occupancy: int) -> Dict:
+    async def get_offers(self, room_id: str, from_date: str, to_date: str, occupancy: int, retry: bool = True) -> Dict:
         """Get price offers for specific dates"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -447,6 +453,10 @@ class Beds24Service:
                 )
                 if response.status_code == 200:
                     return response.json()
+                elif response.status_code == 401 and retry:
+                    # Token expired, refresh and retry
+                    await self.refresh_access_token()
+                    return await self.get_offers(room_id, from_date, to_date, occupancy, retry=False)
         except Exception as e:
             logger.error(f"Error fetching offers for room {room_id}: {e}")
         return {}
