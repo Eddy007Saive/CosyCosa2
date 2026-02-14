@@ -1,0 +1,68 @@
+{
+  "summary": "Comprehensive testing of P0-P1 new features: 1) Drag-and-drop image upload in admin 2) Integrated contact form for showcase properties. All features working correctly - 100% backend tests passed (14/14), frontend features fully functional.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_upload_and_contact.py",
+    "/app/test_reports/pytest/upload_contact_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_upload_and_contact.py"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 tests passed)",
+    "frontend": "100% (all new features working)"
+  },
+  "seed_data_creation": "Demo data initialized via /api/init-demo-data for showcase property testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "New P0-P1 features fully tested: 1) Image upload via POST /api/upload/image works (PNG, JPEG, WebP, GIF up to 10MB). Images served via GET /api/uploads/{filename}. Admin Site Images tab has drag-and-drop zones that trigger file inputs. 2) Showcase properties (is_showcase=true) show integrated contact form instead of booking widget. Contact form submits via POST /api/contact with name, email, phone, message, property_id. Success toast confirms submission.",
+  "tested_features": {
+    "image_upload_api": {
+      "status": "PASS",
+      "details": "POST /api/upload/image accepts PNG, JPEG, WebP, GIF. Returns {success, url, filename}. Validates file type and size (10MB max)"
+    },
+    "image_serving_api": {
+      "status": "PASS",
+      "details": "GET /api/uploads/{filename} serves uploaded images with correct content-type. Returns 404 for non-existent files"
+    },
+    "admin_site_images_tab": {
+      "status": "PASS",
+      "details": "Tab 'Images du site' accessible. Shows 6 configurable images with drag-and-drop zones"
+    },
+    "admin_drag_drop_upload": {
+      "status": "PASS",
+      "details": "File input triggers upload. Success toast shown. URL field updated with uploaded image path"
+    },
+    "showcase_property_detection": {
+      "status": "PASS",
+      "details": "Property with is_showcase=true shows contact form instead of booking widget"
+    },
+    "showcase_contact_form_fields": {
+      "status": "PASS",
+      "details": "Contact form has: name, email, phone, message fields with proper data-testid attributes"
+    },
+    "showcase_contact_form_submission": {
+      "status": "PASS",
+      "details": "Form submission via POST /api/contact works. Success toast displayed: 'Votre demande a été envoyée'"
+    },
+    "contact_api_validation": {
+      "status": "PASS",
+      "details": "API validates required fields (name, email, subject, message) and email format. Returns 422 for invalid data"
+    }
+  },
+  "test_credentials": {
+    "admin_page": "/admin",
+    "admin_password": "orso2024",
+    "showcase_property_url": "/properties/domaine-exclusif-1"
+  }
+}
