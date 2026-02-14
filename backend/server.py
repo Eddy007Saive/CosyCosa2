@@ -38,6 +38,9 @@ BEDS24_REFRESH_TOKEN = os.environ.get('BEDS24_REFRESH_TOKEN', '')
 BEDS24_SYNC_ENABLED = os.environ.get('BEDS24_SYNC_ENABLED', 'true').lower() == 'true'
 BEDS24_SYNC_INTERVAL_HOURS = int(os.environ.get('BEDS24_SYNC_INTERVAL_HOURS', '1'))
 
+# Admin Configuration
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'orso2024')
+
 # Resend Configuration
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'hello@conciergerie-cosycasa.fr')
