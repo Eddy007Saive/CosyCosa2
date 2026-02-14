@@ -983,9 +983,10 @@ async def sync_beds24_properties():
         }
         
         if not existing:
-            # Create new property
+            # Create new property - HIDDEN by default (is_active: False)
             property_data["id"] = f"beds24-{beds24_id}"
             property_data["created_at"] = datetime.now(timezone.utc).isoformat()
+            property_data["is_active"] = False  # Hidden by default - admin must activate
             await db.properties.insert_one(property_data)
             synced += 1
         else:
