@@ -10,6 +10,12 @@ const apiClient = axios.create({
   },
 });
 
+// Admin Auth
+export const adminLogin = async (password) => {
+  const response = await apiClient.post('/admin/login', { password });
+  return response.data;
+};
+
 // Categories
 export const getCategories = async () => {
   const response = await apiClient.get('/categories');
