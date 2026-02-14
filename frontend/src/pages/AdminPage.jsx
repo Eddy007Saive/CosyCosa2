@@ -207,6 +207,70 @@ const AdminPage = () => {
     }
   };
 
+  // Image upload handlers
+  const handleImageUpload = async (key, file) => {
+    if (!file) return;
+    
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      toast.error('Format non supporté. Utilisez JPG, PNG, WebP ou GIF.');
+      return;
+    }
+    
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Fichier trop volumineux. Maximum 10MB.');
+      return;
+    }
+    
+    setUploadingKey(key);
+    try {
+      const result = await uploadImage(file);
+      if (result.success && result.url) {
+        handleSiteImageChange(key, result.url);
+        toast.success('Image téléchargée avec succès');
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+      toast.error('Erreur lors du téléchargement');
+    } finally {
+      setUploadingKey(null);
+    }
+  };
+
+  const handleDragOver = (e, key) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverKey(key);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverKey(null);
+  };
+
+  const handleDrop = async (e, key) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverKey(null);
+    
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      await handleImageUpload(key, files[0]);
+    }
+  };
+
+  const handleFileInputChange = async (e, key) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await handleImageUpload(key, file);
+    }
+    // Reset input
+    e.target.value = '';
+  };
+
   const syncBeds24 = async () => {
     setSyncing(true);
     try {
