@@ -426,7 +426,9 @@ class Beds24Service:
                     }
                 )
                 if response.status_code == 200:
-                    return response.json()
+                    result = response.json()
+                    logger.info(f"Calendar response for room {room_id}: {str(result)[:500]}")
+                    return result
                 elif response.status_code == 401 and retry:
                     # Token expired, refresh and retry
                     await self.refresh_access_token()
