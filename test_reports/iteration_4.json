@@ -1,0 +1,82 @@
+{
+  "summary": "Testing of Beds24 availability/price-quote integration and UI features. Fixed 1 critical bug in price-quote endpoint. 12/12 backend tests pass, all UI features working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [],
+    "fixed": [
+      {
+        "endpoint": "POST /api/properties/{id}/price-quote",
+        "issue": "TypeError: 'NoneType' * int when property.price_from is null",
+        "fix": "Changed `property_data.get('price_from', 150)` to `property_data.get('price_from') or 150`",
+        "file": "/app/backend/server.py",
+        "line": 787
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_beds24_availability.py",
+    "/app/test_reports/pytest/beds24_availability_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Beds24 calendar returns empty data for 2026 (no reservations configured) - system is working correctly with fallback to base price"
+  ],
+  "updated_files": [
+    "/app/backend/server.py",
+    "/app/backend/tests/test_beds24_availability.py"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "100% (all features working)"
+  },
+  "seed_data_creation": "Demo data already initialized from previous iterations",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Beds24 availability and price-quote APIs fully tested. Token refresh on 401 working. Calendar returns empty blocked_dates for 2026 as expected (no reservations configured in Beds24 for future dates). Fallback pricing works correctly using property.price_from or default 150€/night.",
+  "tested_features": {
+    "admin_footer_link": {
+      "status": "PASS",
+      "details": "Discrete admin link in footer with rgba(255,255,255,0.3) styling. Navigates to /admin, password 'orso2024' works"
+    },
+    "availability_endpoint": {
+      "status": "PASS",
+      "details": "GET /api/properties/{id}/availability returns blocked_dates from Beds24 calendar. Returns note for non-connected properties. Returns is_showcase=true for showcase properties"
+    },
+    "price_quote_endpoint": {
+      "status": "PASS",
+      "details": "POST /api/properties/{id}/price-quote checks availability before returning price. Falls back to base price when Beds24 offers empty. Fixed bug with null price_from"
+    },
+    "calendar_past_dates_disabled": {
+      "status": "PASS",
+      "details": "Calendar disables past dates - found 20 disabled buttons for dates before today"
+    },
+    "date_selection_price_display": {
+      "status": "PASS",
+      "details": "Selecting dates 20-25 shows price calculation: 450€ x 5 nights = 2250€ with 'Dates disponibles - Prix garanti' message"
+    },
+    "availability_loading_indicator": {
+      "status": "PASS",
+      "details": "'Chargement des disponibilités...' indicator visible during API call on Beds24 property"
+    },
+    "beds24_not_connected_warning": {
+      "status": "PASS",
+      "details": "Properties without beds24_id show '⚠️ Propriété non connectée à Beds24 - Prix indicatifs' warning"
+    },
+    "showcase_property_contact_form": {
+      "status": "PASS",
+      "details": "Showcase properties show 'Demande d'information' contact form instead of booking widget"
+    }
+  },
+  "test_credentials": {
+    "admin_page": "/admin",
+    "admin_password": "orso2024",
+    "beds24_property": "a24bdc95-f38e-49d5-8f7c-8e55e5815757",
+    "demo_property": "villa-mare-1",
+    "showcase_property": "domaine-exclusif-1"
+  }
+}
