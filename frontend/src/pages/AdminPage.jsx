@@ -194,14 +194,21 @@ const AdminPage = () => {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
+    setLoginError('');
+    setLoggingIn(true);
+    
+    try {
+      await adminLogin(password);
       setIsAuthenticated(true);
       sessionStorage.setItem('orso_admin_auth', 'true');
       toast.success('Connexion réussie');
-    } else {
+    } catch (error) {
+      setLoginError('Mot de passe incorrect');
       toast.error('Mot de passe incorrect');
+    } finally {
+      setLoggingIn(false);
     }
   };
 
