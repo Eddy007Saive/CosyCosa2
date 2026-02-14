@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,6 +17,8 @@ import {
   Check,
   X,
   ArrowLeft,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -31,9 +33,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { format, addDays, differenceInDays } from 'date-fns';
+import { format, addDays, differenceInDays, addMonths, parseISO, isWithinInterval, eachDayOfInterval } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { getProperty, getPriceQuote, createBooking, submitContact } from '@/lib/api';
+import { getProperty, getPriceQuote, createBooking, submitContact, getPropertyAvailability } from '@/lib/api';
 
 const locales = { fr, en: enUS, es, it };
 
