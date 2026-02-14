@@ -836,53 +836,99 @@ async def sync_beds24_properties():
     beds24_properties = await beds24_service.get_properties()
     
     synced = 0
+    updated = 0
+    properties_list = []
+    
     for b24_prop in beds24_properties:
+        beds24_id = str(b24_prop.get("id"))
         existing = await db.properties.find_one(
-            {"beds24_id": str(b24_prop.get("id"))},
+            {"beds24_id": beds24_id},
             {"_id": 0}
         )
         
+        # Extract room info if available
+        rooms = b24_prop.get("roomTypes", [])
+        max_guests = b24_prop.get("maxGuests", 4)
+        
+        # Try to get price from rooms
+        price_from = None
+        for room in rooms:
+            if room.get("price1"):
+                if price_from is None or room.get("price1") < price_from:
+                    price_from = room.get("price1")
+        
+        # Build property name
+        prop_name = b24_prop.get("name", "Propriété Sans Nom")
+        
+        # Create slug
+        import re
+        slug = re.sub(r'[^a-z0-9]+', '-', prop_name.lower()).strip('-')
+        
+        # Get description
+        desc = b24_prop.get("description", "") or ""
+        
+        property_data = {
+            "beds24_id": beds24_id,
+            "name": prop_name,
+            "slug": slug,
+            "description": {
+                "fr": desc,
+                "en": desc,
+                "es": desc,
+                "it": desc
+            },
+            "short_description": {
+                "fr": desc[:200] if desc else "",
+                "en": desc[:200] if desc else "",
+                "es": desc[:200] if desc else "",
+                "it": desc[:200] if desc else ""
+            },
+            "location": f"{b24_prop.get('address', '')}".strip(),
+            "city": b24_prop.get("city", "") or "Corse du Sud",
+            "category": "vue_mer",  # Default - can be changed manually
+            "images": [],  # Beds24 images need separate handling
+            "max_guests": max_guests,
+            "bedrooms": b24_prop.get("numRooms", 1) or 1,
+            "bathrooms": 1,
+            "amenities": [],
+            "price_from": price_from,
+            "currency": b24_prop.get("currency", "EUR"),
+            "is_showcase": False,
+            "is_active": True,
+            "coordinates": {
+                "lat": float(b24_prop.get("latitude")) if b24_prop.get("latitude") else None,
+                "lng": float(b24_prop.get("longitude")) if b24_prop.get("longitude") else None
+            },
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
         if not existing:
-            # Create new property from Beds24 data
-            new_property = Property(
-                beds24_id=str(b24_prop.get("id")),
-                name=b24_prop.get("name", "Unnamed Property"),
-                slug=b24_prop.get("name", "").lower().replace(" ", "-"),
-                description={
-                    "fr": b24_prop.get("description", ""),
-                    "en": b24_prop.get("description", ""),
-                    "es": b24_prop.get("description", ""),
-                    "it": b24_prop.get("description", "")
-                },
-                short_description={
-                    "fr": b24_prop.get("description", "")[:200] if b24_prop.get("description") else "",
-                    "en": "",
-                    "es": "",
-                    "it": ""
-                },
-                location=f"{b24_prop.get('address', '')}, {b24_prop.get('city', '')}",
-                city=b24_prop.get("city", "Porto-Vecchio"),
-                category="vue_mer",  # Default category
-                images=[],
-                max_guests=b24_prop.get("maxGuests", 4),
-                bedrooms=1,
-                bathrooms=1,
-                amenities=[],
-                price_from=None,
-                is_showcase=False,
-                coordinates={
-                    "lat": float(b24_prop.get("latitude", 0)) if b24_prop.get("latitude") else None,
-                    "lng": float(b24_prop.get("longitude", 0)) if b24_prop.get("longitude") else None
-                }
-            )
-            
-            doc = new_property.model_dump()
-            doc['created_at'] = doc['created_at'].isoformat()
-            doc['updated_at'] = doc['updated_at'].isoformat()
-            await db.properties.insert_one(doc)
+            # Create new property
+            property_data["id"] = f"beds24-{beds24_id}"
+            property_data["created_at"] = datetime.now(timezone.utc).isoformat()
+            await db.properties.insert_one(property_data)
             synced += 1
+        else:
+            # Update existing property
+            await db.properties.update_one(
+                {"beds24_id": beds24_id},
+                {"$set": property_data}
+            )
+            updated += 1
+        
+        properties_list.append({
+            "beds24_id": beds24_id,
+            "name": prop_name,
+            "city": property_data["city"]
+        })
     
-    return {"success": True, "synced": synced, "total_beds24": len(beds24_properties)}
+    return {
+        "success": True, 
+        "synced": synced, 
+        "updated": updated,
+        "total_beds24": len(beds24_properties),
+        "properties": properties_list
+    }
 
 # ============== EMAIL FUNCTIONS ==============
 
