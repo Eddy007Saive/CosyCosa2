@@ -85,4 +85,17 @@ export const updateSingleSiteImage = async (imageKey, url) => {
   return response.data;
 };
 
+// Image Upload
+export const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await axios.post(`${API}/upload/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
 export default apiClient;
