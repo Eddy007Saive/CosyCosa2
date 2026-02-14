@@ -28,43 +28,52 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
   - Calendrier de disponibilité en temps réel
   - Prix dynamiques via /inventory/rooms/offers
   - Rafraîchissement automatique du token (retry on 401)
+  - **Création de réservation via API Beds24**
 - ✅ Gestion propriétés (CRUD)
-- ✅ Système de réservation avec price quotes
+- ✅ **Système de réservation complet avec création dans Beds24**
 - ✅ Formulaire de contact (envoi email via Resend)
 - ✅ Upload d'images (/api/upload/image)
-- ✅ API de gestion des images du site
+- ✅ API de gestion des images du site **par page**
+- ✅ **API include_hidden pour l'admin** (retourne toutes les propriétés)
 
 ### Frontend (React)
 - ✅ Design minimaliste avec fonts Cormorant Garamond + Manrope
 - ✅ Homepage avec hero, search bar, catégories (images dynamiques)
 - ✅ Page Propriétés avec filtres par catégorie
-- ✅ **Page Détail Propriété améliorée:**
+- ✅ **Page Détail Propriété avec flux de réservation complet:**
   - Calendrier avec dates bloquées de Beds24
   - Prix calculés en temps réel
   - Indicateur de chargement des disponibilités
   - Message pour propriétés non connectées
   - Indicateur "Dates disponibles - Prix garanti"
+  - **Formulaire de réservation avec confirmation**
 - ✅ Formulaire de contact intégré pour propriétés vitrine
 - ✅ Lien admin discret dans le footer
-- ✅ Page Services (ORSO Essentiel / Premium)
+- ✅ Page Services (ORSO Essentiel / Premium) **avec images configurables**
 - ✅ Page Contact avec formulaire
 - ✅ Internationalisation i18n (FR/EN/ES/IT)
 
 ### Admin Panel (/admin - mot de passe: orso2024)
-- ✅ Tableau de bord avec statistiques
+- ✅ Tableau de bord avec statistiques **(5 stats: Total, Beds24, Visibles, Masquées, Vitrines)**
+- ✅ **Propriétés masquées visibles** avec badge "Masqué" et fond grisé
 - ✅ Gestion des propriétés (ajouter, modifier, supprimer)
 - ✅ Synchronisation Beds24
 - ✅ Gestion des images des propriétés
 - ✅ Gestion de la visibilité et catégories
-- ✅ Gestion des images du site (6 images configurables)
+- ✅ **Gestion des images du site par page:**
+  - Accueil (6 images)
+  - Services (2 images)
+  - Contact (1 image)
+  - Propriétés (1 image)
 - ✅ Upload d'images par drag-and-drop
 
 ### Integrations
-- ✅ **Beds24 API V2** - Synchronisation complète:
+- ✅ **Beds24 API V2** - Intégration complète:
   - Propriétés avec rooms
   - Disponibilités en temps réel
   - Prix dynamiques
   - Token auto-refresh
+  - **Création de réservations**
 - ⏳ Resend emails (clé API non fournie - logs only)
 - ✅ Stripe (via Beds24 - configuré côté Beds24)
 
@@ -79,10 +88,13 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [x] Upload d'images par drag-and-drop
 - [x] Calendrier avec disponibilités temps réel
 - [x] Prix dynamiques depuis Beds24
+- [x] **Propriétés masquées visibles dans l'admin**
+- [x] **Gestion des images par page (Accueil, Services, Contact, Propriétés)**
 
 ### P1 (Important) - COMPLÉTÉ ✅
 - [x] Propriétés vitrine - Formulaire de contact intégré
 - [x] Lien admin dans le footer
+- [x] **Flux de réservation complet avec création dans Beds24**
 - [ ] Configuration Resend pour emails réels
 - [ ] Sécuriser mot de passe admin (variable d'environnement)
 
@@ -108,3 +120,9 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - Le calendrier Beds24 retourne des données vides pour les dates sans réservations configurées
 - Le système fait un fallback automatique au prix de base si l'API Beds24 ne retourne pas de prix
 - Les propriétés non connectées à Beds24 affichent un avertissement "Prix indicatifs"
+- Les nouvelles propriétés synchronisées depuis Beds24 sont **masquées par défaut** (is_active: false)
+
+## Test Coverage
+- **47 tests pytest** dans /app/backend/tests/
+- **Tests automatisés Playwright** pour le frontend
+- Dernier rapport: /app/test_reports/iteration_5.json
