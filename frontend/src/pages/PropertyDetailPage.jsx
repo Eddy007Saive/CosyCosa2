@@ -386,22 +386,83 @@ const PropertyDetailPage = () => {
             <div className="lg:col-span-1">
               <div className="sticky top-28 bg-orso-surface p-6 md:p-8 border border-gray-100">
                 {property.is_showcase ? (
-                  // Showcase Property - Contact Only
+                  // Showcase Property - Contact Form
                   <div data-testid="showcase-contact">
-                    <p className="orso-caption mb-4">{t('properties.showcase')}</p>
-                    <h3 className="orso-h3 mb-6">{property.name}</h3>
-                    <p className="orso-body mb-8">
-                      Cette propriété est disponible sur demande uniquement.
-                      Contactez-nous pour plus d'informations.
+                    <p className="orso-caption mb-2">PROPRIÉTÉ EXCLUSIVE</p>
+                    <h3 className="orso-h3 mb-4">Demande d'information</h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                      Cette propriété d'exception est disponible sur demande. 
+                      Remplissez le formulaire ci-dessous et nous vous contacterons dans les plus brefs délais.
                     </p>
-                    <Link to="/contact">
+                    
+                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                      <div>
+                        <Label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">
+                          Nom complet *
+                        </Label>
+                        <Input
+                          value={contactForm.name}
+                          onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                          placeholder="Votre nom"
+                          required
+                          data-testid="contact-name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">
+                          Email *
+                        </Label>
+                        <Input
+                          type="email"
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                          placeholder="votre@email.com"
+                          required
+                          data-testid="contact-email"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">
+                          Téléphone
+                        </Label>
+                        <Input
+                          type="tel"
+                          value={contactForm.phone}
+                          onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                          placeholder="+33 6 00 00 00 00"
+                          data-testid="contact-phone"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">
+                          Votre message *
+                        </Label>
+                        <Textarea
+                          value={contactForm.message}
+                          onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                          placeholder="Dates souhaitées, nombre de personnes, questions..."
+                          rows={4}
+                          required
+                          data-testid="contact-message"
+                        />
+                      </div>
+                      
                       <Button
+                        type="submit"
                         className="orso-btn-primary w-full"
-                        data-testid="contact-btn"
+                        disabled={submittingContact}
+                        data-testid="contact-submit-btn"
                       >
-                        {t('property.contactForInfo')}
+                        {submittingContact ? 'Envoi en cours...' : 'Envoyer ma demande'}
                       </Button>
-                    </Link>
+                    </form>
+                    
+                    <p className="text-xs text-gray-500 mt-4 text-center">
+                      Ou appelez-nous directement au +33 6 00 00 00 00
+                    </p>
                   </div>
                 ) : (
                   // Bookable Property
