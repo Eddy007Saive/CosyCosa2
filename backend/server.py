@@ -630,8 +630,7 @@ async def get_property_availability(
             is_blocked = (
                 day_data.get("numAvail", 1) == 0 or
                 day_data.get("closed", False) or
-                day_data.get("booked", False) or
-                day_data.get("departure", False) == False and day_data.get("arrival", False) == False and day_data.get("numAvail", 1) == 0
+                day_data.get("booked", False)
             )
             
             if is_blocked and date:
