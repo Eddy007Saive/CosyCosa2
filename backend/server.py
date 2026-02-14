@@ -784,7 +784,7 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                 )
     
     # Fallback to base price (for properties not connected to Beds24 or if API fails)
-    base_price = property_data.get("price_from", 150)
+    base_price = property_data.get("price_from") or 150  # Use 150 if price_from is None or 0
     total = base_price * nights
     
     return PriceQuote(
