@@ -55,6 +55,9 @@ const ContactPage = () => {
 
   return (
     <div className="pt-24 md:pt-32" data-testid="contact-page">
+      {/* SEO */}
+      <ContactSEO lang={i18n.language} />
+      
       {/* Header */}
       <section className="orso-container py-12 md:py-20">
         <div className="max-w-3xl">
