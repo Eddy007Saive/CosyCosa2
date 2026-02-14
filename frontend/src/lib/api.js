@@ -67,4 +67,22 @@ export const syncBeds24 = async () => {
   return response.data;
 };
 
+// Site Images
+export const getSiteImages = async () => {
+  const response = await apiClient.get('/settings/images');
+  return response.data;
+};
+
+export const updateSiteImages = async (images) => {
+  const response = await apiClient.put('/settings/images', images);
+  return response.data;
+};
+
+export const updateSingleSiteImage = async (imageKey, url) => {
+  const response = await apiClient.put(`/settings/images/${imageKey}`, null, {
+    params: { url }
+  });
+  return response.data;
+};
+
 export default apiClient;
