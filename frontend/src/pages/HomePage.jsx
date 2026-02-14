@@ -81,6 +81,22 @@ const HomePage = () => {
 
   return (
     <div data-testid="home-page">
+      {/* SEO */}
+      <SEO 
+        lang={i18n.language}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "ORSO RENTAL SELECTION",
+          "url": "https://orso-rs.com",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://orso-rs.com/properties?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }}
+      />
+      
       {/* Hero Section */}
       <section
         className="relative min-h-screen flex items-center justify-center"
@@ -90,7 +106,7 @@ const HomePage = () => {
         <div className="absolute inset-0">
           <img
             src={siteImages.home_hero}
-            alt="Villa de luxe en Corse"
+            alt="Villa de luxe en Corse du Sud - Location vacances Porto-Vecchio Bonifacio"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/30" />
