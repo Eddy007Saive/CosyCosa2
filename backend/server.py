@@ -579,6 +579,17 @@ async def get_categories():
     ]
     return categories
 
+# --- Admin Auth ---
+class AdminLoginRequest(BaseModel):
+    password: str
+
+@api_router.post("/admin/login")
+async def admin_login(request: AdminLoginRequest):
+    """Validate admin password"""
+    if request.password == ADMIN_PASSWORD:
+        return {"success": True, "message": "Authentication successful"}
+    raise HTTPException(status_code=401, detail="Invalid password")
+
 # --- Properties ---
 @api_router.get("/properties")
 async def get_properties(
