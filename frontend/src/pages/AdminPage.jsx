@@ -609,6 +609,23 @@ const AdminPage = () => {
               {syncing ? 'Sync...' : 'Sync Beds24'}
             </Button>
             
+            {/* Auto-sync status indicator */}
+            {syncStatus && (
+              <div className="flex items-center gap-2 text-xs">
+                {syncStatus.scheduler_running ? (
+                  <span className="flex items-center gap-1 text-green-600">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Auto-sync actif
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-gray-400">
+                    <Clock className="w-3 h-3" />
+                    Auto-sync inactif
+                  </span>
+                )}
+              </div>
+            )}
+            
             <Button
               onClick={openNewProperty}
               size="sm"
