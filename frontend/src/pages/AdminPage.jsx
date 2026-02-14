@@ -238,6 +238,16 @@ const AdminPage = () => {
     }
   };
 
+  // Load sync status on mount
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadSyncStatus();
+      // Refresh sync status every minute
+      const interval = setInterval(loadSyncStatus, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
   const handleSiteImageChange = (key, value) => {
     setSiteImages(prev => ({ ...prev, [key]: value }));
   };
