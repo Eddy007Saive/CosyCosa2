@@ -139,6 +139,9 @@ const AdminPage = () => {
   const [loadingImages, setLoadingImages] = useState(false);
   const [savingImages, setSavingImages] = useState(false);
   
+  // Sync status
+  const [syncStatus, setSyncStatus] = useState(null);
+  
   // Modal states
   const [showPropertyModal, setShowPropertyModal] = useState(false);
   const [showImagesModal, setShowImagesModal] = useState(false);
@@ -165,6 +168,16 @@ const AdminPage = () => {
   });
   
   const [imageUrls, setImageUrls] = useState(['']);
+
+  // Load sync status
+  const loadSyncStatus = async () => {
+    try {
+      const status = await getSyncStatus();
+      setSyncStatus(status);
+    } catch (error) {
+      console.error('Failed to load sync status:', error);
+    }
+  };
 
   // Check session storage for auth
   useEffect(() => {
