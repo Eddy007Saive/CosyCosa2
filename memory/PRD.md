@@ -18,7 +18,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - Formulaire de contact
 - Espace admin pour gérer propriétés et images du site
 
-## What's Been Implemented
+## What's Been Implemented (Feb 14, 2026)
 
 ### Backend (FastAPI)
 - ✅ API REST complète avec endpoints /api/
@@ -29,12 +29,14 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ Synchronisation Beds24
 - ✅ Données demo initialisées (5 propriétés)
 - ✅ API de gestion des images du site (/api/settings/images)
+- ✅ **Nouveau**: Upload d'images (/api/upload/image)
 
 ### Frontend (React)
 - ✅ Design minimaliste avec fonts Cormorant Garamond + Manrope
-- ✅ Homepage avec hero, search bar, catégories
+- ✅ Homepage avec hero, search bar, catégories (images dynamiques)
 - ✅ Page Propriétés avec filtres par catégorie
 - ✅ Page Détail Propriété avec galerie, calendrier, booking widget
+- ✅ **Nouveau**: Formulaire de contact intégré pour propriétés vitrine
 - ✅ Page Services (ORSO Essentiel / Premium)
 - ✅ Page Contact avec formulaire
 - ✅ Internationalisation i18n (FR/EN/ES/IT)
@@ -48,7 +50,8 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ Synchronisation Beds24
 - ✅ Gestion des images des propriétés
 - ✅ Gestion de la visibilité et catégories
-- ✅ **Nouveau**: Gestion des images du site (6 images configurables)
+- ✅ Gestion des images du site (6 images configurables)
+- ✅ **Nouveau**: Upload d'images par drag-and-drop
 
 ### Integrations
 - ✅ Beds24 API V2 (token fourni par utilisateur)
@@ -57,16 +60,16 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 
 ## Prioritized Backlog
 
-### P0 (Critical)
+### P0 (Critical) - COMPLÉTÉ
 - [x] Moteur de réservation fonctionnel
 - [x] Affichage propriétés avec filtres
 - [x] Design conforme (#2e2e2e + blanc)
 - [x] Espace admin complet
 - [x] Gestion des images du site
+- [x] Upload d'images par drag-and-drop
 
-### P1 (Important)
-- [ ] **Flux de réservation complet** - Intégrer disponibilité/prix temps réel Beds24 + création réservation
-- [ ] **Propriétés vitrine** - Remplacer bouton réservation par formulaire contact
+### P1 (Important) - COMPLÉTÉ
+- [x] **Propriétés vitrine** - Formulaire de contact intégré dans la page propriété
 - [ ] Configuration Resend pour emails réels
 - [ ] Sécuriser mot de passe admin (variable d'environnement)
 
@@ -78,16 +81,17 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - [ ] Blog / Actualités
 
 ## Next Tasks
-1. Implémenter le flux de réservation bout en bout avec Beds24
-2. Gérer les propriétés "vitrine" côté frontend
-3. Configurer Resend avec une clé API valide
-4. Sécuriser le mot de passe admin
+1. Configurer Resend avec une clé API valide pour les emails
+2. Sécuriser le mot de passe admin (variable d'environnement)
+3. Optimisation SEO/GEO pour la Corse
+4. Synchronisation automatique Beds24
 
 ## Technical Stack
 - **Backend**: FastAPI, MongoDB, Motor
 - **Frontend**: React, TailwindCSS, Shadcn/UI
 - **Integrations**: Beds24 API V2, Resend (email), Stripe (via Beds24)
 - **i18n**: react-i18next
+- **File Upload**: Images stockées dans /app/backend/uploads/
 
 ## Admin Credentials
 - URL: /admin
