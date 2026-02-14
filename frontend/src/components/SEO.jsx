@@ -123,7 +123,9 @@ export const PropertySEO = ({ property, lang }) => {
 };
 
 // Services page SEO
-export const ServicesSEO = ({ lang = 'fr' }) => {
+export const ServicesSEO = ({ lang }) => {
+  const currentLang = lang || 'fr';
+  
   const titles = {
     fr: 'Nos Services | Conciergerie de Luxe Corse du Sud | ORSO RS',
     en: 'Our Services | Luxury Concierge Southern Corsica | ORSO RS',
@@ -138,12 +140,12 @@ export const ServicesSEO = ({ lang = 'fr' }) => {
     it: 'Scopri i nostri servizi di concierge di lusso in Corsica: ORSO Essential e ORSO Premium. Accoglienza personalizzata, chef privato, escursioni in barca.',
   };
 
-  const title = titles[lang] || titles.fr;
-  const description = descriptions[lang] || descriptions.fr;
+  const title = titles[currentLang] || titles.fr;
+  const description = descriptions[currentLang] || descriptions.fr;
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={`${BASE_URL}/services`} />
@@ -152,7 +154,9 @@ export const ServicesSEO = ({ lang = 'fr' }) => {
 };
 
 // Contact page SEO
-export const ContactSEO = ({ lang = 'fr' }) => {
+export const ContactSEO = ({ lang }) => {
+  const currentLang = lang || 'fr';
+  
   const titles = {
     fr: 'Contact | ORSO RS Conciergerie Corse du Sud',
     en: 'Contact | ORSO RS Concierge Southern Corsica',
@@ -167,12 +171,12 @@ export const ContactSEO = ({ lang = 'fr' }) => {
     it: 'Contatta ORSO RS per il tuo progetto di affitto di villa di lusso in Corsica del Sud. Il nostro team è a tua disposizione.',
   };
 
-  const title = titles[lang] || titles.fr;
-  const description = descriptions[lang] || descriptions.fr;
+  const title = titles[currentLang] || titles.fr;
+  const description = descriptions[currentLang] || descriptions.fr;
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={`${BASE_URL}/contact`} />
@@ -181,7 +185,10 @@ export const ContactSEO = ({ lang = 'fr' }) => {
 };
 
 // Legal pages SEO
-export const LegalSEO = ({ page = 'legal', lang = 'fr' }) => {
+export const LegalSEO = ({ page, lang }) => {
+  const currentLang = lang || 'fr';
+  const currentPage = page || 'legal';
+  
   const titles = {
     legal: {
       fr: 'Mentions Légales | ORSO RS',
@@ -197,11 +204,11 @@ export const LegalSEO = ({ page = 'legal', lang = 'fr' }) => {
     },
   };
 
-  const title = titles[page]?.[lang] || titles[page]?.fr || 'ORSO RS';
+  const title = titles[currentPage]?.[currentLang] || titles[currentPage]?.fr || 'ORSO RS';
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
