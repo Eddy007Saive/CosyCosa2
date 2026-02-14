@@ -22,6 +22,12 @@ export const getProperties = async (params = {}) => {
   return response.data;
 };
 
+// Admin: Get all properties including hidden ones
+export const getAdminProperties = async () => {
+  const response = await apiClient.get('/properties', { params: { include_hidden: true } });
+  return response.data;
+};
+
 export const getProperty = async (propertyId) => {
   const response = await apiClient.get(`/properties/${propertyId}`);
   return response.data;
