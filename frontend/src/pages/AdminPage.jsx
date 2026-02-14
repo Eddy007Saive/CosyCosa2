@@ -575,16 +575,35 @@ const AdminPage = () => {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setLoginError('');
+                  }}
+                  className={`pl-10 ${loginError ? 'border-red-500' : ''}`}
                   placeholder="Entrez le mot de passe"
                   data-testid="admin-password"
+                  disabled={loggingIn}
                 />
               </div>
+              {loginError && (
+                <p className="text-red-500 text-sm mt-2">{loginError}</p>
+              )}
             </div>
             
-            <Button type="submit" className="orso-btn-primary w-full" data-testid="admin-login-btn">
-              Connexion
+            <Button 
+              type="submit" 
+              className="orso-btn-primary w-full" 
+              data-testid="admin-login-btn"
+              disabled={loggingIn}
+            >
+              {loggingIn ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Connexion...
+                </>
+              ) : (
+                'Connexion'
+              )}
             </Button>
           </form>
         </div>
