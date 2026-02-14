@@ -1,10 +1,32 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Check, Download, Phone, Clock, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSiteImages } from '@/lib/api';
+
+const DEFAULT_IMAGES = {
+  services_hero: "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=1920&q=80",
+  services_lifestyle: "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80",
+};
 
 const ServicesPage = () => {
   const { t } = useTranslation();
+  const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
+
+  useEffect(() => {
+    const loadSiteImages = async () => {
+      try {
+        const data = await getSiteImages();
+        if (data?.images) {
+          setSiteImages({ ...DEFAULT_IMAGES, ...data.images });
+        }
+      } catch (error) {
+        console.error('Failed to load site images:', error);
+      }
+    };
+    loadSiteImages();
+  }, []);
 
   const intendanceServices = [
     'Accueil personnalisé',
