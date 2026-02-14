@@ -78,13 +78,6 @@ const SEO = ({
       
       {/* Canonical */}
       <link rel="canonical" href={metaUrl} />
-      
-      {/* Structured Data */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
     </Helmet>
   );
 };
