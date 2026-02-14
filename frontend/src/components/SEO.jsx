@@ -41,7 +41,9 @@ const SEO = ({ lang }) => {
 };
 
 // Properties listing page SEO
-export const PropertiesSEO = ({ lang = 'fr', category = null }) => {
+export const PropertiesSEO = ({ lang, category }) => {
+  const currentLang = lang || 'fr';
+  
   const baseTitles = {
     fr: 'Nos Propriétés | Villas de Luxe en Corse du Sud | ORSO RS',
     en: 'Our Properties | Luxury Villas in Southern Corsica | ORSO RS',
@@ -78,13 +80,13 @@ export const PropertiesSEO = ({ lang = 'fr', category = null }) => {
   };
 
   const title = category && categoryTitles[category] 
-    ? (categoryTitles[category][lang] || categoryTitles[category].fr)
-    : (baseTitles[lang] || baseTitles.fr);
-  const description = descriptions[lang] || descriptions.fr;
+    ? (categoryTitles[category][currentLang] || categoryTitles[category].fr)
+    : (baseTitles[currentLang] || baseTitles.fr);
+  const description = descriptions[currentLang] || descriptions.fr;
 
   return (
     <Helmet>
-      <html lang={lang} />
+      <html lang={currentLang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={`${BASE_URL}/properties${category ? `?category=${category}` : ''}`} />
