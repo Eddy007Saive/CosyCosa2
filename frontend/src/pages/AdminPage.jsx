@@ -129,6 +129,7 @@ const AdminPage = () => {
   
   // Tab state
   const [activeTab, setActiveTab] = useState('properties');
+  const [activeImagePage, setActiveImagePage] = useState('home');
   
   // Site images state
   const [siteImages, setSiteImages] = useState({});
