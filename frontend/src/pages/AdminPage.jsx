@@ -688,6 +688,93 @@ const AdminPage = () => {
             </TableBody>
           </Table>
         </div>
+          </>
+        )}
+
+        {/* Site Images Tab */}
+        {activeTab === 'site-images' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-serif text-2xl">Images du site</h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  Modifiez les images principales affichées sur votre site
+                </p>
+              </div>
+              <Button
+                onClick={saveSiteImages}
+                disabled={savingImages}
+                className="bg-[#2e2e2e] text-white hover:bg-black"
+                data-testid="save-site-images-btn"
+              >
+                <Save className={`w-4 h-4 mr-2 ${savingImages ? 'animate-spin' : ''}`} />
+                {savingImages ? 'Enregistrement...' : 'Enregistrer les modifications'}
+              </Button>
+            </div>
+
+            {loadingImages ? (
+              <div className="text-center py-12 text-gray-500">Chargement...</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Object.entries(SITE_IMAGE_KEYS).map(([key, config]) => (
+                  <div
+                    key={key}
+                    className="bg-white border border-gray-100 p-6 space-y-4"
+                    data-testid={`site-image-${key}`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <Label className="font-medium">{config.label}</Label>
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">{config.page}</span>
+                      </div>
+                      <p className="text-xs text-gray-500">{config.description}</p>
+                    </div>
+                    
+                    {/* Image Preview */}
+                    <div className="aspect-video bg-gray-100 overflow-hidden relative">
+                      {siteImages[key] ? (
+                        <img
+                          src={siteImages[key]}
+                          alt={config.label}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
+                            e.target.className = 'hidden';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <ImageIcon className="w-8 h-8" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* URL Input */}
+                    <div>
+                      <Input
+                        value={siteImages[key] || ''}
+                        onChange={(e) => handleSiteImageChange(key, e.target.value)}
+                        placeholder="https://example.com/image.jpg"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Tips */}
+            <div className="bg-gray-50 border border-gray-100 p-6">
+              <h3 className="font-medium mb-3">Conseils pour les images</h3>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• Utilisez des images de haute qualité (min. 1920px de large pour les images héro)</li>
+                <li>• Les formats recommandés sont JPG et WebP pour de meilleures performances</li>
+                <li>• Vous pouvez utiliser des URLs d'images hébergées sur Unsplash, Cloudinary, ou votre propre serveur</li>
+                <li>• Les modifications seront visibles sur le site après avoir cliqué sur "Enregistrer"</li>
+              </ul>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Property Modal */}
