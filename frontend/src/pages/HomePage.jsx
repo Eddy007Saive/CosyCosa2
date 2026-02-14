@@ -27,7 +27,11 @@ const HomePage = () => {
     const loadCategories = async () => {
       try {
         const data = await getCategories();
-        setCategories(data);
+        if (data && data.length > 0) {
+          setCategories(data);
+        } else {
+          throw new Error('No categories');
+        }
       } catch (error) {
         console.error('Failed to load categories:', error);
         // Use default categories

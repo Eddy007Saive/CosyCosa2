@@ -24,12 +24,29 @@ const PropertiesPage = () => {
           getProperties(activeCategory !== 'all' ? { category: activeCategory } : {}),
           getCategories(),
         ]);
-        setProperties(propertiesData.properties || []);
+        // Use API data if available, otherwise use mock data
+        const apiProperties = propertiesData.properties || [];
+        if (apiProperties.length > 0) {
+          setProperties(apiProperties);
+        } else {
+          // Filter mock data by category
+          const mockData = getMockProperties();
+          if (activeCategory !== 'all') {
+            setProperties(mockData.filter(p => p.category === activeCategory));
+          } else {
+            setProperties(mockData);
+          }
+        }
         setCategories(categoriesData);
       } catch (error) {
         console.error('Failed to load data:', error);
         // Set mock data for demo
-        setProperties(getMockProperties());
+        const mockData = getMockProperties();
+        if (activeCategory !== 'all') {
+          setProperties(mockData.filter(p => p.category === activeCategory));
+        } else {
+          setProperties(mockData);
+        }
         setCategories([
           { id: 'vue_mer', name: 'Vue Mer' },
           { id: 'plage_a_pieds', name: 'Plage à Pieds' },
