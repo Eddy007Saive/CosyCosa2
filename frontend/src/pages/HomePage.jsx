@@ -57,11 +57,11 @@ const HomePage = () => {
         }
       } catch (error) {
         console.error('Failed to load categories:', error);
-        // Use default categories
+        // Use default categories with new image keys
         setCategories([
-          { id: 'vue_mer', name: 'Vue Mer', image: DEFAULT_IMAGES.category_vue_mer },
-          { id: 'plage_a_pieds', name: 'Plage à Pieds', image: DEFAULT_IMAGES.category_plage_a_pieds },
-          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau", image: DEFAULT_IMAGES.category_pieds_dans_eau },
+          { id: 'vue_mer', name: 'Vue Mer', image: DEFAULT_IMAGES.home_category_vue_mer },
+          { id: 'plage_a_pieds', name: 'Plage à Pieds', image: DEFAULT_IMAGES.home_category_plage_a_pieds },
+          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau", image: DEFAULT_IMAGES.home_category_pieds_dans_eau },
         ]);
       }
     };
