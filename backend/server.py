@@ -91,8 +91,10 @@ async def update_site_images(images: Dict[str, str]):
     return {"success": True, "message": "Images updated"}
 
 @api_router.put("/settings/images/{image_key}")
-async def update_single_image(image_key: str, url: str):
+async def update_single_image(image_key: str, url: str = None):
     """Update a single site image"""
+    if not url:
+        raise HTTPException(status_code=400, detail="URL is required")
     await db.site_settings.update_one(
         {"id": "site_settings"},
         {
