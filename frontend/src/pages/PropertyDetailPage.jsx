@@ -64,6 +64,12 @@ const PropertyDetailPage = () => {
   const [priceQuote, setPriceQuote] = useState(null);
   const [loadingPrice, setLoadingPrice] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  
+  // Availability states
+  const [blockedDates, setBlockedDates] = useState([]);
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState(null);
+  
   const [bookingForm, setBookingForm] = useState({
     firstName: '',
     lastName: '',
@@ -82,6 +88,7 @@ const PropertyDetailPage = () => {
   });
   const [submittingContact, setSubmittingContact] = useState(false);
 
+  // Load property
   useEffect(() => {
     const loadProperty = async () => {
       setLoading(true);
@@ -98,6 +105,57 @@ const PropertyDetailPage = () => {
     };
     loadProperty();
   }, [id]);
+  
+  // Load availability when property is loaded (for next 6 months)
+  useEffect(() => {
+    const loadAvailability = async () => {
+      if (!property || property.is_showcase) return;
+      
+      setLoadingAvailability(true);
+      setAvailabilityError(null);
+      
+      try {
+        const today = new Date();
+        const fromDate = format(today, 'yyyy-MM-dd');
+        const toDate = format(addMonths(today, 6), 'yyyy-MM-dd');
+        
+        const data = await getPropertyAvailability(property.id, fromDate, toDate);
+        
+        if (data.blocked_dates && data.blocked_dates.length > 0) {
+          // Parse blocked dates
+          const blocked = data.blocked_dates.map(dateStr => parseISO(dateStr));
+          setBlockedDates(blocked);
+        } else {
+          setBlockedDates([]);
+        }
+        
+        if (data.note) {
+          console.log('Availability note:', data.note);
+        }
+      } catch (error) {
+        console.error('Failed to load availability:', error);
+        setAvailabilityError('Unable to load availability');
+      } finally {
+        setLoadingAvailability(false);
+      }
+    };
+    
+    loadAvailability();
+  }, [property]);
+  
+  // Function to check if a date is blocked
+  const isDateBlocked = (date) => {
+    return blockedDates.some(blockedDate => 
+      format(blockedDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+    );
+  };
+  
+  // Check if date range has blocked dates
+  const hasBlockedDatesInRange = (start, end) => {
+    if (!start || !end) return false;
+    const daysInRange = eachDayOfInterval({ start, end });
+    return daysInRange.some(day => isDateBlocked(day));
+  };
 
   useEffect(() => {
     const fetchPrice = async () => {
