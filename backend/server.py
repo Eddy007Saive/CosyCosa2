@@ -664,6 +664,53 @@ async def submit_contact(contact: ContactRequestCreate, background_tasks: Backgr
     }
 
 # --- Beds24 Sync ---
+@api_router.post("/sync/beds24/images")
+async def sync_beds24_images():
+    """Sync images from Beds24 for all properties"""
+    # Get all properties with beds24_id
+    properties = await db.properties.find(
+        {"beds24_id": {"$ne": None}},
+        {"_id": 0, "id": 1, "beds24_id": 1, "name": 1}
+    ).to_list(100)
+    
+    updated = 0
+    for prop in properties:
+        beds24_id = prop.get("beds24_id")
+        if beds24_id:
+            images = await beds24_service.get_property_images(beds24_id)
+            if images:
+                await db.properties.update_one(
+                    {"beds24_id": beds24_id},
+                    {"$set": {"images": images, "updated_at": datetime.now(timezone.utc).isoformat()}}
+                )
+                updated += 1
+                logger.info(f"Updated images for {prop.get('name')}: {len(images)} images")
+    
+    return {"success": True, "updated": updated, "total": len(properties)}
+
+@api_router.put("/properties/{property_id}/category")
+async def update_property_category(property_id: str, category: str):
+    """Update property category"""
+    valid_categories = ["vue_mer", "plage_a_pieds", "pieds_dans_eau"]
+    if category not in valid_categories:
+        raise HTTPException(status_code=400, detail=f"Invalid category. Must be one of: {valid_categories}")
+    
+    result = await db.properties.update_one(
+        {"$or": [{"id": property_id}, {"beds24_id": property_id}]},
+        {"$set": {"category": category, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    return {"success": True, "message": f"Category updated to {category}"}
+
+@api_router.get("/sync/beds24/properties")
+async def get_beds24_properties_raw():
+    """Get raw properties from Beds24 API for debugging"""
+    properties = await beds24_service.get_properties()
+    return {"properties": properties, "count": len(properties)}
+
 @api_router.post("/init-demo-data")
 async def init_demo_data():
     """Initialize demo properties for display"""
