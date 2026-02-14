@@ -111,6 +111,10 @@ const AdminPage = () => {
   const [editingProperty, setEditingProperty] = useState(null);
   const [selectedPropertyForImages, setSelectedPropertyForImages] = useState(null);
   
+  // Upload states
+  const [uploadingKey, setUploadingKey] = useState(null);
+  const [dragOverKey, setDragOverKey] = useState(null);
+  
   // Form state
   const [propertyForm, setPropertyForm] = useState({
     name: '',
