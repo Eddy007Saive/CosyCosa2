@@ -688,6 +688,19 @@ async def sync_beds24_images():
     
     return {"success": True, "updated": updated, "total": len(properties)}
 
+@api_router.put("/properties/{property_id}/images")
+async def update_property_images(property_id: str, images: List[str]):
+    """Update property images"""
+    result = await db.properties.update_one(
+        {"$or": [{"id": property_id}, {"beds24_id": property_id}]},
+        {"$set": {"images": images, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    return {"success": True, "message": "Images updated", "count": len(images)}
+
 @api_router.put("/properties/{property_id}/category")
 async def update_property_category(property_id: str, category: str):
     """Update property category"""
