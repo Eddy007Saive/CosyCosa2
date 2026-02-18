@@ -8,158 +8,110 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 2. **Propriétaires** - Souhaitent confier leur bien à une conciergerie de luxe
 3. **Administrateur** - Gère les propriétés et le contenu du site
 
-## Core Requirements
-- Design minimaliste et élégant (#2e2e2e + blanc)
-- Moteur de réservation connecté à Beds24 API V2
-- Trois catégories: Vue Mer, Plage à Pieds, Pieds dans l'Eau
-- Logements "vitrine" (sans réservation en ligne)
-- Site multilingue (FR/EN/ES/IT)
-- Page services (ORSO Essentiel, ORSO Premium)
-- Formulaire de contact
-- Espace admin pour gérer propriétés et images du site
+## What's Been Implemented (Feb 18, 2026)
 
-## What's Been Implemented (Feb 14, 2026)
+### ✅ INTÉGRATION BEDS24 COMPLÈTE
+- **Synchronisation automatique** toutes les heures (APScheduler)
+- **Toutes les données récupérées de Beds24 :**
+  - Descriptions (via templates)
+  - Équipements/Amenities (via featureCodes)
+  - Min/Max stay
+  - Caution (security deposit)
+  - Frais de ménage (cleaning fee)
+  - Horaires check-in/check-out
+  - Prix dynamiques en temps réel
+  - Disponibilités via calendrier
+- **Flux de réservation avec paiement Stripe via Beds24 :**
+  - Sélection des dates
+  - Calcul du prix en temps réel
+  - Modal de réservation
+  - Redirection vers Beds24 pour paiement Stripe
 
-### Backend (FastAPI)
-- ✅ API REST complète avec endpoints /api/
-- ✅ **Intégration Beds24 API V2 complète:**
-  - Synchronisation des propriétés avec includeAllRooms
-  - Récupération des room_ids dynamiquement
-  - Calendrier de disponibilité en temps réel
-  - Prix dynamiques via /inventory/rooms/offers
-  - Rafraîchissement automatique du token (retry on 401)
-  - **Création de réservation via API Beds24**
-- ✅ Gestion propriétés (CRUD)
-- ✅ **Système de réservation complet avec création dans Beds24**
-- ✅ Formulaire de contact (envoi email via Resend)
-- ✅ Upload d'images (/api/upload/image)
-- ✅ API de gestion des images du site **par page**
-- ✅ **API include_hidden pour l'admin** (retourne toutes les propriétés)
-- ✅ **Authentification admin via API** (mot de passe sécurisé en variable d'environnement)
-- ✅ **Synchronisation automatique Beds24 (APScheduler, toutes les heures)**
+### ✅ Frontend (React)
+- Homepage avec recherche de dates
+- Page Propriétés avec filtres par catégorie
+- **Page Détail Propriété COMPLÈTE :**
+  - Galerie d'images
+  - Description
+  - **Équipements/Amenities** (traduits depuis featureCodes Beds24)
+  - **Informations pratiques** :
+    - Horaires arrivée/départ
+    - Séjour minimum
+    - Caution
+    - Frais de ménage
+  - Calendrier avec disponibilités temps réel
+  - Calcul de prix dynamique
+  - **Bouton "Paiement sécurisé par Stripe"**
+  - **Modal de réservation avec redirection vers Beds24**
+- Page Services (ORSO Essentiel / Premium)
+- Page Contact avec formulaire + téléphone + Google Maps
+- **Pages Légales complètes** (AT OME - toutes infos SIRET, RCS, TVA)
+- Footer avec téléphone, email, GMB
+- Multilingue FR/EN/ES/IT
 
-### Frontend (React)
-- ✅ Design minimaliste avec fonts Cormorant Garamond + Manrope
-- ✅ Homepage avec hero, search bar, catégories (images dynamiques)
-- ✅ Page Propriétés avec filtres par catégorie
-- ✅ **Page Détail Propriété avec flux de réservation complet:**
-  - Calendrier avec dates bloquées de Beds24
-  - Prix calculés en temps réel
-  - Indicateur de chargement des disponibilités
-  - Message pour propriétés non connectées
-  - Indicateur "Dates disponibles - Prix garanti"
-  - **Formulaire de réservation avec confirmation**
-- ✅ Formulaire de contact intégré pour propriétés vitrine
-- ✅ Lien admin discret dans le footer
-- ✅ Page Services (ORSO Essentiel / Premium) **avec images configurables**
-- ✅ Page Contact avec formulaire + téléphone + lien Google Maps
-- ✅ Internationalisation i18n (FR/EN/ES/IT)
-- ✅ **Pages Légales** (Mentions Légales + Politique de Confidentialité)
+### ✅ Backend (FastAPI)
+- **21 propriétés** en base de données
+- **16 propriétés connectées Beds24**
+- **Sync complète avec toutes les données Beds24**
+- API REST complète
+- Endpoint `/properties/{id}/booking-url` pour génération URL Beds24
+- Endpoint `/properties/{id}/beds24-details` pour détails complets
 
-### SEO/GEO Optimisé pour la Corse
-- ✅ **Meta tags complets** (title, description, keywords, robots)
-- ✅ **Open Graph** pour partage Facebook/LinkedIn
-- ✅ **Twitter Cards** pour partage Twitter
-- ✅ **Geo tags** pour SEO local (FR-2A, Porto-Vecchio)
-- ✅ **Balises hreflang** pour multilingue (fr, en, es, it)
-- ✅ **Données structurées Schema.org:**
-  - Organization
-  - LocalBusiness
-  - LodgingBusiness
-  - BreadcrumbList
-  - FAQPage
-- ✅ **sitemap.xml** avec toutes les pages et hreflang
-- ✅ **robots.txt** configuré
+### ✅ Admin Panel (`/admin`)
+- Authentification sécurisée (ADMIN_PASSWORD en env var)
+- Gestion propriétés (activer/masquer)
+- Upload photos
+- Sync manuelle Beds24
+- Gestion images du site par page
+- Statut de sync automatique
 
-### Admin Panel (/admin)
-- ✅ Tableau de bord avec statistiques **(5 stats: Total, Beds24, Visibles, Masquées, Vitrines)**
-- ✅ **Propriétés masquées visibles** avec badge "Masqué" et fond grisé
-- ✅ Gestion des propriétés (ajouter, modifier, supprimer)
-- ✅ Synchronisation Beds24
-- ✅ Gestion des images des propriétés
-- ✅ Gestion de la visibilité et catégories
-- ✅ **Gestion des images du site par page:**
-  - Accueil (6 images)
-  - Services (2 images)
-  - Contact (1 image)
-  - Propriétés (1 image)
-- ✅ Upload d'images par drag-and-drop
+### ✅ SEO/GEO
+- robots.txt + sitemap.xml
+- Schema.org (Organization, LocalBusiness, FAQ...)
+- Open Graph / Twitter Cards
+- Geo tags Corse du Sud
 
-### Informations de Contact
-- ✅ **Téléphone**: +33 6 15 87 54 70
-- ✅ **Email**: hello@conciergerie-cosycasa.fr
-- ✅ **Google My Business**: https://share.google/AJqwlTVKrw5cqQIyD
-- ✅ Tous les liens présents dans le Footer et la page Contact
+## Informations Légales (AT OME)
+- **SIRET :** 538 392 135 00033
+- **SIREN :** 538 392 135
+- **RCS :** Ajaccio 538 392 135
+- **TVA Intracommunautaire :** FR26538392135
+- **Capital :** 7 000,00 €
+- **Gérant :** Marc VOUILLARMET
+- **Adresse :** Pont de l'Oso, Lotissement Puretta, 20170 San-Gavino-di-Carbini
 
-### Integrations
-- ✅ **Beds24 API V2** - Intégration complète:
-  - Propriétés avec rooms
-  - Disponibilités en temps réel
-  - Prix dynamiques
-  - Token auto-refresh
-  - **Création de réservations**
-- ⏳ Resend emails (clé API non fournie - logs only)
-- ✅ Stripe (via Beds24 - configuré côté Beds24)
-
-## Prioritized Backlog
-
-### P0 (Critical) - COMPLÉTÉ ✅
-- [x] Moteur de réservation fonctionnel avec Beds24
-- [x] Affichage propriétés avec filtres
-- [x] Design conforme (#2e2e2e + blanc)
-- [x] Espace admin complet
-- [x] Gestion des images du site
-- [x] Upload d'images par drag-and-drop
-- [x] Calendrier avec disponibilités temps réel
-- [x] Prix dynamiques depuis Beds24
-- [x] **Propriétés masquées visibles dans l'admin**
-- [x] **Gestion des images par page (Accueil, Services, Contact, Propriétés)**
-- [x] **Téléphone + Google My Business ajoutés**
-- [x] **Pages légales créées**
-
-### P1 (Important) - COMPLÉTÉ ✅
-- [x] Propriétés vitrine - Formulaire de contact intégré
-- [x] Lien admin dans le footer
-- [x] **Flux de réservation complet avec création dans Beds24**
-- [x] **Synchronisation automatique Beds24 (toutes les heures)**
-- [x] **Sécuriser mot de passe admin (variable d'environnement)**
-- [x] **sitemap.xml et robots.txt générés**
-- [ ] Configuration Resend pour emails réels
-
-### P2 (Nice to have)
-- [x] **Optimisation SEO/GEO pour la Corse** (meta tags, structured data, geo tags)
-- [ ] Carte interactive Google Maps (recommandé seulement avec 10+ propriétés)
-- [ ] Avis clients / témoignages
-- [ ] Blog / Actualités
-- [ ] SEO dynamique par page (react-helmet-async a causé des bugs, reporté)
+## Informations de Contact
+- **Téléphone :** +33 6 15 87 54 70
+- **Email :** hello@conciergerie-cosycasa.fr
+- **Google My Business :** https://share.google/AJqwlTVKrw5cqQIyD
 
 ## Technical Stack
-- **Backend**: FastAPI, MongoDB, Motor, APScheduler
-- **Frontend**: React, TailwindCSS, Shadcn/UI
-- **Integrations**: Beds24 API V2, Resend (email), Stripe (via Beds24)
-- **i18n**: react-i18next
-- **File Upload**: Images stockées dans /app/backend/uploads/
-- **Auto-Sync**: APScheduler pour synchronisation automatique Beds24
+- **Backend:** FastAPI, MongoDB, Motor, APScheduler
+- **Frontend:** React, TailwindCSS, Shadcn/UI
+- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24)
+- **i18n:** react-i18next
 
 ## Admin Credentials
-- URL: /admin (ou cliquer sur "Admin" dans le footer)
+- URL: /admin
 - Mot de passe: Variable d'environnement ADMIN_PASSWORD
 
-## Configuration Auto-Sync
-- Intervalle: 1 heure (configurable via `BEDS24_SYNC_INTERVAL_HOURS`)
-- Activer/Désactiver: `BEDS24_SYNC_ENABLED=true/false`
-- Endpoints:
-  - `GET /api/sync/status` - Statut de la synchronisation
-  - `POST /api/sync/trigger` - Déclencher une sync manuelle
+## Data Flow - Réservation
+1. User sélectionne dates sur le calendrier
+2. API appelle Beds24 pour prix + disponibilité
+3. User clique "BOOK NOW"
+4. Modal s'ouvre avec récapitulatif
+5. User remplit formulaire (nom, email, téléphone)
+6. Clic "RÉSERVER MAINTENANT - PAIEMENT SÉCURISÉ"
+7. API génère URL Beds24 avec paramètres pré-remplis
+8. Redirection vers page Beds24/Stripe pour paiement
 
-## Notes techniques importantes
-- Le calendrier Beds24 retourne des données vides pour les dates sans réservations configurées
-- Le système fait un fallback automatique au prix de base si l'API Beds24 ne retourne pas de prix
-- Les propriétés non connectées à Beds24 affichent un avertissement "Prix indicatifs"
-- Les nouvelles propriétés synchronisées depuis Beds24 sont **masquées par défaut** (is_active: false)
-- **SEO dynamique via react-helmet-async**: Tentative d'implémentation a échoué (erreur Helmet). Le SEO statique dans index.html reste la solution active.
+## Remaining Tasks (Backlog)
+- [ ] Ajouter vraies photos des propriétés (actuellement images placeholder)
+- [ ] Configurer Resend pour emails réels
+- [ ] Témoignages clients / avis
+- [ ] Blog / Actualités
 
-## Test Coverage
-- **47 tests pytest** dans /app/backend/tests/
-- **Tests automatisés Playwright** pour le frontend
-- Dernier rapport: /app/test_reports/iteration_5.json
+## Notes Importantes
+- Les nouvelles propriétés Beds24 sont **masquées par défaut** - l'admin doit les activer
+- Le paiement Stripe est géré par Beds24 (pas d'intégration directe Stripe nécessaire)
+- Le token Beds24 a une durée de vie de 24h, le backend le rafraîchit automatiquement
