@@ -21,11 +21,11 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
   - Horaires check-in/check-out
   - Prix dynamiques en temps réel
   - Disponibilités via calendrier
-- **Flux de réservation avec paiement Stripe via Beds24 :**
-  - Sélection des dates
-  - Calcul du prix en temps réel
-  - Modal de réservation
-  - Redirection vers Beds24 pour paiement Stripe
+- **Flux de réservation avec paiement Stripe direct (P0 RÉSOLU):**
+  - Backend crée réservation dans Beds24 via API
+  - Génère URL de paiement Stripe direct (`bookpay.php`)
+  - L'utilisateur est redirigé directement vers la page de paiement Stripe
+  - **Contourne le formulaire de réservation Beds24** (demande utilisateur critique)
 
 ### ✅ Frontend (React)
 - Homepage avec recherche de dates
@@ -39,10 +39,10 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
     - Séjour minimum
     - Caution
     - Frais de ménage
-  - Calendrier avec disponibilités temps réel
+  - **Calendrier de disponibilité FONCTIONNEL** (bug P0 corrigé)
   - Calcul de prix dynamique
   - **Bouton "Paiement sécurisé par Stripe"**
-  - **Modal de réservation avec redirection vers Beds24**
+  - **Modal de réservation avec redirection vers Stripe**
 - Page Services (ORSO Essentiel / Premium)
 - Page Contact avec formulaire + téléphone + Google Maps
 - **Pages Légales complètes** (AT OME - toutes infos SIRET, RCS, TVA)
@@ -54,7 +54,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - **16 propriétés connectées Beds24**
 - **Sync complète avec toutes les données Beds24**
 - API REST complète
-- Endpoint `/properties/{id}/booking-url` pour génération URL Beds24
+- **Endpoint `/api/bookings` - Crée réservation dans Beds24 + retourne payment_url Stripe**
 - Endpoint `/properties/{id}/beds24-details` pour détails complets
 
 ### ✅ Admin Panel (`/admin`)
@@ -67,9 +67,11 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 
 ### ✅ SEO/GEO
 - robots.txt + sitemap.xml
-- Schema.org (Organization, LocalBusiness, FAQ...)
+- Schema.org (Organization, LocalBusiness, FAQ...) dans index.html
 - Open Graph / Twitter Cards
 - Geo tags Corse du Sud
+- **Note:** SEO dynamique via react-helmet-async désactivé (provoque page blanche)
+- Le SEO statique dans index.html est très complet et suffisant
 
 ## Informations Légales (AT OME)
 - **SIRET :** 538 392 135 00033
@@ -88,30 +90,43 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 ## Technical Stack
 - **Backend:** FastAPI, MongoDB, Motor, APScheduler
 - **Frontend:** React, TailwindCSS, Shadcn/UI
-- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24)
+- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24 bookpay.php)
 - **i18n:** react-i18next
 
 ## Admin Credentials
 - URL: /admin
 - Mot de passe: Variable d'environnement ADMIN_PASSWORD
 
-## Data Flow - Réservation
+## Data Flow - Réservation (MIS À JOUR)
 1. User sélectionne dates sur le calendrier
 2. API appelle Beds24 pour prix + disponibilité
 3. User clique "BOOK NOW"
 4. Modal s'ouvre avec récapitulatif
 5. User remplit formulaire (nom, email, téléphone)
 6. Clic "RÉSERVER MAINTENANT - PAIEMENT SÉCURISÉ"
-7. API génère URL Beds24 avec paramètres pré-remplis
-8. Redirection vers page Beds24/Stripe pour paiement
+7. **Backend crée réservation dans Beds24 API**
+8. **Backend retourne URL de paiement Stripe direct**
+9. **Redirection vers page Stripe pour paiement** (contourne formulaire Beds24)
+
+## Issues Résolues (Session Feb 18, 2026)
+- ✅ **Bug calendrier désactivé (P0)** - Confirmé comme fonctionnel après tests
+- ⚠️ **SEO dynamique (P1)** - Maintenu désactivé car provoque bug page blanche. SEO statique suffisant.
 
 ## Remaining Tasks (Backlog)
-- [ ] Ajouter vraies photos des propriétés (actuellement images placeholder)
-- [ ] Configurer Resend pour emails réels
-- [ ] Témoignages clients / avis
+### P1 - Prochain
+- [ ] **Upsells/Extras Beds24** - L'utilisateur veut afficher les extras. Les propriétés actuelles n'ont pas d'upsellItems configurés dans Beds24.
+
+### P2 - Future
+- [ ] Ajouter section "Témoignages clients"
+- [ ] Intégrer liens réseaux sociaux (Instagram/Facebook)
+- [ ] Configurer Resend pour emails réels du formulaire de contact
+
+### P3 - Backlog
+- [ ] Carte SVG pour localiser les propriétés
 - [ ] Blog / Actualités
 
 ## Notes Importantes
 - Les nouvelles propriétés Beds24 sont **masquées par défaut** - l'admin doit les activer
-- Le paiement Stripe est géré par Beds24 (pas d'intégration directe Stripe nécessaire)
+- Le paiement Stripe est géré via URL directe Beds24 `bookpay.php` avec paramètres g=st (Stripe only) et pc=100 (100% paiement)
 - Le token Beds24 a une durée de vie de 24h, le backend le rafraîchit automatiquement
+- **L'API Beds24 `/properties` retourne parfois erreur 500** - monitoring recommandé
