@@ -525,11 +525,21 @@ class Beds24Service:
                 
                 logger.info(f"Beds24 booking response status: {response.status_code}")
                 
-                if response.status_code == 200:
+                if response.status_code in [200, 201]:
                     result = response.json()
                     logger.info(f"Beds24 booking response: {result}")
                     if result and isinstance(result, list) and len(result) > 0:
-                        return result[0]
+                        # Extract booking ID from the response
+                        booking_response = result[0]
+                        if booking_response.get("success") and "new" in booking_response:
+                            # Return with the booking ID
+                            return {
+                                "success": True,
+                                "bookId": booking_response["new"].get("id"),
+                                "id": booking_response["new"].get("id"),
+                                "price": booking_response["new"].get("price")
+                            }
+                        return booking_response
                     return result if result else {"success": False, "error": "Empty response"}
                 elif response.status_code == 401 and retry:
                     # Token expired, refresh and retry
