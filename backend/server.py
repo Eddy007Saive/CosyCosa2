@@ -218,6 +218,7 @@ class Property(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     beds24_id: Optional[str] = None
+    beds24_room_id: Optional[str] = None  # Room type ID for booking
     name: str
     slug: str
     description: Dict[str, str]  # {fr, en, es, it}
@@ -230,11 +231,23 @@ class Property(BaseModel):
     bedrooms: int
     bathrooms: int
     amenities: List[str]
+    feature_codes: Optional[List[str]] = []  # Beds24 feature codes
     price_from: Optional[float] = None
     currency: str = "EUR"
     is_showcase: bool = False  # True = vitrine only, no booking
     is_active: bool = True
     coordinates: Optional[Dict[str, float]] = None
+    # Beds24 specific fields
+    min_stay: Optional[int] = None
+    max_stay: Optional[int] = None
+    security_deposit: Optional[float] = None
+    cleaning_fee: Optional[float] = None
+    check_in_start: Optional[str] = None
+    check_in_end: Optional[str] = None
+    check_out_end: Optional[str] = None
+    booking_url: Optional[str] = None  # Beds24 booking page URL
+    payment_settings: Optional[Dict] = None  # Stripe/payment gateway settings
+    templates: Optional[Dict[str, str]] = None  # Beds24 templates (descriptions, etc)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
