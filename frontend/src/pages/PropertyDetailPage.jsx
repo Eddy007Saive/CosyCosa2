@@ -493,6 +493,61 @@ const PropertyDetailPage = () => {
                   </div>
                 </div>
               )}
+              
+              {/* Practical Info - Only for Beds24 connected properties */}
+              {property.beds24_id && (
+                <div className="mb-12 bg-gray-50 p-6 rounded-lg">
+                  <h2 className="orso-h3 mb-6">Informations pratiques</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Check-in / Check-out */}
+                    <div className="flex items-start gap-4">
+                      <Clock className="w-5 h-5 text-gray-500 mt-1" strokeWidth={1.5} />
+                      <div>
+                        <p className="font-medium mb-1">Horaires</p>
+                        <p className="text-sm text-gray-600">
+                          Arrivée : {property.check_in_start || '15:00'} - {property.check_in_end || '20:00'}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Départ : avant {property.check_out_end || '10:00'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Min Stay */}
+                    {property.min_stay && property.min_stay > 1 && (
+                      <div className="flex items-start gap-4">
+                        <CalendarIcon className="w-5 h-5 text-gray-500 mt-1" strokeWidth={1.5} />
+                        <div>
+                          <p className="font-medium mb-1">Séjour minimum</p>
+                          <p className="text-sm text-gray-600">{property.min_stay} nuits</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Security Deposit */}
+                    {property.security_deposit && (
+                      <div className="flex items-start gap-4">
+                        <Shield className="w-5 h-5 text-gray-500 mt-1" strokeWidth={1.5} />
+                        <div>
+                          <p className="font-medium mb-1">Caution</p>
+                          <p className="text-sm text-gray-600">{property.security_deposit}€</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Cleaning Fee */}
+                    {property.cleaning_fee && (
+                      <div className="flex items-start gap-4">
+                        <Check className="w-5 h-5 text-gray-500 mt-1" strokeWidth={1.5} />
+                        <div>
+                          <p className="font-medium mb-1">Frais de ménage</p>
+                          <p className="text-sm text-gray-600">{property.cleaning_fee}€ (inclus)</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Booking Sidebar */}
