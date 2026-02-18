@@ -58,76 +58,73 @@ const SEO = ({
 /**
  * SEO for property detail pages
  */
-export const PropertySEO = ({ property, lang = 'fr' }) => {
+export const PropertySEO = ({ property, lang }) => {
   if (!property) return null;
   
-  const name = property.name || 'Propriété';
-  const city = property.city || 'Corse du Sud';
-  const description = property.description?.[lang] || property.description?.fr || '';
+  const name = String(property.name || 'Propriété');
+  const city = String(property.city || 'Corse du Sud');
+  const description = String(property.description?.[lang] || property.description?.fr || '');
   const shortDesc = description.substring(0, 155) + (description.length > 155 ? '...' : '');
-  const image = property.images?.[0] || DEFAULT_IMAGE;
+  const image = String(property.images?.[0] || DEFAULT_IMAGE);
   const price = property.price_from;
   
   const title = `${name} - Location à ${city}`;
   const metaDesc = shortDesc || `${name} à ${city}. ${property.bedrooms || 0} chambres, ${property.max_guests || 4} personnes. Réservez votre séjour de luxe en Corse.`;
+  const fullTitle = `${title} | ${SITE_NAME}`;
+  const propertyUrl = `${SITE_URL}/properties/${property.id || ''}`;
   
   return (
-    <>
-      <Helmet>
-        <title>{`${title} | ${SITE_NAME}`}</title>
-        <meta name="description" content={metaDesc} />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={metaDesc} />
-        <meta property="og:image" content={image} />
-        <meta property="og:url" content={`${SITE_URL}/properties/${property.id}`} />
-        <meta property="og:type" content="website" />
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={metaDesc} />
-        <meta name="twitter:image" content={image} />
-        
-        {/* Canonical */}
-        <link rel="canonical" href={`${SITE_URL}/properties/${property.id}`} />
-      </Helmet>
+    <Helmet>
+      <title>{fullTitle}</title>
+      <meta name="description" content={metaDesc} />
+      
+      {/* Open Graph */}
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={metaDesc} />
+      <meta property="og:image" content={image} />
+      <meta property="og:url" content={propertyUrl} />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={metaDesc} />
+      <meta name="twitter:image" content={image} />
+      
+      {/* Canonical */}
+      <link rel="canonical" href={propertyUrl} />
       
       {/* JSON-LD Structured Data for Property */}
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LodgingBusiness",
-            "name": name,
-            "description": metaDesc,
-            "image": image,
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": city,
-              "addressRegion": "Corse du Sud",
-              "addressCountry": "FR"
-            },
-            ...(price && {
-              "priceRange": `${price}€ - ${price * 2}€`
-            }),
-            "amenityFeature": (property.amenities || []).map(a => ({
-              "@type": "LocationFeatureSpecification",
-              "name": a,
-              "value": true
-            }))
-          })}
-        </script>
-      </Helmet>
-    </>
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": name,
+          "description": metaDesc,
+          "image": image,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": city,
+            "addressRegion": "Corse du Sud",
+            "addressCountry": "FR"
+          },
+          ...(price && { "priceRange": `${price}€ - ${price * 2}€` }),
+          "amenityFeature": (property.amenities || []).map(a => ({
+            "@type": "LocationFeatureSpecification",
+            "name": String(a),
+            "value": true
+          }))
+        })}
+      </script>
+    </Helmet>
   );
 };
 
 /**
  * SEO for services page
  */
-export const ServicesSEO = () => (
+export const ServicesSEO = ({ lang }) => (
   <SEO
     title="Nos Services de Conciergerie"
     description="Services de conciergerie haut de gamme en Corse du Sud : gestion locative, accueil personnalisé, ménage, maintenance, conciergerie 24/7."
@@ -138,7 +135,7 @@ export const ServicesSEO = () => (
 /**
  * SEO for contact page
  */
-export const ContactSEO = () => (
+export const ContactSEO = ({ lang }) => (
   <SEO
     title="Contactez-nous"
     description="Contactez ORSO RS pour réserver votre villa en Corse du Sud ou obtenir des informations sur nos services de conciergerie."
@@ -149,24 +146,59 @@ export const ContactSEO = () => (
 /**
  * SEO for properties listing page
  */
-export const PropertiesSEO = () => (
-  <SEO
-    title="Nos Villas en Corse du Sud"
-    description="Découvrez notre collection de villas de luxe en Corse du Sud : vue mer, plage à pieds, pieds dans l'eau. Porto-Vecchio, Bonifacio, Calvi."
-    url="/properties"
-  />
-);
+export const PropertiesSEO = ({ category, city, lang }) => {
+  let title = 'Nos Villas en Corse du Sud';
+  let desc = 'Découvrez notre collection de villas de luxe en Corse du Sud : vue mer, plage à pieds, pieds dans l\'eau. Porto-Vecchio, Bonifacio, Calvi.';
+  
+  if (category) {
+    const categoryNames = {
+      vue_mer: 'Vue Mer',
+      plage_a_pieds: 'Plage à Pieds',
+      pieds_dans_eau: 'Pieds dans l\'Eau'
+    };
+    const catName = categoryNames[category] || category;
+    title = `Villas ${catName} en Corse du Sud`;
+    desc = `Découvrez nos villas ${catName} en Corse du Sud. Locations de luxe avec vue exceptionnelle.`;
+  }
+  
+  if (city) {
+    title = `Villas à ${city}`;
+    desc = `Découvrez nos villas de luxe à ${city}, Corse du Sud. Réservation en ligne.`;
+  }
+  
+  return (
+    <SEO
+      title={title}
+      description={desc}
+      url="/properties"
+    />
+  );
+};
 
 /**
  * SEO for legal pages
  */
-export const LegalSEO = ({ title = 'Mentions Légales', url = '/legal' }) => (
-  <SEO
-    title={title}
-    description={`${title} d'ORSO RS - Conciergerie et location de villas en Corse du Sud.`}
-    url={url}
-    noindex={true}
-  />
-);
+export const LegalSEO = ({ page, lang }) => {
+  const titles = {
+    legal: 'Mentions Légales',
+    privacy: 'Politique de Confidentialité'
+  };
+  const urls = {
+    legal: '/legal',
+    privacy: '/privacy'
+  };
+  
+  const title = titles[page] || 'Mentions Légales';
+  const url = urls[page] || '/legal';
+  
+  return (
+    <SEO
+      title={title}
+      description={`${title} d'ORSO RS - Conciergerie et location de villas en Corse du Sud.`}
+      url={url}
+      noindex={true}
+    />
+  );
+};
 
 export default SEO;
