@@ -937,14 +937,35 @@ const PropertyDetailPage = () => {
               />
             </div>
 
+            <div className="bg-gray-50 rounded-lg p-4 mb-4">
+              <p className="text-sm text-gray-600 flex items-center gap-2">
+                <ExternalLink className="w-4 h-4" />
+                Vous allez être redirigé vers notre page de réservation sécurisée pour finaliser votre paiement.
+              </p>
+            </div>
+
             <Button
               type="submit"
-              className="orso-btn-primary w-full"
+              className="orso-btn-primary w-full flex items-center justify-center gap-2"
               disabled={submitting}
               data-testid="booking-confirm-btn"
             >
-              {submitting ? t('common.loading') : t('booking.confirm')}
+              {submitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Redirection...
+                </>
+              ) : (
+                <>
+                  <Shield className="w-4 h-4" />
+                  Réserver maintenant - Paiement Sécurisé
+                </>
+              )}
             </Button>
+            
+            <p className="text-xs text-center text-gray-500 mt-3">
+              Paiement sécurisé par Stripe. Vous ne serez débité qu'après confirmation.
+            </p>
           </form>
         </DialogContent>
       </Dialog>
