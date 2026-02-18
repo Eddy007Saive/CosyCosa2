@@ -205,39 +205,55 @@ const PropertyDetailPage = () => {
     );
   };
 
-  // Redirect to Beds24 booking page with Stripe payment
+  // Create booking via API and redirect to Stripe payment page
   const handleBookOnBeds24 = async () => {
     if (!property.beds24_id) {
       toast.error('Cette propriété n\'est pas disponible à la réservation en ligne');
       return;
     }
     
+    // Validate form
+    if (!bookingForm.firstName || !bookingForm.lastName || !bookingForm.email) {
+      toast.error('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+    
     try {
       setSubmitting(true);
       
+      // Create booking via API - this will create the reservation in Beds24
+      // and return the direct Stripe payment URL
       const bookingData = {
-        check_in: checkIn ? format(checkIn, 'yyyy-MM-dd') : '',
-        check_out: checkOut ? format(checkOut, 'yyyy-MM-dd') : '',
+        property_id: property.id,
+        room_id: property.beds24_room_id,
+        check_in: format(checkIn, 'yyyy-MM-dd'),
+        check_out: format(checkOut, 'yyyy-MM-dd'),
         guests: guests,
-        first_name: bookingForm.firstName || '',
-        last_name: bookingForm.lastName || '',
-        email: bookingForm.email || '',
-        phone: bookingForm.phone || '',
+        guest_name: `${bookingForm.firstName} ${bookingForm.lastName}`,
+        guest_email: bookingForm.email,
+        guest_phone: bookingForm.phone || '',
+        special_requests: bookingForm.specialRequests || '',
+        total_price: priceQuote?.total_price || 0,
+        currency: priceQuote?.currency || 'EUR',
       };
       
-      const result = await getBookingUrl(property.id, bookingData);
+      const result = await createBooking(bookingData);
       
-      if (result.success && result.booking_url) {
-        // Open Beds24 booking page in new tab
-        window.open(result.booking_url, '_blank');
-        toast.success('Redirection vers la page de réservation...');
+      if (result.success && result.payment_url) {
+        // Redirect to Stripe payment page
+        toast.success('Redirection vers le paiement sécurisé...');
+        // Use window.location to redirect (same tab) for better UX
+        window.location.href = result.payment_url;
+      } else if (result.success && !result.payment_url) {
+        // Booking created but no payment URL (fallback case)
+        toast.success('Réservation créée ! Vous recevrez un email avec les instructions de paiement.');
         setShowBookingModal(false);
       } else {
-        toast.error('Impossible de générer le lien de réservation');
+        toast.error('Erreur lors de la création de la réservation');
       }
     } catch (error) {
-      console.error('Failed to get booking URL:', error);
-      toast.error('Erreur lors de la génération du lien de réservation');
+      console.error('Booking failed:', error);
+      toast.error(error.response?.data?.detail || 'Erreur lors de la réservation');
     } finally {
       setSubmitting(false);
     }
