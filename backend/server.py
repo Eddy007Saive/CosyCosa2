@@ -1225,12 +1225,35 @@ async def init_demo_data():
 
 @api_router.post("/sync/beds24")
 async def sync_beds24_properties():
-    """Sync properties from Beds24"""
+    """Sync properties from Beds24 with full data"""
     beds24_properties = await beds24_service.get_properties()
     
     synced = 0
     updated = 0
     properties_list = []
+    
+    # Feature code to human readable mapping
+    FEATURE_LABELS = {
+        'WIFI': 'WiFi', 'AIR_CONDITIONING': 'Climatisation', 'HEATING': 'Chauffage',
+        'KITCHEN': 'Cuisine équipée', 'DISHWASHER': 'Lave-vaisselle', 'WASHER': 'Lave-linge',
+        'DRYER': 'Sèche-linge', 'REFRIGERATOR': 'Réfrigérateur', 'FREEZER': 'Congélateur',
+        'MICROWAVE': 'Micro-ondes', 'OVEN': 'Four', 'COFFEE_MAKER': 'Machine à café',
+        'KETTLE': 'Bouilloire', 'TOASTER': 'Grille-pain', 'TV': 'Télévision',
+        'POOL': 'Piscine', 'POOL_HEATED': 'Piscine chauffée', 'GARDEN': 'Jardin',
+        'PARKING': 'Parking', 'PARKING_INCLUDED': 'Parking inclus', 'PARKING_POSSIBLE': 'Parking possible',
+        'BALCONY': 'Balcon', 'DECK_PATIO_UNCOVERED': 'Terrasse', 'OUTDOOR_FURNITURE': 'Mobilier extérieur',
+        'BEACH_FRONT': 'Front de mer', 'LINENS': 'Linge de maison', 'TOWELS': 'Serviettes',
+        'HAIR_DRYER': 'Sèche-cheveux', 'IRON_BOARD': 'Fer à repasser', 'HANGERS': 'Cintres',
+        'CLOSET': 'Penderie', 'SMOKE_DETECTOR': 'Détecteur de fumée', 'GAMES': 'Jeux',
+        'HIGHCHAIR': 'Chaise haute', 'BED_CRIB': 'Lit bébé', 'PACK_N_PLAY_TRAVEL_CRIB': 'Lit parapluie',
+        'PRIVATE_ENTRANCE': 'Entrée privée', 'FAN_PORTABLE': 'Ventilateur', 'WATER_HOT': 'Eau chaude',
+        'PETS_NOT_ALLOWED': 'Animaux non admis', 'SMOKING_NOT_ALLOWED': 'Non-fumeur',
+        'CLEANING_BEFORE_CHECKOUT': 'Ménage inclus', 'LONG_TERM_RENTERS': 'Location longue durée',
+        'BATHROOM_FULL': 'Salle de bain complète', 'GLASSES_WINE': 'Verres à vin',
+        'DISHES_UTENSILS': 'Vaisselle et ustensiles', 'BAKING_SHEET': 'Plaque de cuisson',
+        'EXTRA_PILLOWS_BLANKETS': 'Oreillers et couvertures supplémentaires',
+        'LUGGAGE_DROPOFF': 'Dépôt de bagages', 'CLOTHES_DRYINGRACK': 'Étendoir à linge'
+    }
     
     for b24_prop in beds24_properties:
         beds24_id = str(b24_prop.get("id"))
@@ -1241,14 +1264,50 @@ async def sync_beds24_properties():
         
         # Extract room info if available
         rooms = b24_prop.get("roomTypes", [])
-        max_guests = b24_prop.get("maxGuests", 4)
-        
-        # Try to get price from rooms
+        max_guests = 4
+        bedrooms = 1
+        min_stay = None
+        max_stay = None
+        security_deposit = None
+        cleaning_fee = None
         price_from = None
-        for room in rooms:
-            if room.get("price1"):
-                if price_from is None or room.get("price1") < price_from:
-                    price_from = room.get("price1")
+        room_id = None
+        feature_codes_raw = []
+        room_templates = {}
+        
+        # Get data from first room type (main listing)
+        if rooms:
+            room = rooms[0]
+            room_id = str(room.get("id"))
+            max_guests = room.get("maxPeople", 4) or 4
+            min_stay = room.get("minStay")
+            max_stay = room.get("maxStay")
+            security_deposit = room.get("securityDeposit")
+            cleaning_fee = room.get("cleaningFee")
+            price_from = room.get("minPrice") or room.get("rackRate")
+            
+            # Get feature codes (amenities)
+            raw_features = room.get("featureCodes", [])
+            for feat in raw_features:
+                if isinstance(feat, list):
+                    feature_codes_raw.extend(feat)
+                else:
+                    feature_codes_raw.append(feat)
+            
+            # Get room templates (can contain descriptions)
+            room_templates = room.get("templates", {})
+            
+            # Count bedrooms from feature codes
+            bedroom_count = sum(1 for f in raw_features if isinstance(f, list) and 'BEDROOM' in f)
+            if bedroom_count > 0:
+                bedrooms = bedroom_count
+        
+        # Convert feature codes to readable amenities
+        amenities = []
+        for code in feature_codes_raw:
+            if code in FEATURE_LABELS:
+                amenities.append(FEATURE_LABELS[code])
+        amenities = list(set(amenities))  # Remove duplicates
         
         # Build property name
         prop_name = b24_prop.get("name", "Propriété Sans Nom")
@@ -1257,11 +1316,33 @@ async def sync_beds24_properties():
         import re
         slug = re.sub(r'[^a-z0-9]+', '-', prop_name.lower()).strip('-')
         
-        # Get description
-        desc = b24_prop.get("description", "") or ""
+        # Get description from templates (usually template1 or template2)
+        prop_templates = b24_prop.get("templates", {})
+        all_templates = {**prop_templates, **room_templates}
+        
+        # Try to find description in templates
+        desc = ""
+        for tpl_key in ["template1", "template2", "template4", "template5"]:
+            tpl_val = all_templates.get(tpl_key, "")
+            if tpl_val and len(tpl_val) > len(desc) and not tpl_val.startswith("http"):
+                desc = tpl_val
+        
+        # Get check-in/out times
+        check_in_start = b24_prop.get("checkInStart", "15:00")
+        check_in_end = b24_prop.get("checkInEnd", "20:00")
+        check_out_end = b24_prop.get("checkOutEnd", "10:00")
+        
+        # Payment settings
+        payment_gateways = b24_prop.get("paymentGateways", {})
+        payment_collection = b24_prop.get("paymentCollection", {})
+        booking_rules = b24_prop.get("bookingRules", {})
+        
+        # Generate Beds24 booking URL
+        booking_url = f"https://beds24.com/booking2.php?propid={beds24_id}"
         
         property_data = {
             "beds24_id": beds24_id,
+            "beds24_room_id": room_id,
             "name": prop_name,
             "slug": slug,
             "description": {
@@ -1281,13 +1362,27 @@ async def sync_beds24_properties():
             "category": "vue_mer",  # Default - can be changed manually
             "images": [],  # Beds24 images need separate handling
             "max_guests": max_guests,
-            "bedrooms": b24_prop.get("numRooms", 1) or 1,
+            "bedrooms": bedrooms,
             "bathrooms": 1,
-            "amenities": [],
+            "amenities": amenities,
+            "feature_codes": feature_codes_raw,
             "price_from": price_from,
             "currency": b24_prop.get("currency", "EUR"),
             "is_showcase": False,
-            "is_active": True,
+            "min_stay": min_stay,
+            "max_stay": max_stay,
+            "security_deposit": security_deposit,
+            "cleaning_fee": cleaning_fee,
+            "check_in_start": check_in_start,
+            "check_in_end": check_in_end,
+            "check_out_end": check_out_end,
+            "booking_url": booking_url,
+            "payment_settings": {
+                "gateways": payment_gateways,
+                "collection": payment_collection,
+                "rules": booking_rules
+            },
+            "templates": all_templates,
             "coordinates": {
                 "lat": float(b24_prop.get("latitude")) if b24_prop.get("latitude") else None,
                 "lng": float(b24_prop.get("longitude")) if b24_prop.get("longitude") else None
@@ -1303,7 +1398,12 @@ async def sync_beds24_properties():
             await db.properties.insert_one(property_data)
             synced += 1
         else:
-            # Update existing property
+            # Update existing property - preserve certain fields
+            preserved_fields = ["id", "category", "is_active", "is_showcase", "created_at", "images"]
+            for field in preserved_fields:
+                if field in existing:
+                    property_data[field] = existing[field]
+            
             await db.properties.update_one(
                 {"beds24_id": beds24_id},
                 {"$set": property_data}
@@ -1313,7 +1413,9 @@ async def sync_beds24_properties():
         properties_list.append({
             "beds24_id": beds24_id,
             "name": prop_name,
-            "city": property_data["city"]
+            "city": property_data["city"],
+            "amenities_count": len(amenities),
+            "room_id": room_id
         })
     
     return {
