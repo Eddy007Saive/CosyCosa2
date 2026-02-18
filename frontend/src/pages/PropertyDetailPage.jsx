@@ -205,10 +205,55 @@ const PropertyDetailPage = () => {
     );
   };
 
+  // Redirect to Beds24 booking page with Stripe payment
+  const handleBookOnBeds24 = async () => {
+    if (!property.beds24_id) {
+      toast.error('Cette propriété n\'est pas disponible à la réservation en ligne');
+      return;
+    }
+    
+    try {
+      setSubmitting(true);
+      
+      const bookingData = {
+        check_in: checkIn ? format(checkIn, 'yyyy-MM-dd') : '',
+        check_out: checkOut ? format(checkOut, 'yyyy-MM-dd') : '',
+        guests: guests,
+        first_name: bookingForm.firstName || '',
+        last_name: bookingForm.lastName || '',
+        email: bookingForm.email || '',
+        phone: bookingForm.phone || '',
+      };
+      
+      const result = await getBookingUrl(property.id, bookingData);
+      
+      if (result.success && result.booking_url) {
+        // Open Beds24 booking page in new tab
+        window.open(result.booking_url, '_blank');
+        toast.success('Redirection vers la page de réservation...');
+        setShowBookingModal(false);
+      } else {
+        toast.error('Impossible de générer le lien de réservation');
+      }
+    } catch (error) {
+      console.error('Failed to get booking URL:', error);
+      toast.error('Erreur lors de la génération du lien de réservation');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     if (!priceQuote || !priceQuote.available) return;
 
+    // Use Beds24 booking page instead of internal booking
+    if (property.beds24_id) {
+      await handleBookOnBeds24();
+      return;
+    }
+
+    // Fallback for non-Beds24 properties (shouldn't happen normally)
     setSubmitting(true);
     try {
       const bookingData = {
