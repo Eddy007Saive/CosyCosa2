@@ -67,6 +67,18 @@ export const getBooking = async (bookingId) => {
   return response.data;
 };
 
+// Generate Beds24 booking URL with pre-filled data
+export const getBookingUrl = async (propertyId, bookingData) => {
+  const response = await apiClient.post(`/properties/${propertyId}/booking-url`, bookingData);
+  return response.data;
+};
+
+// Get full Beds24 property details
+export const getBeds24Details = async (propertyId) => {
+  const response = await apiClient.get(`/properties/${propertyId}/beds24-details`);
+  return response.data;
+};
+
 // Contact
 export const submitContact = async (contactData) => {
   const response = await apiClient.post('/contact', contactData);
