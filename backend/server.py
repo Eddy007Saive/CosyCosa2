@@ -1331,6 +1331,8 @@ async def sync_beds24_properties():
     """Sync properties from Beds24 with full data"""
     beds24_properties = await beds24_service.get_properties()
     
+    logger.info(f"Got {len(beds24_properties)} properties from Beds24 API")
+    
     synced = 0
     updated = 0
     properties_list = []
