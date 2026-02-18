@@ -500,7 +500,20 @@ const PropertyDetailPage = () => {
               {/* Description */}
               <div className="mb-12">
                 <h2 className="orso-h3 mb-6">{t('property.description')}</h2>
-                <div className="orso-body whitespace-pre-line">{description}</div>
+                {description ? (
+                  <div className="orso-body whitespace-pre-line">{description}</div>
+                ) : (
+                  <div className="orso-body text-gray-500 italic">
+                    {i18n.language === 'fr' 
+                      ? `${property.name} vous accueille en Corse du Sud. Contactez-nous pour plus d'informations sur cette propriété.`
+                      : i18n.language === 'en'
+                      ? `${property.name} welcomes you in Southern Corsica. Contact us for more information about this property.`
+                      : i18n.language === 'es'
+                      ? `${property.name} le da la bienvenida en el sur de Córcega. Contáctenos para más información.`
+                      : `${property.name} vi accoglie nella Corsica del Sud. Contattateci per maggiori informazioni.`
+                    }
+                  </div>
+                )}
               </div>
 
               {/* Amenities */}
