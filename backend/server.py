@@ -1391,8 +1391,11 @@ async def sync_beds24_properties():
             cleaning_fee = room.get("cleaningFee")
             price_from = room.get("minPrice") or room.get("rackRate")
             
+            logger.info(f"Property {beds24_id}: room_id={room_id}, min_stay={min_stay}, security={security_deposit}")
+            
             # Get feature codes (amenities)
             raw_features = room.get("featureCodes", [])
+            logger.info(f"Property {beds24_id}: featureCodes count={len(raw_features)}")
             for feat in raw_features:
                 if isinstance(feat, list):
                     feature_codes_raw.extend(feat)
