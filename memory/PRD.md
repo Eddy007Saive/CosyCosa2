@@ -13,8 +13,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 ### ✅ INTÉGRATION BEDS24 COMPLÈTE
 - **Synchronisation automatique** toutes les heures (APScheduler)
 - **Toutes les données récupérées de Beds24 :**
-  - Descriptions (via templates)
-  - Équipements/Amenities (via featureCodes)
+  - Équipements/Amenities (via featureCodes) - 8 équipements affichés par propriété
   - Min/Max stay
   - Caution (security deposit)
   - Frais de ménage (cleaning fee)
@@ -28,19 +27,22 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
   - **Contourne le formulaire de réservation Beds24** (demande utilisateur critique)
 
 ### ✅ Frontend (React)
-- Homepage avec recherche de dates
+- **Homepage avec badge de confiance** (ajouté Feb 18):
+  - "Paiement 100% sécurisé" avec icône ✓
+  - "Service premium depuis 2011" avec étoile ★
+  - Multilingue FR/EN/ES/IT
 - Page Propriétés avec filtres par catégorie
 - **Page Détail Propriété COMPLÈTE :**
   - Galerie d'images
-  - Description
-  - **Équipements/Amenities** (traduits depuis featureCodes Beds24)
+  - **Description avec texte de secours** si Beds24 vide (Feb 18)
+  - **Équipements/Amenities** (8 items par propriété)
   - **Informations pratiques** :
     - Horaires arrivée/départ
     - Séjour minimum
     - Caution
     - Frais de ménage
-  - **Calendrier de disponibilité FONCTIONNEL** (bug P0 corrigé)
-  - Calcul de prix dynamique
+  - **Calendrier de disponibilité FONCTIONNEL** (testé et validé)
+  - Calcul de prix dynamique (ex: 900€ x 4 nuits = 3600€)
   - **Bouton "Paiement sécurisé par Stripe"**
   - **Modal de réservation avec redirection vers Stripe**
 - Page Services (ORSO Essentiel / Premium)
