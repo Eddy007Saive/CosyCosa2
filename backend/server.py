@@ -936,10 +936,19 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
         booking.check_out
     )
     
+    # Generate Stripe payment URL if Beds24 booking was created
+    payment_url = None
+    if booking_obj.beds24_booking_id:
+        # Direct Stripe payment page URL
+        # g=st means Stripe only, pay=groupbalance&pc=100 means 100% of total
+        payment_url = f"https://beds24.com/bookpay.php?bookid={booking_obj.beds24_booking_id}&g=st&pay=groupbalance&pc=100"
+    
     return {
         "success": True,
         "booking_id": booking_obj.id,
+        "beds24_booking_id": booking_obj.beds24_booking_id,
         "status": booking_obj.status,
+        "payment_url": payment_url,
         "message": "Booking created successfully"
     }
 
