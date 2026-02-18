@@ -810,6 +810,13 @@ const PropertyDetailPage = () => {
                         : t('property.bookNow')}
                     </Button>
                     
+                    {property.beds24_id && (
+                      <p className="text-xs text-gray-500 mt-3 text-center flex items-center justify-center gap-1">
+                        <Shield className="w-3 h-3" />
+                        Paiement sécurisé par Stripe
+                      </p>
+                    )}
+                    
                     {!property.beds24_id && (
                       <p className="text-xs text-amber-600 mt-3 text-center">
                         ⚠️ Propriété non connectée à Beds24 - Prix indicatifs
