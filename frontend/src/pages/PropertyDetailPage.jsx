@@ -19,6 +19,10 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
+  ExternalLink,
+  Clock,
+  Shield,
+  Calendar as CalendarIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
