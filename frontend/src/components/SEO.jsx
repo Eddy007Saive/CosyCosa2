@@ -6,39 +6,48 @@ const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1747512281554-1e259aab3
 
 /**
  * Base SEO component for all pages
+ * Accepts lang prop for compatibility but doesn't use it (static meta for SEO)
  */
 const SEO = ({ 
-  title = 'Location de Villas de Luxe en Corse', 
-  description = 'Découvrez notre sélection de villas d\'exception en Corse du Sud. Vue mer, pieds dans l\'eau, plages à proximité. Réservation en ligne.',
-  image = DEFAULT_IMAGE,
-  url = '',
-  type = 'website',
-  noindex = false
+  title, 
+  description,
+  image,
+  url,
+  type,
+  noindex,
+  lang // accepted but unused - for compatibility
 }) => {
-  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-  const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL;
+  // Ensure all values are valid strings with safe defaults
+  const safeTitle = String(title || 'Location de Villas de Luxe en Corse');
+  const safeDescription = String(description || 'Découvrez notre sélection de villas d\'exception en Corse du Sud. Vue mer, pieds dans l\'eau, plages à proximité. Réservation en ligne.');
+  const safeImage = String(image || DEFAULT_IMAGE);
+  const safeUrl = String(url || '');
+  const safeType = String(type || 'website');
+  
+  const fullTitle = safeTitle.includes(SITE_NAME) ? safeTitle : `${safeTitle} | ${SITE_NAME}`;
+  const fullUrl = safeUrl ? `${SITE_URL}${safeUrl}` : SITE_URL;
   
   return (
     <Helmet>
       {/* Basic Meta */}
       <title>{fullTitle}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={safeDescription} />
       {noindex && <meta name="robots" content="noindex, nofollow" />}
       
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:description" content={safeDescription} />
+      <meta property="og:image" content={safeImage} />
       <meta property="og:url" content={fullUrl} />
-      <meta property="og:type" content={type} />
+      <meta property="og:type" content={safeType} />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="fr_FR" />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:description" content={safeDescription} />
+      <meta name="twitter:image" content={safeImage} />
       
       {/* Canonical */}
       <link rel="canonical" href={fullUrl} />
