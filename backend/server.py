@@ -951,6 +951,109 @@ async def get_booking(booking_id: str):
         raise HTTPException(status_code=404, detail="Booking not found")
     return booking
 
+@api_router.post("/properties/{property_id}/booking-url")
+async def generate_booking_url(property_id: str, request: dict):
+    """
+    Generate Beds24 booking page URL with pre-filled data.
+    This redirects to Beds24's hosted booking page which handles Stripe payment.
+    """
+    property_data = await db.properties.find_one(
+        {"id": property_id},
+        {"_id": 0}
+    )
+    
+    if not property_data:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    beds24_id = property_data.get("beds24_id")
+    if not beds24_id:
+        raise HTTPException(
+            status_code=400,
+            detail="This property is not connected to Beds24. Please contact us to book."
+        )
+    
+    # Get parameters
+    check_in = request.get("check_in", "")
+    check_out = request.get("check_out", "")
+    guests = request.get("guests", 2)
+    first_name = request.get("first_name", "")
+    last_name = request.get("last_name", "")
+    email = request.get("email", "")
+    phone = request.get("phone", "")
+    
+    # Build Beds24 booking URL with parameters
+    # https://beds24.com/booking2.php?propid=XXX&checkin=YYYY-MM-DD&checkout=YYYY-MM-DD
+    base_url = f"https://beds24.com/booking2.php"
+    
+    params = {
+        "propid": beds24_id,
+    }
+    
+    # Add optional parameters
+    if check_in:
+        params["checkin"] = check_in
+    if check_out:
+        params["checkout"] = check_out
+    if guests:
+        params["numadult"] = guests
+    if first_name:
+        params["firstname"] = first_name
+    if last_name:
+        params["lastname"] = last_name
+    if email:
+        params["email"] = email
+    if phone:
+        params["phone"] = phone
+    
+    # Build query string
+    query_string = "&".join([f"{k}={v}" for k, v in params.items()])
+    booking_url = f"{base_url}?{query_string}"
+    
+    return {
+        "success": True,
+        "booking_url": booking_url,
+        "property_name": property_data.get("name"),
+        "beds24_id": beds24_id,
+        "payment_enabled": property_data.get("payment_settings", {}).get("gateways", {}).get("stripe", {}).get("type") == "enable"
+    }
+
+@api_router.get("/properties/{property_id}/beds24-details")
+async def get_beds24_property_details(property_id: str):
+    """
+    Get full Beds24 details for a property including amenities, payment settings, etc.
+    """
+    property_data = await db.properties.find_one(
+        {"id": property_id},
+        {"_id": 0}
+    )
+    
+    if not property_data:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    beds24_id = property_data.get("beds24_id")
+    
+    return {
+        "success": True,
+        "property_id": property_id,
+        "beds24_id": beds24_id,
+        "beds24_room_id": property_data.get("beds24_room_id"),
+        "name": property_data.get("name"),
+        "amenities": property_data.get("amenities", []),
+        "feature_codes": property_data.get("feature_codes", []),
+        "min_stay": property_data.get("min_stay"),
+        "max_stay": property_data.get("max_stay"),
+        "security_deposit": property_data.get("security_deposit"),
+        "cleaning_fee": property_data.get("cleaning_fee"),
+        "check_in_start": property_data.get("check_in_start"),
+        "check_in_end": property_data.get("check_in_end"),
+        "check_out_end": property_data.get("check_out_end"),
+        "booking_url": property_data.get("booking_url"),
+        "payment_settings": property_data.get("payment_settings"),
+        "templates": property_data.get("templates"),
+        "is_beds24_connected": beds24_id is not None,
+        "has_stripe_enabled": property_data.get("payment_settings", {}).get("gateways", {}).get("stripe", {}).get("type") == "enable"
+    }
+
 # --- Contact ---
 @api_router.post("/contact")
 async def submit_contact(contact: ContactRequestCreate, background_tasks: BackgroundTasks):
