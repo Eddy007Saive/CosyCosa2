@@ -1621,6 +1621,29 @@ async def auto_sync_beds24():
         synced = 0
         updated = 0
         
+        # Feature code to human readable mapping
+        FEATURE_LABELS = {
+            'WIFI': 'WiFi', 'AIR_CONDITIONING': 'Climatisation', 'HEATING': 'Chauffage',
+            'KITCHEN': 'Cuisine équipée', 'DISHWASHER': 'Lave-vaisselle', 'WASHER': 'Lave-linge',
+            'DRYER': 'Sèche-linge', 'REFRIGERATOR': 'Réfrigérateur', 'FREEZER': 'Congélateur',
+            'MICROWAVE': 'Micro-ondes', 'OVEN': 'Four', 'COFFEE_MAKER': 'Machine à café',
+            'KETTLE': 'Bouilloire', 'TOASTER': 'Grille-pain', 'TV': 'Télévision',
+            'POOL': 'Piscine', 'POOL_HEATED': 'Piscine chauffée', 'GARDEN': 'Jardin',
+            'PARKING': 'Parking', 'PARKING_INCLUDED': 'Parking inclus', 'PARKING_POSSIBLE': 'Parking possible',
+            'BALCONY': 'Balcon', 'DECK_PATIO_UNCOVERED': 'Terrasse', 'OUTDOOR_FURNITURE': 'Mobilier extérieur',
+            'BEACH_FRONT': 'Front de mer', 'LINENS': 'Linge de maison', 'TOWELS': 'Serviettes',
+            'HAIR_DRYER': 'Sèche-cheveux', 'IRON_BOARD': 'Fer à repasser', 'HANGERS': 'Cintres',
+            'CLOSET': 'Penderie', 'SMOKE_DETECTOR': 'Détecteur de fumée', 'GAMES': 'Jeux',
+            'HIGHCHAIR': 'Chaise haute', 'BED_CRIB': 'Lit bébé', 'PACK_N_PLAY_TRAVEL_CRIB': 'Lit parapluie',
+            'PRIVATE_ENTRANCE': 'Entrée privée', 'FAN_PORTABLE': 'Ventilateur', 'WATER_HOT': 'Eau chaude',
+            'PETS_NOT_ALLOWED': 'Animaux non admis', 'SMOKING_NOT_ALLOWED': 'Non-fumeur',
+            'CLEANING_BEFORE_CHECKOUT': 'Ménage inclus', 'LONG_TERM_RENTERS': 'Location longue durée',
+            'BATHROOM_FULL': 'Salle de bain complète', 'GLASSES_WINE': 'Verres à vin',
+            'DISHES_UTENSILS': 'Vaisselle et ustensiles', 'BAKING_SHEET': 'Plaque de cuisson',
+            'EXTRA_PILLOWS_BLANKETS': 'Oreillers supplémentaires', 'LUGGAGE_DROPOFF': 'Dépôt de bagages',
+            'CLOTHES_DRYINGRACK': 'Étendoir à linge', 'VIEW_SEA': 'Vue mer', 'BEACH_ACCESS': 'Accès plage'
+        }
+        
         for b24_prop in beds24_properties:
             beds24_id = str(b24_prop.get("id"))
             existing = await db.properties.find_one(
@@ -1628,39 +1651,109 @@ async def auto_sync_beds24():
                 {"_id": 0}
             )
             
+            # Extract room info
             rooms = b24_prop.get("roomTypes", [])
-            max_guests = b24_prop.get("maxGuests", 4)
-            
+            max_guests = 4
+            bedrooms = 1
+            min_stay = None
+            max_stay = None
+            security_deposit = None
+            cleaning_fee = None
             price_from = None
-            for room in rooms:
-                if room.get("price1"):
-                    if price_from is None or room.get("price1") < price_from:
-                        price_from = room.get("price1")
+            room_id = None
+            feature_codes_raw = []
+            room_templates = {}
+            
+            # Get data from first room type (main listing)
+            if rooms:
+                room = rooms[0]
+                room_id = str(room.get("id"))
+                max_guests = room.get("maxPeople", 4) or 4
+                min_stay = room.get("minStay")
+                max_stay = room.get("maxStay")
+                security_deposit = room.get("securityDeposit")
+                cleaning_fee = room.get("cleaningFee")
+                price_from = room.get("minPrice") or room.get("rackRate")
+                
+                # Get feature codes (amenities)
+                raw_features = room.get("featureCodes", [])
+                for feat in raw_features:
+                    if isinstance(feat, list):
+                        feature_codes_raw.extend(feat)
+                    else:
+                        feature_codes_raw.append(feat)
+                
+                room_templates = room.get("templates", {})
+                
+                # Count bedrooms
+                bedroom_count = sum(1 for f in raw_features if isinstance(f, list) and 'BEDROOM' in f)
+                if bedroom_count > 0:
+                    bedrooms = bedroom_count
+            
+            # Convert feature codes to readable amenities
+            amenities = []
+            for code in feature_codes_raw:
+                if code in FEATURE_LABELS:
+                    amenities.append(FEATURE_LABELS[code])
+            amenities = list(set(amenities))
             
             prop_name = b24_prop.get("name", "Propriété Sans Nom")
             
             import re
             slug = re.sub(r'[^a-z0-9]+', '-', prop_name.lower()).strip('-')
-            desc = b24_prop.get("description", "") or ""
+            
+            # Get description from templates
+            prop_templates = b24_prop.get("templates", {})
+            all_templates = {**prop_templates, **room_templates}
+            
+            desc = ""
+            for tpl_key in ["template1", "template2", "template4", "template5"]:
+                tpl_val = all_templates.get(tpl_key, "")
+                if tpl_val and len(tpl_val) > len(desc) and not tpl_val.startswith("http"):
+                    desc = tpl_val
+            
+            # Get check-in/out times
+            check_in_start = b24_prop.get("checkInStart", "15:00")
+            check_in_end = b24_prop.get("checkInEnd", "20:00")
+            check_out_end = b24_prop.get("checkOutEnd", "10:00")
+            
+            # Payment settings
+            payment_gateways = b24_prop.get("paymentGateways", {})
+            payment_collection = b24_prop.get("paymentCollection", {})
+            booking_rules = b24_prop.get("bookingRules", {})
+            
+            booking_url = f"https://beds24.com/booking2.php?propid={beds24_id}"
             
             property_data = {
                 "beds24_id": beds24_id,
+                "beds24_room_id": room_id,
                 "name": prop_name,
                 "slug": slug,
                 "description": {"fr": desc, "en": desc, "es": desc, "it": desc},
-                "short_description": {"fr": desc[:200], "en": desc[:200], "es": desc[:200], "it": desc[:200]},
+                "short_description": {"fr": desc[:200] if desc else "", "en": desc[:200] if desc else "", "es": desc[:200] if desc else "", "it": desc[:200] if desc else ""},
                 "location": f"{b24_prop.get('address', '')}".strip(),
                 "city": b24_prop.get("city", "") or "Corse du Sud",
-                "category": "vue_mer",
-                "images": [],
                 "max_guests": max_guests,
-                "bedrooms": b24_prop.get("numRooms", 1) or 1,
+                "bedrooms": bedrooms,
                 "bathrooms": 1,
-                "amenities": [],
+                "amenities": amenities,
+                "feature_codes": feature_codes_raw,
                 "price_from": price_from,
                 "currency": b24_prop.get("currency", "EUR"),
-                "is_showcase": False,
-                "is_active": True,
+                "min_stay": min_stay,
+                "max_stay": max_stay,
+                "security_deposit": security_deposit,
+                "cleaning_fee": cleaning_fee,
+                "check_in_start": check_in_start,
+                "check_in_end": check_in_end,
+                "check_out_end": check_out_end,
+                "booking_url": booking_url,
+                "payment_settings": {
+                    "gateways": payment_gateways,
+                    "collection": payment_collection,
+                    "rules": booking_rules
+                },
+                "templates": all_templates,
                 "coordinates": {
                     "lat": float(b24_prop.get("latitude")) if b24_prop.get("latitude") else None,
                     "lng": float(b24_prop.get("longitude")) if b24_prop.get("longitude") else None
@@ -1672,19 +1765,22 @@ async def auto_sync_beds24():
                 property_data["id"] = f"beds24-{beds24_id}"
                 property_data["created_at"] = datetime.now(timezone.utc).isoformat()
                 property_data["is_active"] = False  # Hidden by default
+                property_data["is_showcase"] = False
+                property_data["category"] = "vue_mer"
+                property_data["images"] = []
                 await db.properties.insert_one(property_data)
                 synced += 1
                 logger.info(f"  ➕ New property: {prop_name} (hidden)")
             else:
-                update_data = {
-                    "name": prop_name,
-                    "max_guests": max_guests,
-                    "bedrooms": property_data["bedrooms"],
-                    "price_from": price_from,
-                    "coordinates": property_data["coordinates"],
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }
-                await db.properties.update_one({"beds24_id": beds24_id}, {"$set": update_data})
+                # Preserve certain fields from existing
+                property_data["id"] = existing.get("id", f"beds24-{beds24_id}")
+                property_data["is_active"] = existing.get("is_active", False)
+                property_data["is_showcase"] = existing.get("is_showcase", False)
+                property_data["category"] = existing.get("category", "vue_mer")
+                property_data["images"] = existing.get("images", [])
+                property_data["created_at"] = existing.get("created_at", datetime.now(timezone.utc).isoformat())
+                
+                await db.properties.update_one({"beds24_id": beds24_id}, {"$set": property_data})
                 updated += 1
         
         await db.sync_status.update_one(
