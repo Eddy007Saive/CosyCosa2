@@ -367,8 +367,26 @@ const PropertyDetailPage = () => {
     );
   }
 
-  const description =
-    property.description?.[i18n.language] || property.description?.fr || '';
+  // Get description - try multiple sources
+  const getDescription = () => {
+    // First try the description field
+    const desc = property.description?.[i18n.language] || property.description?.fr;
+    if (desc && desc.trim().length > 10) return desc;
+    
+    // Then try templates (Beds24 stores descriptions there)
+    const templates = property.templates || {};
+    for (const key of ['template1', 'template2', 'template4', 'template5']) {
+      const tpl = templates[key];
+      if (tpl && tpl.trim().length > 20 && !tpl.startsWith('http')) {
+        return tpl;
+      }
+    }
+    
+    // Return empty string - will show placeholder
+    return '';
+  };
+  
+  const description = getDescription();
   const images = property.images?.length
     ? property.images
     : ['https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1200'];
