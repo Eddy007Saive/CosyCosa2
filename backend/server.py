@@ -892,15 +892,13 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
     
     # Create in Beds24 if property is connected
     beds24_id = property_data.get("beds24_id")
-    if beds24_id:
-        # Get room IDs for this property (Beds24 uses roomId, not propId for bookings)
-        room_ids = await beds24_service.get_rooms_for_property(beds24_id)
-        room_id = booking.room_id or (room_ids[0] if room_ids else beds24_id)
-        
-        logger.info(f"Creating Beds24 booking for property {beds24_id}, room {room_id}")
+    beds24_room_id = property_data.get("beds24_room_id")
+    
+    if beds24_id and beds24_room_id:
+        logger.info(f"Creating Beds24 booking for property {beds24_id}, roomType {beds24_room_id}")
         
         beds24_result = await beds24_service.create_booking({
-            "room_id": room_id,
+            "room_id": beds24_room_id,  # Use the stored room type ID
             "check_in": booking.check_in,
             "check_out": booking.check_out,
             "guests": booking.guests,
@@ -919,6 +917,9 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
             booking_obj.status = "confirmed"
         elif beds24_result.get("success") == False:
             logger.error(f"Beds24 booking failed: {beds24_result.get('error')}")
+            # Continue anyway to save local booking
+    elif beds24_id:
+        logger.warning(f"Property {beds24_id} has no beds24_room_id - skipping Beds24 booking")
             # Continue anyway to save local booking
     
     # Save to MongoDB
