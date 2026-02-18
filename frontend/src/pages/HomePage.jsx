@@ -115,11 +115,43 @@ const HomePage = () => {
             {t('hero.title')}
           </h1>
           <p
-            className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0 animate-fade-in"
+            className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 leading-relaxed opacity-0 animate-fade-in"
             style={{ animationDelay: '600ms' }}
           >
             {t('hero.subtitle')}
           </p>
+          
+          {/* Trust Badge */}
+          <div 
+            className="flex items-center justify-center gap-6 mb-12 opacity-0 animate-fade-in"
+            style={{ animationDelay: '700ms' }}
+            data-testid="trust-badge"
+          >
+            <div className="flex items-center gap-2 text-white/90">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm tracking-wide">
+                {i18n.language === 'fr' ? 'Paiement 100% sécurisé' 
+                  : i18n.language === 'en' ? '100% secure payment'
+                  : i18n.language === 'es' ? 'Pago 100% seguro'
+                  : 'Pagamento 100% sicuro'}
+              </span>
+            </div>
+            <div className="hidden md:block w-px h-4 bg-white/40" />
+            <div className="hidden md:flex items-center gap-2 text-white/90">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="text-sm tracking-wide">
+                {i18n.language === 'fr' ? 'Service premium depuis 2011' 
+                  : i18n.language === 'en' ? 'Premium service since 2011'
+                  : i18n.language === 'es' ? 'Servicio premium desde 2011'
+                  : 'Servizio premium dal 2011'}
+              </span>
+            </div>
+          </div>
+          
           <div
             className="opacity-0 animate-fade-in"
             style={{ animationDelay: '800ms' }}
