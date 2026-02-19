@@ -501,7 +501,7 @@ class Beds24Service:
         return []
     
     async def get_calendar(self, room_id: str, from_date: str, to_date: str, retry: bool = True) -> Dict:
-        """Get calendar availability and pricing"""
+        """Get calendar availability and pricing from Beds24"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.get(
@@ -509,8 +509,9 @@ class Beds24Service:
                     headers=await self._get_headers(),
                     params={
                         "roomId": room_id,
-                        "from": from_date,
-                        "to": to_date
+                        "startDate": from_date,
+                        "endDate": to_date,
+                        "includeNumAvail": "true"  # Include availability data
                     }
                 )
                 if response.status_code == 200:
