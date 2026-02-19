@@ -8,7 +8,7 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 2. **Propriétaires** - Souhaitent confier leur bien à une conciergerie de luxe
 3. **Administrateur** - Gère les propriétés et le contenu du site
 
-## What's Been Implemented (Feb 18, 2026)
+## What's Been Implemented (Feb 19, 2026)
 
 ### ✅ INTÉGRATION BEDS24 COMPLÈTE
 - **Synchronisation automatique** toutes les heures (APScheduler)
@@ -90,9 +90,9 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - **Google My Business :** https://share.google/AJqwlTVKrw5cqQIyD
 
 ## Technical Stack
-- **Backend:** FastAPI, MongoDB, Motor, APScheduler
+- **Backend:** FastAPI, MongoDB, Motor, APScheduler, sib-api-v3-sdk (Brevo)
 - **Frontend:** React, TailwindCSS, Shadcn/UI
-- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24 bookpay.php)
+- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24 bookpay.php), Brevo (emails)
 - **i18n:** react-i18next
 
 ## Admin Credentials
@@ -120,8 +120,8 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 
 ### P2 - Future
 - [ ] Ajouter section "Témoignages clients"
-- [ ] Intégrer liens réseaux sociaux (Instagram/Facebook)
-- [ ] Configurer Resend pour emails réels du formulaire de contact
+- [x] ~~Intégrer liens réseaux sociaux (Instagram/Facebook)~~ - FAIT
+- [x] ~~Configurer emails du formulaire de contact~~ - FAIT via Brevo (Feb 19, 2026)
 
 ### P3 - Backlog
 - [ ] Carte SVG pour localiser les propriétés
