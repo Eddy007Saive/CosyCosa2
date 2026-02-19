@@ -23,6 +23,8 @@ import {
   Clock,
   Shield,
   Calendar as CalendarIcon,
+  Phone,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
