@@ -597,6 +597,39 @@ const PropertyDetailPage = () => {
                   </div>
                 </div>
               )}
+
+              {/* Concierge Services CTA */}
+              <div className="mb-12 bg-[#2e2e2e] text-white p-6 md:p-8 rounded-lg" data-testid="concierge-cta">
+                <div className="flex items-start gap-4">
+                  <div className="bg-white/10 p-3 rounded-full flex-shrink-0">
+                    <Sparkles className="w-6 h-6" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-xl md:text-2xl mb-3">
+                      {i18n.language === 'fr' ? 'Séjour sur mesure' 
+                        : i18n.language === 'en' ? 'Tailor-made stay'
+                        : i18n.language === 'es' ? 'Estancia a medida'
+                        : 'Soggiorno su misura'}
+                    </h3>
+                    <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4">
+                      {i18n.language === 'fr' 
+                        ? 'Vous souhaitez organiser un séjour personnalisé ? Activités, transport, chef à domicile, excursions en bateau... Notre équipe de conciergerie est à votre disposition pour créer une expérience unique.'
+                        : i18n.language === 'en'
+                        ? 'Would you like to organize a personalized stay? Activities, transport, private chef, boat trips... Our concierge team is at your service to create a unique experience.'
+                        : i18n.language === 'es'
+                        ? '¿Le gustaría organizar una estancia personalizada? Actividades, transporte, chef privado, excursiones en barco... Nuestro equipo de conserjería está a su disposición.'
+                        : 'Desiderate organizzare un soggiorno personalizzato? Attività, trasporto, chef privato, escursioni in barca... Il nostro team di concierge è a vostra disposizione.'}
+                    </p>
+                    <a 
+                      href="tel:+33615875470" 
+                      className="inline-flex items-center gap-2 bg-white text-[#2e2e2e] px-5 py-2.5 rounded-full font-medium text-sm hover:bg-gray-100 transition-colors"
+                    >
+                      <Phone className="w-4 h-4" />
+                      +33 6 15 87 54 70
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Booking Sidebar */}
