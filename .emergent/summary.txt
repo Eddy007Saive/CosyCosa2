@@ -1,190 +1,158 @@
 <analysis>**original_problem_statement:**
-L'utilisateur souhaite créer un site web pour une conciergerie locative en Corse nommée ORSO RS. Le design doit être minimaliste et élégant, utilisant un gris foncé (#2e2e2e) et du blanc. Le site doit s'adresser à la fois aux propriétaires et aux voyageurs, en réutilisant tout le contenu du site actuel . Un accent doit être mis sur l'optimisation pour le SEO/GEO en Corse.
+L'utilisateur souhaite créer un site web pour une conciergerie locative en Corse nommée ORSO RS. Le design doit être minimaliste et élégant (gris foncé #2e2e2e et blanc), en réutilisant le contenu du site . L'objectif principal est de créer un moteur de réservation sur mesure, connecté à l'API Beds24, qui mène directement à une page de paiement Stripe, sans passer par les formulaires intermédiaires de Beds24. Le site doit être multilingue (FR, EN, ES, IT), optimisé pour le SEO en Corse, et disposer d'un espace admin pour la gestion de contenu.
 
 **PRODUCT REQUIREMENTS:**
-1.  **Moteur de Réservation Personnalisé :**
-    *   Connexion directe à l'API de Beds24 (sans utiliser leur iframe).
-    *   Doit récupérer les informations des logements, tarifs, disponibilités, photos, descriptions, équipements.
-    *   L'interface doit être moderne, élégante, rassurante et luxueuse.
-    *   Une barre de recherche sur la page d'accueil et une page dédiée aux réservations.
-2.  **Gestion des Propriétés :**
-    *   Trois catégories de logements : VUE MER, PLAGE A PIEDS, PIEDS DANS L’EAU.
-    *   Possibilité d'ajouter facilement de nouveaux logements connectés à Beds24.
-    *   Possibilité d'ajouter des logements vitrine (non connectés à Beds24, nécessitant une prise de contact).
-3.  **Intégrations :**
-    *   Paiement via Stripe, géré par l'intégration Beds24.
-    *   Les demandes de contact doivent être envoyées à .
-4.  **Technologie :**
-    *   Frontend en React.
-    *   Backend avec une base de données pour gérer le contenu.
-5.  **Internationalisation :**
-    *   Le site doit être disponible en français, anglais, espagnol et italien.
-6.  **Espace Admin :**
-    *   Un espace admin pour gérer les propriétés, les images du site, et synchroniser avec Beds24.
-    *   La synchronisation avec Beds24 doit ajouter les nouvelles propriétés comme masquées par défaut.
+1.  **Moteur de Réservation Personnalisé :** Connexion à l'API Beds24 pour toutes les données (logements, tarifs, disponibilités, photos, descriptions, équipements, upsells). L'expérience doit mener directement au paiement Stripe.
+2.  **Gestion des Propriétés :** Catégories VUE MER, PLAGE A PIEDS, PIEDS DANS L’EAU, et gestion de propriétés vitrine non connectées.
+3.  **Intégrations :** Paiement via Stripe (géré par Beds24) et formulaire de contact envoyant à .
+4.  **Technologie :** Frontend React, backend avec base de données.
+5.  **Internationalisation :** Site en français, anglais, espagnol et italien.
+6.  **Espace Admin :** Gestion des propriétés, images, et synchronisation avec Beds24.
 
 **User's preferred language**:
 français. The next agent MUST respond in French.
 
 **what currently exists?**
-Une application full-stack (React/FastAPI/MongoDB) est en place avec un design sombre. Les pages principales, l'internationalisation (FR/EN/ES/IT), et un espace administrateur complet (, mot de passe: ) sont fonctionnels.
+Une application full-stack (React/FastAPI/MongoDB) fonctionnelle est en place. Le site synchronise en temps réel les données de Beds24, y compris les propriétés, les équipements, la disponibilité (en bloquant les dates réservées sur d'autres canaux) et les contraintes de séjour minimum.
 
-L'espace admin permet :
-- La synchronisation manuelle des propriétés depuis Beds24.
-- La gestion des propriétés (catégorie, visibilité, images manuelles).
-- La gestion des images du site (homepage) via upload drag-and-drop.
-- Un lien d'accès discret a été ajouté dans le pied de page du site.
+Le flux de réservation a été sécurisé : le site ne bloque plus les dates avant le paiement. Il collecte les informations du voyageur, puis le redirige vers la page de réservation de Beds24 avec les données pré-remplies. Beds24 gère alors le paiement Stripe et ne confirme la réservation (et bloque les dates) qu'après le succès de la transaction.
 
-Le moteur de réservation est partiellement fonctionnel :
-- Les pages de détail des propriétés affichent un calendrier avec les disponibilités en **temps réel** depuis l'API Beds24.
-- Le calcul du devis se base sur les prix et disponibilités en **temps réel**.
-- Les propriétés vitrine affichent un formulaire de contact intégré au lieu du module de réservation.
+De nombreuses améliorations UI/UX ont été apportées : refonte de la liste des équipements, amélioration de la typographie, ajout d'un encart pour les services de conciergerie, ajout des liens vers les réseaux sociaux et correction d'un bug de scroll dans le panneau d'administration. Le mécanisme de rafraîchissement des tokens d'API Beds24 a été rendu robuste et persistant. Brevo a été intégré pour la gestion des emails du formulaire de contact.
 
 **Last working item**:
--   **Last item agent was working on:** L'agent s'apprêtait à implémenter deux nouvelles demandes de l'utilisateur :
-    1.  Modifier le tableau de bord admin pour que les propriétés masquées restent visibles dans la liste (avec un indicateur visuel) au lieu de disparaître.
-    2.  Étendre la fonctionnalité de gestion des Images du site pour inclure les images de toutes les pages, pas seulement la page d'accueil.
--   **Status:** NOT STARTED
+-   **Last item agent was working on:** Intégration de l'API Brevo pour gérer l'envoi d'e-mails depuis le formulaire de contact. L'agent a installé la dépendance, configuré les clés API et ajouté la logique d'envoi dans l'endpoint  du fichier .
+-   **Status:** IN PROGRESS
 -   **Agent Testing Done:** N
--   **Which testing method agent to use?** both
+-   **Which testing method agent to use?** backend testing agent. L'agent doit utiliser  pour envoyer une requête POST à l'endpoint  et vérifier que l'email est bien envoyé via Brevo. Il faudra ensuite demander confirmation à l'utilisateur.
 -   **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Afficher les propriétés masquées dans l'admin (P0)**
-    -   **Description:** Les propriétés masquées () sont actuellement invisibles dans la liste de l'espace admin. L'utilisateur veut voir toutes les propriétés, avec une distinction visuelle pour celles qui sont masquées (par exemple, grisées).
-    -   **Attempted fixes:** None.
+-   **Issue 1: Tester l'intégration de l'emailing Brevo (P0)**
+    -   **Description:** Le code pour l'intégration de Brevo a été écrit, mais il n'a pas été testé. Il est nécessaire de vérifier que le formulaire de contact envoie correctement les emails via Brevo en utilisant les clés fournies par l'utilisateur.
+    -   **Attempted fixes:** Aucune. C'est la prochaine étape logique.
     -   **Next debug checklist:**
-        1.  Modifier l'endpoint  dans  pour qu'il retourne toutes les propriétés, sans filtrer par .
-        2.  Mettre à jour le composant de la liste des propriétés dans  pour appliquer un style conditionnel (ex: ) aux lignes des propriétés où  est .
-    -   **Why fix this issue and what will be achieved with the fix?** Pour donner à l'administrateur une vue d'ensemble de toutes les propriétés gérées par le système, qu'elles soient publiques ou non.
+        1.  Redémarrer le service backend pour s'assurer que les nouvelles dépendances et variables d'environnement sont chargées.
+        2.  Exécuter une commande  pour simuler une soumission du formulaire de contact vers l'endpoint .
+        3.  Inspecter les logs du backend pour toute erreur provenant de l'API Brevo.
+        4.  Demander à l'utilisateur de confirmer la réception de l'email de test.
+    -   **Why fix this issue and what will be achieved with the fix?** Cela finalise une fonctionnalité essentielle du site (le formulaire de contact) et répond à une demande directe de l'utilisateur.
     -   **Status:** NOT STARTED
     -   **Is recurring issue?** N
-    -   **Should Test frontend/backend/both after fix?** both
-    -   **Blocked on other issue:** None.
--   **Issue 2: Étendre la gestion des images du site (P0)**
-    -   **Description:** La gestion des images dans l'admin ne concerne que la page d'accueil. L'utilisateur veut pouvoir modifier les images de toutes les pages principales du site (Services, Contact, etc.).
-    -   **Attempted fixes:** None.
-    -   **Next debug checklist:**
-        1.  **Backend:** Dans , faire évoluer la structure de données des images (actuellement dans ) pour qu'elle soit imbriquée par page (ex: ). Adapter les endpoints  et  .
-        2.  **Frontend:** Dans , modifier l'onglet Images du site pour refléter la nouvelle structure (ex: avec des onglets ou des accordéons par page).
-        3.  **Frontend:** Mettre à jour chaque page concernée (, etc.) pour charger et utiliser les images depuis l'API.
-    -   **Why fix this issue and what will be achieved with the fix?** Pour offrir une personnalisation visuelle complète du site à l'administrateur.
-    -   **Status:** NOT STARTED
-    -   **Is recurring issue?** N
-    -   **Should Test frontend/backend/both after fix?** both
+    -   **Should Test frontend/backend/both after fix?** backend
     -   **Blocked on other issue:** None.
 
 **In progress Task List**:
--   None.
+-   **Task 1: Finaliser l'intégration de Brevo (P0)**
+    -   **Where to resume:** Tester l'implémentation existante dans .
+    -   **What will be achieved with this?** Un formulaire de contact pleinement fonctionnel.
+    -   **Status:** IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?** backend
+    -   **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **P0: Finaliser le flux de réservation.** C'est l'étape la plus critique manquante.
-        -   **Action:** Implémenter l'appel API pour créer une réservation dans Beds24 lorsque l'utilisateur clique sur Réserver.
-        -   **Files:**  (déclencher l'appel),  (créer un endpoint  qui appelle l'API Beds24).
-    -   **P1: Mettre en place la synchronisation automatique avec Beds24.**
-        -   **Action:** Créer une tâche de fond (ex: avec  dans FastAPI) qui appelle périodiquement l'endpoint  pour maintenir les données des propriétés à jour sans intervention manuelle.
+    -   **P1: Intégrer les Upsells (Extras) de Beds24:** Une demande initiale de l'utilisateur qui a été mise en pause car l'API ne semblait pas retourner ces données. Il faudrait ré-enquêter pour voir si un autre endpoint existe ou si une configuration est nécessaire côté Beds24.
 -   **Future Tasks:**
-    -   **P2: Optimisation SEO/GEO.** Ajouter du contenu stratégique et des méta-tags pour améliorer le référencement du site en Corse.
-    -   **P2: Sécuriser le mot de passe admin.** Déplacer le mot de passe (), actuellement codé en dur, vers une variable d'environnement backend.
+    -   **P2: Ajouter une section Témoignages clients.**
+    -   **P2: Implémenter un webhook depuis Beds24 :** Pour mettre à jour le statut des réservations de pending à confirmed dans la base de données locale après un paiement réussi, assurant une meilleure cohérence des données.
+    -   **P3: Corriger le SEO dynamique :** Le SEO dynamique avec  cause un bug de page blanche et est actuellement désactivé. C'est une dette technique à résoudre pour optimiser le référencement des pages de propriétés.
 
 **Completed work in this session**
--   Intégration de la gestion des images du site dans l'admin, avec prévisualisation et upload par glisser-déposer.
--   Mise en place d'un formulaire de contact intégré pour les propriétés vitrine.
--   Ajout d'un lien d'accès ADMIN discret dans le pied de page.
--   Connexion du calendrier et du calcul de prix à l'API Beds24 pour des données de disponibilité et de tarification en temps réel.
--   Correction de plusieurs bugs liés à l'API Beds24, notamment le rafraîchissement du token et la gestion des .
+-   **Logique de Réservation Sécurisée :** Le flux a été modifié pour ne plus bloquer les dates avant la confirmation du paiement par Beds24.
+-   **Validation du Séjour Minimum :** Le frontend valide désormais le séjour minimum requis par Beds24 et affiche un message clair à l'utilisateur.
+-   **Synchronisation en Temps Réel du Calendrier :** Correction du bug qui empêchait la synchronisation des disponibilités. Le calendrier affiche maintenant en temps réel les dates bloquées sur d'autres plateformes (Airbnb, etc.).
+-   **Améliorations UI/UX :** Correction du bug de scroll dans le modal d'images de l'admin, refonte de l'affichage des équipements en badges, amélioration de la typographie, et ajout d'un encart Séjour sur mesure.
+-   **Gestion des Tokens API :** Le mécanisme de rafraîchissement des tokens Beds24 a été rendu plus robuste en persistant les nouveaux tokens dans la base de données.
+-   **Intégrations :** Ajout des liens Facebook et Instagram dans le footer.
 
 **Earlier issues found/mentioned but not fixed**
--   **Issue 1: Mot de passe admin codé en dur.**
-    -   **Debug checklist:** Le mot de passe  est dans . La validation doit être déplacée côté backend et le mot de passe stocké dans une variable d'environnement.
-    -   **Why to solve this issue?** C'est une faille de sécurité majeure.
-    -   **Should Test frontend/backend/both after fix:** both
+-   **Issue 1: Le SEO dynamique avec  provoque un bug de page blanche.**
+    -   **Debug checklist:** Plusieurs tentatives de correction ont échoué. L'erreur  persiste même avec des props valides. La fonctionnalité a été désactivée pour maintenir le site opérationnel.
+    -   **Why to solve this issue and what will be achieved with this?** C'est une exigence clé de l'utilisateur pour le référencement des pages de propriétés.
+    -   **Should Test frontend/backend/both after fix?** frontend
     -   **Is recurring issue?** Y
--   **Issue 2: Optimisation SEO/GEO.**
-    -   **Debug checklist:** Les composants de page et  manquent de balises méta (description, keywords) et de données structurées (Schema.org) pour le SEO.
-    -   **Why to solve this issue?** C'était une exigence initiale de l'utilisateur pour la visibilité du site.
-    -   **Should Test frontend/backend/both after fix:** frontend
-    -   **Is recurring issue?** N
 
 **Known issue recurrence from previous fork**
--   N/A
+-   **Issue:** L'implémentation de  a causé un bug de page blanche à plusieurs reprises.
+-   **Recurrence count:** 3
+-   **Status:** NOT STARTED (une solution de contournement est en place).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Frontend:** React, Tailwind CSS, , 
--   **Backend:** FastAPI (Python), Pydantic, 
--   **Database:** MongoDB
--   **Integrations:** API Beds24 (synchronisation de propriétés, disponibilité, prix)
+-   **Frontend:** React, Tailwind CSS, , .
+-   **Backend:** FastAPI, Pydantic, , .
+-   **Database:** MongoDB.
+-   **Integrations:** Beds24 API, Stripe (via Beds24), Brevo API.
 
 **key DB schema**
--   ** collection:**
-    -   : String (ID Beds24), : String, : String, : List[String], : Boolean, : Boolean, : Boolean.
--   ** (or similar DB collection):**
-    -   Actuellement une structure plate comme . Doit être étendue à une structure imbriquée par page.
+-   **:** Contient les données des propriétés synchronisées depuis Beds24, y compris , , et .
+-   **:** Stocke les clés API, y compris les tokens  et  persistants pour Beds24.
+-   **:** Enregistre les tentatives de réservation avec un statut initial de pending.
 
 **changes in tech stack**
--   Ajout de  pour le téléversement d'images.
--   Ajout de  pour la gestion des fichiers uploadés côté backend.
+-   Ajout de la dépendance  pour l'intégration de Brevo.
 
 **All files of reference**
--   : Le cœur du backend, gère toutes les routes API et la logique métier.
--   : L'interface principale de l'espace admin, consolidant plusieurs fonctionnalités sous forme d'onglets.
--   : La page clé pour le flux de réservation.
--   : Centralise la logique de communication avec le backend.
--   : A été modifié pour ajouter le lien vers l'admin.
+-   
+-   
+-   
+-   
 -   
 
 **Areas that need refactoring**:
--   Le mot de passe de l'administrateur est codé en dur.
--   La logique d'interaction avec l'API Beds24 dans  est devenue complexe et pourrait être extraite dans un module de service dédié (ex: ) pour améliorer la lisibilité et la maintenance.
+-   Le fichier  est très volumineux. La logique métier (Beds24, Brevo) pourrait être extraite dans des modules de service dédiés pour améliorer la lisibilité et la maintenance.
+-   Les composants  doivent être corrigés ou remplacés par une solution fonctionnelle pour le SEO dynamique.
 
 **key api endpoints**
--   : Récupère les propriétés pour l'admin (à modifier).
--   : Met à jour les images du site (à modifier).
--   : Nouvel endpoint pour téléverser une image.
--   : Récupère la disponibilité en temps réel.
--   : Calcule le prix en temps réel.
--   : Envoie le formulaire de contact pour les propriétés vitrine.
--   : Bascule la visibilité d'une propriété.
+-   : Ne crée plus de réservation dans Beds24, mais retourne une URL pré-remplie vers la page de réservation de Beds24.
+-   : Récupère et parse les disponibilités en temps réel depuis l'API de Beds24.
+-   : Déclenche l'envoi d'un email via Brevo (à tester).
 
 **Critical Info for New Agent**
--   **Priorités immédiates :** Traiter les deux nouvelles demandes de l'utilisateur (Issue 1 & 2) avant toute autre chose.
--   **Blocage principal :** Le flux de réservation n'est pas complet. L'étape finale de création de la réservation via l'API Beds24 est manquante et constitue la prochaine tâche majeure (P0).
--   **Accès Admin :** L'URL est  et le mot de passe est .
--   **Complexité Beds24 :** L'intégration avec Beds24 nécessite des étapes spécifiques comme la récupération des  à partir d'un  et le rafraîchissement du token d'accès. La logique est dans .
+-   **Priorité Absolue (P0):** Tester l'intégration de Brevo. Le code est en place mais non vérifié. C'est la dernière étape avant que toutes les fonctionnalités demandées (hors back-log) soient complètes.
+-   **Logique de Réservation :** Le point crucial à comprendre est que le site ne bloque PAS les dates. Il délègue cette responsabilité à Beds24 après un paiement réussi. C'était une exigence forte de l'utilisateur pour éviter les blocages indus.
+-   **Descriptions des Propriétés :** Le fait que les descriptions complètes de Beds24 ne remontent pas via l'API est un point de friction. La solution actuelle est la saisie manuelle via l'admin. Soyez prêt à réexpliquer cette limitation de l'API Beds24.
+-   **SEO Dynamique :** Cette fonctionnalité est cassée et a été une source de problèmes récurrents. Ne pas y toucher sauf si l'utilisateur en fait une nouvelle priorité.
 
 **documents and test reports created in this job**
--   
+-    (mis à jour)
 -   
 
 **Last 10 User Messages and any pending HUMAN messages**
--   L'utilisateur a demandé comment accéder à l'espace admin car il n'y avait pas de bouton, et a insisté sur la nécessité d'une synchronisation parfaite avec Beds24 pour éviter les doubles réservations.
--   L'agent a répondu qu'il allait ajouter un lien discret et implémenter la synchronisation en temps réel.
--   L'utilisateur a ensuite fait deux nouvelles demandes : 1) que les propriétés masquées restent visibles dans la liste admin (au lieu de disparaître), et 2) que la gestion des images soit étendue à toutes les pages du site.
--   L'agent a accusé réception et a accepté d'implémenter ces deux changements en priorité.
+1.  **User:** demande d'ajouter un numéro de téléphone pour un service sur mesure dans les fiches logement.
+2.  **User:** demande si les équipements remontent bien depuis Beds24.
+3.  **User:** demande d'améliorer le design de la liste des équipements.
+4.  **User:** s'assure que la réservation n'est confirmée qu'après paiement à 100% et collecte des infos voyageur.
+5.  **User:** insiste pour que les dates ne soient pas bloquées tant que le paiement n'est pas effectué.
+6.  **User:** fournit les liens des réseaux sociaux à ajouter.
+7.  **User:** demande si le site est prêt à être déployé (sauf l'emailing).
+8.  **User:** questionne la connexion en temps réel du calendrier avec Beds24.
+9.  **User:** signale un bug sur le non-respect du séjour minimum pour une propriété.
+10. **User:** demande quelle solution utiliser pour l'emailing et fournit les clés API pour Brevo.
 
 **Project Health Check:**
--   **Broken:** Le flux de réservation est incomplet. Un utilisateur ne peut pas finaliser une réservation car l'appel final à l'API Beds24 pour créer la réservation n'est pas implémenté.
--   **Mocked:** N/A. Les données qui étaient auparavant statiques (calendrier, prix) sont maintenant alimentées en temps réel par l'API Beds24.
+-   **Broken:**
+    -   Le SEO dynamique () est intentionnellement désactivé car il provoque un bug de page blanche.
+-   **Mocked:**
+    -   Le formulaire de contact est fonctionnel côté frontend, mais l'envoi d'e-mails via Brevo n'a pas encore été testé.
 
 **3rd Party Integrations**
--   **Beds24:** Utilisé pour la synchronisation des propriétés (manuelle), la récupération des disponibilités et des prix en temps réel. La création de réservation est à faire.
--   **Stripe:** Prévu pour les paiements, mais aucune intégration directe n'a été réalisée. Doit être géré via l'intégration Beds24.
+-   **Beds24:** Intégration avancée pour la gestion des propriétés, des disponibilités et la redirection des réservations.
+-   **Stripe:** Utilisé indirectement via la page de paiement générée par Beds24.
+-   **Brevo (sib-api-v3-sdk):** Intégré pour les emails transactionnels du formulaire de contact. En attente de test.
 
 **Testing status**
 -   **Testing agent used after significant changes:** YES
 -   **Troubleshoot agent used after agent stuck in loop:** NO
 -   **Test files created:** []
--   **Known regressions:** None.
+-   **Known regressions:** La fonctionnalité de SEO dynamique a été retirée pour corriger un bug critique.
 
 **Credentials to test flow:**
 -   **Admin Panel:** 
--   **Password:** 
+-   **Admin Password:** 
+-   **Brevo API Key:** Présente dans l'environnement ().
 
 **What agent forgot to execute**
--   L'étape finale de la création de la réservation dans le flux de booking.
--   L'optimisation SEO/GEO, une exigence initiale.
--   La correction de la faille de sécurité du mot de passe admin codé en dur.</analysis>
+-   L'agent a implémenté l'intégration de Brevo mais a oublié de la tester pour en vérifier le bon fonctionnement. C'est la tâche la plus critique à effectuer.</analysis>
