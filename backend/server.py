@@ -1648,18 +1648,24 @@ async def send_booking_confirmation(email: str, name: str, property_name: str, c
         logger.error(f"Failed to send booking confirmation: {e}")
 
 async def send_contact_notification(name: str, email: str, subject: str, message: str, phone: str = None):
-    """Send contact notification to admin"""
-    if not RESEND_API_KEY:
-        logger.warning("Resend API key not configured, skipping email")
+    """Send contact notification to admin via Brevo"""
+    if not BREVO_API_KEY:
+        logger.warning("Brevo API key not configured, skipping email")
         return
     
     try:
-        resend.Emails.send({
-            "from": "ORSO RS <noreply@orso-rs.com>",
-            "to": [CONTACT_EMAIL],
-            "reply_to": email,
-            "subject": f"[ORSO RS] Nouveau message: {subject}",
-            "html": f"""
+        # Configure Brevo API
+        configuration = sib_api_v3_sdk.Configuration()
+        configuration.api_key['api-key'] = BREVO_API_KEY
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+        
+        # Build the email
+        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+            to=[{"email": CONTACT_EMAIL, "name": "ORSO RS"}],
+            sender={"email": BREVO_SENDER_EMAIL, "name": BREVO_SENDER_NAME},
+            reply_to={"email": email, "name": name},
+            subject=f"[ORSO RS] Nouveau message: {subject}",
+            html_content=f"""
             <div style="font-family: 'Manrope', sans-serif; max-width: 600px; margin: 0 auto;">
                 <h1 style="color: #2e2e2e;">Nouveau message de contact</h1>
                 <p><strong>Nom:</strong> {name}</p>
@@ -1671,8 +1677,13 @@ async def send_contact_notification(name: str, email: str, subject: str, message
                 <p>{message}</p>
             </div>
             """
-        })
-        logger.info(f"Contact notification sent for {email}")
+        )
+        
+        # Send the email
+        api_instance.send_transac_email(send_smtp_email)
+        logger.info(f"Contact notification sent via Brevo for {email}")
+    except ApiException as e:
+        logger.error(f"Brevo API error: {e}")
     except Exception as e:
         logger.error(f"Failed to send contact notification: {e}")
 
