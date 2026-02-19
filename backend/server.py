@@ -15,6 +15,8 @@ import shutil
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
