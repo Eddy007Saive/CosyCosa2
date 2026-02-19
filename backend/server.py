@@ -754,7 +754,7 @@ async def get_property_availability(
     from_date: str,
     to_date: str
 ):
-    """Get availability calendar for a property with blocked dates"""
+    """Get availability calendar for a property with blocked dates from Beds24"""
     property_data = await db.properties.find_one(
         {"id": property_id, "is_active": True},
         {"_id": 0}
@@ -773,45 +773,38 @@ async def get_property_availability(
         }
     
     beds24_id = property_data.get("beds24_id")
+    beds24_room_id = property_data.get("beds24_room_id")
     blocked_dates = []
     
-    if beds24_id:
-        # Get room IDs for this property
-        room_ids = await beds24_service.get_rooms_for_property(beds24_id)
+    if beds24_id and beds24_room_id:
+        # Use the stored room_id directly for calendar lookup
+        logger.info(f"Fetching calendar for room {beds24_room_id} (property {beds24_id})")
         
-        if not room_ids:
-            # Try using property ID as room ID (sometimes they're the same)
-            room_ids = [beds24_id]
+        calendar = await beds24_service.get_calendar(str(beds24_room_id), from_date, to_date)
+        calendar_data = calendar.get("data", [])
         
-        all_calendar_data = []
-        
-        # Get calendar for each room and merge blocked dates
-        for room_id in room_ids:
-            calendar = await beds24_service.get_calendar(room_id, from_date, to_date)
-            calendar_data = calendar.get("data", [])
-            all_calendar_data.extend(calendar_data)
+        # Parse calendar data to extract blocked dates
+        for day_data in calendar_data:
+            date = day_data.get("date")
+            # Check if date is blocked (booked, closed, or no availability)
+            is_blocked = (
+                day_data.get("numAvail", 1) == 0 or
+                day_data.get("closed", False) or
+                day_data.get("booked", False) or
+                day_data.get("numRoom", 1) == 0
+            )
             
-            # Parse calendar data to extract blocked dates
-            for day_data in calendar_data:
-                date = day_data.get("date")
-                # Check if date is blocked (booked, closed, or no availability)
-                is_blocked = (
-                    day_data.get("numAvail", 1) == 0 or
-                    day_data.get("closed", False) or
-                    day_data.get("booked", False)
-                )
-                
-                if is_blocked and date and date not in blocked_dates:
-                    blocked_dates.append(date)
+            if is_blocked and date and date not in blocked_dates:
+                blocked_dates.append(date)
         
         return {
             "property_id": property_id,
             "beds24_id": beds24_id,
-            "room_ids": room_ids,
+            "beds24_room_id": beds24_room_id,
             "from_date": from_date,
             "to_date": to_date,
             "blocked_dates": sorted(blocked_dates),
-            "calendar_raw": all_calendar_data[:10],  # Sample for debugging
+            "calendar_raw": calendar_data[:10],  # Sample for debugging
             "available": True
         }
     
