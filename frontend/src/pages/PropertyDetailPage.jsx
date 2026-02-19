@@ -501,9 +501,9 @@ const PropertyDetailPage = () => {
               <div className="mb-12">
                 <h2 className="orso-h3 mb-6">{t('property.description')}</h2>
                 {description ? (
-                  <div className="orso-body whitespace-pre-line">{description}</div>
+                  <div className="orso-description whitespace-pre-line">{description}</div>
                 ) : (
-                  <div className="orso-body text-gray-500 italic">
+                  <div className="orso-description text-gray-500 italic">
                     {i18n.language === 'fr' 
                       ? `${property.name} vous accueille en Corse du Sud. Contactez-nous pour plus d'informations sur cette propriété.`
                       : i18n.language === 'en'
