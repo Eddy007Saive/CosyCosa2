@@ -345,8 +345,45 @@ class Beds24Service:
         self.base_url = BEDS24_API_URL
         self.token = BEDS24_TOKEN
         self.refresh_token = BEDS24_REFRESH_TOKEN
+        self._token_loaded = False
+        
+    async def _load_token_from_db(self):
+        """Load token from database if available (persisted after refresh)"""
+        if self._token_loaded:
+            return
+        try:
+            settings = await db.site_settings.find_one({"id": "beds24_tokens"})
+            if settings:
+                if settings.get("token"):
+                    self.token = settings["token"]
+                if settings.get("refresh_token"):
+                    self.refresh_token = settings["refresh_token"]
+                logger.info("Loaded Beds24 tokens from database")
+            self._token_loaded = True
+        except Exception as e:
+            logger.error(f"Error loading tokens from DB: {e}")
+            self._token_loaded = True
+    
+    async def _save_token_to_db(self):
+        """Save refreshed token to database for persistence"""
+        try:
+            await db.site_settings.update_one(
+                {"id": "beds24_tokens"},
+                {
+                    "$set": {
+                        "token": self.token,
+                        "refresh_token": self.refresh_token,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                },
+                upsert=True
+            )
+            logger.info("Saved Beds24 tokens to database")
+        except Exception as e:
+            logger.error(f"Error saving tokens to DB: {e}")
         
     async def _get_headers(self):
+        await self._load_token_from_db()
         return {
             "accept": "application/json",
             "token": self.token
@@ -354,6 +391,7 @@ class Beds24Service:
     
     async def refresh_access_token(self):
         """Refresh the access token using refresh token"""
+        await self._load_token_from_db()
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(
@@ -365,14 +403,23 @@ class Beds24Service:
                 )
                 if response.status_code == 200:
                     data = response.json()
-                    self.token = data.get("token", self.token)
-                    logger.info("Successfully refreshed Beds24 token")
-                    return True
+                    new_token = data.get("token")
+                    if new_token:
+                        self.token = new_token
+                        # Also update refresh token if provided
+                        if data.get("refreshToken"):
+                            self.refresh_token = data["refreshToken"]
+                        # Persist to database
+                        await self._save_token_to_db()
+                        logger.info("Successfully refreshed and saved Beds24 token")
+                        return True
+                else:
+                    logger.error(f"Token refresh failed with status {response.status_code}: {response.text[:200]}")
         except Exception as e:
             logger.error(f"Failed to refresh token: {e}")
         return False
     
-    async def get_properties(self) -> List[Dict]:
+    async def get_properties(self, retry: bool = True) -> List[Dict]:
         """Get all properties from Beds24"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -383,14 +430,17 @@ class Beds24Service:
                 )
                 if response.status_code == 200:
                     return response.json().get("data", [])
-                elif response.status_code == 401:
-                    await self.refresh_access_token()
-                    return await self.get_properties()
+                elif response.status_code == 401 and retry:
+                    logger.warning("Token expired, refreshing...")
+                    if await self.refresh_access_token():
+                        return await self.get_properties(retry=False)
+                else:
+                    logger.error(f"get_properties failed: {response.status_code}")
         except Exception as e:
             logger.error(f"Error fetching Beds24 properties: {e}")
         return []
     
-    async def get_property(self, property_id: str) -> Optional[Dict]:
+    async def get_property(self, property_id: str, retry: bool = True) -> Optional[Dict]:
         """Get single property details from Beds24"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -404,6 +454,10 @@ class Beds24Service:
                 )
                 if response.status_code == 200:
                     return response.json()
+                elif response.status_code == 401 and retry:
+                    logger.warning("Token expired, refreshing...")
+                    if await self.refresh_access_token():
+                        return await self.get_property(property_id, retry=False)
         except Exception as e:
             logger.error(f"Error fetching Beds24 property {property_id}: {e}")
         return None
@@ -414,18 +468,15 @@ class Beds24Service:
             prop_data = await self.get_property(property_id)
             if prop_data and "data" in prop_data:
                 rooms = prop_data["data"].get("rooms", [])
-                # Return list of room IDs
                 return [str(room.get("id")) for room in rooms if room.get("id")]
             elif prop_data:
-                # Single property response
                 rooms = prop_data.get("rooms", [])
                 return [str(room.get("id")) for room in rooms if room.get("id")]
         except Exception as e:
             logger.error(f"Error getting rooms for property {property_id}: {e}")
         return []
-        return None
     
-    async def get_property_images(self, property_id: str) -> List[str]:
+    async def get_property_images(self, property_id: str, retry: bool = True) -> List[str]:
         """Get images for a property from Beds24"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
