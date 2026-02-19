@@ -781,22 +781,32 @@ async def get_property_availability(
         # Use the stored room_id directly for calendar lookup
         logger.info(f"Fetching calendar for room {beds24_room_id} (property {beds24_id})")
         
-        calendar = await beds24_service.get_calendar(str(beds24_room_id), from_date, to_date)
-        calendar_data = calendar.get("data", [])
+        calendar_response = await beds24_service.get_calendar(str(beds24_room_id), from_date, to_date)
+        calendar_data = calendar_response.get("data", [])
         
-        # Parse calendar data to extract blocked dates
-        for day_data in calendar_data:
-            date = day_data.get("date")
-            # Check if date is blocked (booked, closed, or no availability)
-            is_blocked = (
-                day_data.get("numAvail", 1) == 0 or
-                day_data.get("closed", False) or
-                day_data.get("booked", False) or
-                day_data.get("numRoom", 1) == 0
-            )
+        # Parse calendar data - Beds24 returns date ranges, not individual dates
+        for room_data in calendar_data:
+            calendar_entries = room_data.get("calendar", [])
             
-            if is_blocked and date and date not in blocked_dates:
-                blocked_dates.append(date)
+            for entry in calendar_entries:
+                # Each entry has from/to date range and numAvail
+                entry_from = entry.get("from")
+                entry_to = entry.get("to")
+                num_avail = entry.get("numAvail", 1)
+                
+                # If numAvail is 0, all dates in this range are blocked
+                if num_avail == 0 and entry_from:
+                    # Generate all dates in the range
+                    from datetime import datetime, timedelta
+                    start = datetime.strptime(entry_from, "%Y-%m-%d")
+                    end = datetime.strptime(entry_to or entry_from, "%Y-%m-%d")
+                    
+                    current = start
+                    while current <= end:
+                        date_str = current.strftime("%Y-%m-%d")
+                        if date_str not in blocked_dates:
+                            blocked_dates.append(date_str)
+                        current += timedelta(days=1)
         
         return {
             "property_id": property_id,
@@ -805,7 +815,7 @@ async def get_property_availability(
             "from_date": from_date,
             "to_date": to_date,
             "blocked_dates": sorted(blocked_dates),
-            "calendar_raw": calendar_data[:10],  # Sample for debugging
+            "calendar_raw": calendar_data[:5],  # Sample for debugging
             "available": True
         }
     
