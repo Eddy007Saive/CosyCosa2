@@ -902,7 +902,9 @@ const PropertyDetailPage = () => {
                       {loadingPrice ? (
                         <Loader2 className="w-4 h-4 animate-spin mr-2" />
                       ) : null}
-                      {priceQuote?.available === false 
+                      {priceQuote?.min_stay_error
+                        ? `Minimum ${priceQuote.min_stay} nuits`
+                        : priceQuote?.available === false 
                         ? 'Non disponible' 
                         : t('property.bookNow')}
                     </Button>
