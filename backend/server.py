@@ -492,6 +492,10 @@ class Beds24Service:
                             if img.get("url"):
                                 images.append(img["url"])
                     return images
+                elif response.status_code == 401 and retry:
+                    logger.warning("Token expired in get_property_images, refreshing...")
+                    if await self.refresh_access_token():
+                        return await self.get_property_images(property_id, retry=False)
         except Exception as e:
             logger.error(f"Error fetching images for property {property_id}: {e}")
         return []
