@@ -168,6 +168,22 @@ const PropertyDetailPage = () => {
     const fetchPrice = async () => {
       if (!checkIn || !checkOut || !property || property.is_showcase) return;
 
+      const nights = differenceInDays(checkOut, checkIn);
+      const minStay = property.min_stay || 1;
+      
+      // Check minimum stay requirement
+      if (nights < minStay) {
+        setPriceQuote({
+          available: false,
+          min_stay_error: true,
+          min_stay: minStay,
+          nights,
+          message: `Séjour minimum de ${minStay} nuits requis`
+        });
+        setLoadingPrice(false);
+        return;
+      }
+
       setLoadingPrice(true);
       try {
         const quote = await getPriceQuote(
@@ -180,7 +196,6 @@ const PropertyDetailPage = () => {
       } catch (error) {
         console.error('Failed to get price quote:', error);
         // Calculate mock price
-        const nights = differenceInDays(checkOut, checkIn);
         setPriceQuote({
           available: true,
           total_price: (property.price_from || 200) * nights,
