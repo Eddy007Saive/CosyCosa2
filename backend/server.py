@@ -11,7 +11,6 @@ from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone, timedelta
 import httpx
-import resend
 import shutil
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -41,13 +40,11 @@ BEDS24_SYNC_INTERVAL_HOURS = int(os.environ.get('BEDS24_SYNC_INTERVAL_HOURS', '1
 # Admin Configuration
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'orso2024')
 
-# Resend Configuration
-RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+# Brevo Configuration
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
+BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', 'contact@gt-bnb.com')
+BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'ORSO Rental Selection')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'hello@conciergerie-cosycasa.fr')
-
-# Configure resend
-if RESEND_API_KEY:
-    resend.api_key = RESEND_API_KEY
 
 # Create the main app
 app = FastAPI(title="ORSO RS API", version="1.0.0")
