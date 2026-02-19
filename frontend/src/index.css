@@ -92,7 +92,11 @@
   }
 
   .orso-body {
-    @apply text-base md:text-lg font-sans leading-relaxed text-gray-600;
+    @apply text-base md:text-lg font-light leading-relaxed text-gray-700;
+  }
+  
+  .orso-description {
+    @apply text-base md:text-lg font-light leading-[1.8] text-gray-600 tracking-wide;
   }
 }
 
