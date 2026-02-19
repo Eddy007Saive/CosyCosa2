@@ -880,13 +880,30 @@ const PropertyDetailPage = () => {
                           </>
                         ) : (
                           <div className="text-center py-4">
-                            <div className="flex items-center justify-center gap-2 text-red-600 mb-2">
-                              <X className="w-5 h-5" />
-                              <span className="font-medium">Dates non disponibles</span>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                              {priceQuote.message || 'Veuillez sélectionner d\'autres dates'}
-                            </p>
+                            {priceQuote.min_stay_error ? (
+                              <>
+                                <div className="flex items-center justify-center gap-2 text-amber-600 mb-2">
+                                  <AlertCircle className="w-5 h-5" />
+                                  <span className="font-medium">Séjour minimum requis</span>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                  Cette propriété nécessite un séjour d'au moins <strong>{priceQuote.min_stay} nuits</strong>.
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  Vous avez sélectionné {priceQuote.nights} {priceQuote.nights > 1 ? 'nuits' : 'nuit'}.
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex items-center justify-center gap-2 text-red-600 mb-2">
+                                  <X className="w-5 h-5" />
+                                  <span className="font-medium">Dates non disponibles</span>
+                                </div>
+                                <p className="text-sm text-gray-500">
+                                  {priceQuote.message || 'Veuillez sélectionner d\'autres dates'}
+                                </p>
+                              </>
+                            )}
                           </div>
                         )}
                       </div>
