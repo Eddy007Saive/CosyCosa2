@@ -1200,14 +1200,14 @@ const AdminPage = () => {
 
       {/* Images Modal */}
       <Dialog open={showImagesModal} onOpenChange={setShowImagesModal}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
+        <DialogContent className="max-w-xl max-h-[85vh] flex flex-col">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle className="font-serif text-2xl">
               Images: {selectedPropertyForImages?.name}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
+          <div className="flex-1 overflow-y-auto space-y-4 py-4 pr-2">
             <p className="text-sm text-gray-500">
               Ajoutez les URLs des images (hébergées sur Unsplash, votre serveur, etc.)
             </p>
@@ -1252,16 +1252,17 @@ const AdminPage = () => {
                 ))}
               </div>
             )}
+          </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button variant="outline" onClick={() => setShowImagesModal(false)}>
-                Annuler
-              </Button>
-              <Button onClick={saveImages} className="bg-[#2e2e2e] text-white hover:bg-black">
-                <Check className="w-4 h-4 mr-2" />
-                Enregistrer les images
-              </Button>
-            </div>
+          {/* Footer fixe en bas */}
+          <div className="flex-shrink-0 flex justify-end gap-3 pt-4 border-t bg-white">
+            <Button variant="outline" onClick={() => setShowImagesModal(false)}>
+              Annuler
+            </Button>
+            <Button onClick={saveImages} className="bg-[#2e2e2e] text-white hover:bg-black">
+              <Check className="w-4 h-4 mr-2" />
+              Enregistrer les images
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
