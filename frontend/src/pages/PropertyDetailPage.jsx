@@ -521,18 +521,18 @@ const PropertyDetailPage = () => {
               {/* Amenities */}
               {property.amenities?.length > 0 && (
                 <div className="mb-12">
-                  <h2 className="orso-h3 mb-6">{t('property.amenities')}</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <h2 className="orso-h3 mb-8">{t('property.amenities')}</h2>
+                  <div className="flex flex-wrap gap-3">
                     {property.amenities.map((amenity) => {
                       const IconComponent =
                         amenityIcons[amenity] || amenityIcons.default;
                       return (
                         <div
                           key={amenity}
-                          className="flex items-center gap-3 py-3"
+                          className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                         >
                           <IconComponent
-                            className="w-5 h-5 text-gray-500"
+                            className="w-4 h-4 text-gray-500"
                             strokeWidth={1.5}
                           />
                           <span>{amenity}</span>
