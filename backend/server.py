@@ -926,7 +926,11 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
 # --- Bookings ---
 @api_router.post("/bookings")
 async def create_booking(booking: BookingRequest, background_tasks: BackgroundTasks):
-    """Create a new booking"""
+    """
+    Generate a payment URL for Beds24.
+    The booking and date blocking only happens AFTER successful payment on Beds24/Stripe.
+    This ensures no dates are blocked without payment.
+    """
     property_data = await db.properties.find_one(
         {"id": booking.property_id, "is_active": True},
         {"_id": 0}
@@ -941,7 +945,17 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
             detail="This property cannot be booked online. Please contact us."
         )
     
-    # Create booking object
+    beds24_id = property_data.get("beds24_id")
+    beds24_room_id = property_data.get("beds24_room_id")
+    
+    if not beds24_id or not beds24_room_id:
+        raise HTTPException(
+            status_code=400,
+            detail="This property is not configured for online booking"
+        )
+    
+    # Save booking intent locally with "pending" status
+    # This is just for tracking - NO reservation is created in Beds24 yet
     booking_obj = Booking(
         property_id=booking.property_id,
         check_in=booking.check_in,
@@ -952,71 +966,63 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
         guest_phone=booking.guest_phone,
         special_requests=booking.special_requests,
         total_price=booking.total_price,
-        currency=booking.currency
+        currency=booking.currency,
+        status="pending"  # Will be updated by Beds24 webhook after payment
     )
     
-    # Create in Beds24 if property is connected
-    beds24_id = property_data.get("beds24_id")
-    beds24_room_id = property_data.get("beds24_room_id")
-    
-    if beds24_id and beds24_room_id:
-        logger.info(f"Creating Beds24 booking for property {beds24_id}, roomType {beds24_room_id}")
-        
-        beds24_result = await beds24_service.create_booking({
-            "room_id": beds24_room_id,  # Use the stored room type ID
-            "check_in": booking.check_in,
-            "check_out": booking.check_out,
-            "guests": booking.guests,
-            "guest_name": booking.guest_name,
-            "guest_email": booking.guest_email,
-            "guest_phone": booking.guest_phone,
-            "total_price": booking.total_price,
-            "currency": booking.currency,
-            "special_requests": booking.special_requests
-        })
-        
-        logger.info(f"Beds24 booking result: {beds24_result}")
-        
-        if beds24_result.get("bookId") or beds24_result.get("id"):
-            booking_obj.beds24_booking_id = str(beds24_result.get("bookId") or beds24_result.get("id"))
-            booking_obj.status = "confirmed"
-        elif beds24_result.get("success") == False:
-            logger.error(f"Beds24 booking failed: {beds24_result.get('error')}")
-            # Continue anyway to save local booking
-    elif beds24_id:
-        logger.warning(f"Property {beds24_id} has no beds24_room_id - skipping Beds24 booking")
-            # Continue anyway to save local booking
-    
-    # Save to MongoDB
+    # Save to MongoDB as pending intent
     doc = booking_obj.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     await db.bookings.insert_one(doc)
     
-    # Send confirmation email in background
-    background_tasks.add_task(
-        send_booking_confirmation,
-        booking_obj.guest_email,
-        booking_obj.guest_name,
-        property_data.get("name"),
-        booking.check_in,
-        booking.check_out
-    )
+    logger.info(f"Booking intent saved: {booking_obj.id} - redirecting to Beds24 payment")
     
-    # Generate Stripe payment URL if Beds24 booking was created
-    payment_url = None
-    if booking_obj.beds24_booking_id:
-        # Direct Stripe payment page URL
-        # g=st means Stripe only, pay=groupbalance&pc=100 means 100% of total
-        payment_url = f"https://beds24.com/bookpay.php?bookid={booking_obj.beds24_booking_id}&g=st&pay=groupbalance&pc=100"
+    # Build Beds24 booking page URL with pre-filled guest info
+    # The booking is ONLY created in Beds24 after successful payment
+    # Parameters:
+    # - propid: Property ID in Beds24
+    # - roomid: Room type ID
+    # - checkin/checkout: Dates in YYYY-MM-DD format
+    # - numadult: Number of guests
+    # - firstname, lastname, email, phone: Guest info (pre-filled)
+    # - g=st: Stripe payment only
+    # - pc=100: Require 100% payment upfront
+    
+    from urllib.parse import urlencode, quote
+    
+    # Split guest name into first/last
+    name_parts = booking.guest_name.strip().split(' ', 1)
+    first_name = name_parts[0] if name_parts else ''
+    last_name = name_parts[1] if len(name_parts) > 1 else ''
+    
+    # Build the Beds24 booking URL
+    # This URL opens Beds24's booking page with payment - reservation only created after payment
+    booking_params = {
+        'propid': beds24_id,
+        'roomid': beds24_room_id,
+        'checkin': booking.check_in,
+        'checkout': booking.check_out,
+        'numadult': booking.guests,
+        'firstname': first_name,
+        'lastname': last_name,
+        'email': booking.guest_email,
+        'phone': booking.guest_phone or '',
+        'notes': booking.special_requests or '',
+        'g': 'st',  # Stripe gateway only
+        'pc': '100'  # 100% payment required
+    }
+    
+    payment_url = f"https://beds24.com/booking2.php?{urlencode(booking_params)}"
     
     return {
         "success": True,
         "booking_id": booking_obj.id,
-        "beds24_booking_id": booking_obj.beds24_booking_id,
-        "status": booking_obj.status,
+        "beds24_booking_id": None,  # Will be set after payment via webhook
+        "status": "pending",
         "payment_url": payment_url,
-        "message": "Booking created successfully"
+        "message": "Redirecting to secure payment. Reservation will be confirmed after payment."
     }
+
 
 @api_router.get("/bookings/{booking_id}")
 async def get_booking(booking_id: str):
