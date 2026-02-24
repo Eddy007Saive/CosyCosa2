@@ -420,6 +420,30 @@ const resources = {
         tagline: "NUESTRAS OFERTAS",
         title: "Prestigio a Medida",
         subtitle: "Porque cada viaje es único, ORSO le ofrece paquetes a medida adaptados a sus deseos.",
+        intendance: {
+          title: "Gestión del Hogar & Servicios",
+          subtitle: "Servicios de alta gama para un día a día sin preocupaciones.",
+          services: [
+            "Bienvenida personalizada",
+            "Preparación del alojamiento",
+            "Limpieza diaria o intermedia"
+          ]
+        },
+        experiences: {
+          title: "Experiencias & Ocio",
+          subtitle: "Actividades exclusivas e inmersivas para sublimar cada momento de su estancia.",
+          services: [
+            "Excursiones en barco",
+            "Alquiler de yate",
+            "Senderismo guiado",
+            "Clases de cocina corsa"
+          ]
+        },
+        custom: {
+          title: "Solicitudes a medida",
+          subtitle: "Un acompañamiento personalizado para concretar cada uno de sus deseos, incluso los más específicos. Nuestro equipo está a su disposición para realizar todos sus deseos.",
+          cta: "Contáctenos"
+        },
         essentiel: {
           title: "ORSO ESENCIAL",
           subtitle: "Sus vacaciones a la carta",
