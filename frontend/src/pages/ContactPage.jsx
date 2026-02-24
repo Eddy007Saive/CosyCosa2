@@ -213,7 +213,7 @@ const ContactPage = () => {
                     <div>
                       <p className="orso-caption mb-1">Adresse</p>
                       <p className="text-gray-600">
-                        Porto-Vecchio<br />
+                        Sainte Lucie de Porto Vecchio<br />
                         Corse du Sud, France
                       </p>
                       <a
@@ -251,11 +251,11 @@ const ContactPage = () => {
                     <div>
                       <p className="orso-caption mb-1">Email</p>
                       <a
-                        href="mailto:hello@conciergerie-cosycasa.fr"
+                        href="mailto:contact@orso-rs.com"
                         className="text-gray-600 hover:text-[#2e2e2e] transition-colors"
                         data-testid="contact-email-link"
                       >
-                        hello@conciergerie-cosycasa.fr
+                        contact@orso-rs.com
                       </a>
                     </div>
                   </div>
@@ -286,7 +286,7 @@ const ContactPage = () => {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
             <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" strokeWidth={1} />
-            <p className="orso-caption">Porto-Vecchio, Corse du Sud</p>
+            <p className="orso-caption">Sainte Lucie de Porto Vecchio, Corse du Sud</p>
             <p className="text-gray-500 text-sm mt-2">
               Carte interactive disponible
             </p>
