@@ -280,19 +280,6 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
-
-      {/* Map Section */}
-      <section className="h-[50vh] bg-orso-surface relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" strokeWidth={1} />
-            <p className="orso-caption">Sainte Lucie de Porto Vecchio, Corse du Sud</p>
-            <p className="text-gray-500 text-sm mt-2">
-              Carte interactive disponible
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
