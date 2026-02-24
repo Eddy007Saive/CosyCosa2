@@ -56,15 +56,19 @@
   }
 
   .orso-btn-primary {
-    @apply bg-[#2e2e2e] text-white hover:bg-black px-8 py-4 transition-all duration-300 uppercase tracking-widest text-xs font-medium;
+    @apply bg-[#2e2e2e] text-white hover:bg-black px-8 py-4 transition-all duration-300 uppercase tracking-widest text-xs font-medium rounded-full;
   }
 
   .orso-btn-secondary {
-    @apply bg-transparent border border-[#2e2e2e] text-[#2e2e2e] hover:bg-[#2e2e2e] hover:text-white px-8 py-4 transition-all duration-300 uppercase tracking-widest text-xs font-medium;
+    @apply bg-transparent border border-[#2e2e2e] text-[#2e2e2e] hover:bg-[#2e2e2e] hover:text-white px-8 py-4 transition-all duration-300 uppercase tracking-widest text-xs font-medium rounded-full;
   }
 
   .orso-btn-ghost {
     @apply text-[#2e2e2e] hover:opacity-70 underline-offset-4 hover:underline uppercase tracking-widest text-xs font-medium;
+  }
+
+  .orso-btn-round {
+    @apply w-12 h-12 rounded-full bg-[#2e2e2e] text-white hover:bg-black flex items-center justify-center transition-all duration-300 hover:scale-110;
   }
 
   .orso-input {
