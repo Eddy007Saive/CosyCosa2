@@ -15,6 +15,9 @@ const resources = {
       hero: {
         tagline: "CORSE DU SUD",
         title: "Où rêvez-vous d'être ?",
+        quote: "Des Lieux uniques pour des moments hors du temps",
+        sectors: "3 secteurs",
+        criteria: "3 critères",
         subtitle: "Une sélection de propriétés d'exception en Corse du Sud. Expériences sur-mesure et conciergerie premium.",
         cta: "Découvrir nos biens"
       },
@@ -169,6 +172,9 @@ const resources = {
       hero: {
         tagline: "SOUTHERN CORSICA",
         title: "Where do you dream of being?",
+        quote: "Unique places for timeless moments",
+        sectors: "3 areas",
+        criteria: "3 criteria",
         subtitle: "A selection of exceptional properties in Southern Corsica. Bespoke experiences and premium concierge services.",
         cta: "Discover our properties"
       },
@@ -323,6 +329,9 @@ const resources = {
       hero: {
         tagline: "CÓRCEGA DEL SUR",
         title: "¿Dónde sueñas estar?",
+        quote: "Lugares únicos para momentos fuera del tiempo",
+        sectors: "3 sectores",
+        criteria: "3 criterios",
         subtitle: "Una selección de propiedades excepcionales en Córcega del Sur. Experiencias a medida y conserjería premium.",
         cta: "Descubrir nuestras propiedades"
       },
@@ -477,6 +486,9 @@ const resources = {
       hero: {
         tagline: "CORSICA DEL SUD",
         title: "Dove sogni di essere?",
+        quote: "Luoghi unici per momenti senza tempo",
+        sectors: "3 settori",
+        criteria: "3 criteri",
         subtitle: "Una selezione di proprietà eccezionali in Corsica del Sud. Esperienze su misura e concierge premium.",
         cta: "Scopri le nostre proprietà"
       },
