@@ -1618,6 +1618,19 @@ async def sync_beds24_properties():
         "properties": properties_list
     }
 
+@api_router.post("/sync/beds24/activate-all")
+async def activate_all_beds24_properties():
+    """Activate all Beds24 synchronized properties"""
+    result = await db.properties.update_many(
+        {"beds24_id": {"$exists": True}},
+        {"$set": {"is_active": True}}
+    )
+    return {
+        "success": True,
+        "activated": result.modified_count,
+        "message": f"{result.modified_count} propriétés activées"
+    }
+
 # ============== EMAIL FUNCTIONS ==============
 
 async def send_booking_confirmation(email: str, name: str, property_name: str, check_in: str, check_out: str):
