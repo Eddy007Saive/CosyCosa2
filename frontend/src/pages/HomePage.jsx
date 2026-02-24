@@ -288,8 +288,7 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Categories Section */}
       <section className="orso-section bg-white" data-testid="categories-section">
