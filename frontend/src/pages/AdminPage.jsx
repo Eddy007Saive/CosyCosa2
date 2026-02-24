@@ -106,6 +106,10 @@ const SITE_IMAGE_PAGES = {
         label: 'Image Hero Contact',
         description: 'Grande image de fond page Contact',
       },
+      contact_page: {
+        label: 'Image principale Contact',
+        description: 'Photo à gauche du formulaire de contact',
+      },
     },
   },
   properties: {
