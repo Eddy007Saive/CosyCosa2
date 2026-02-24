@@ -84,101 +84,99 @@ const HomePage = () => {
       {/* SEO */}
       <SEO lang={i18n.language} />
       
-      {/* Hero Section */}
+      {/* Hero Section - Split Design */}
       <section
-        className="relative min-h-screen flex items-center justify-center"
+        className="min-h-screen flex items-center bg-white pt-20"
         data-testid="hero-section"
       >
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src={siteImages.home_hero}
-            alt="Villa de luxe en Corse du Sud - Location vacances Porto-Vecchio Bonifacio"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 orso-container text-center text-white py-32">
-          <p
-            className="orso-caption text-white/80 mb-6 opacity-0 animate-fade-in"
-            style={{ animationDelay: '200ms' }}
-          >
-            {t('hero.tagline')}
-          </p>
-          <h1
-            className="orso-h1 text-white mb-6 max-w-4xl mx-auto opacity-0 animate-fade-in"
-            style={{ animationDelay: '400ms' }}
-            data-testid="hero-title"
-          >
-            {t('hero.title')}
-          </h1>
-          <p
-            className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 leading-relaxed opacity-0 animate-fade-in"
-            style={{ animationDelay: '600ms' }}
-          >
-            {t('hero.subtitle')}
-          </p>
-          
-          {/* Trust Badge */}
-          <div 
-            className="flex items-center justify-center gap-6 mb-12 opacity-0 animate-fade-in"
-            style={{ animationDelay: '700ms' }}
-            data-testid="trust-badge"
-          >
-            <div className="flex items-center gap-2 text-white/90">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="text-sm tracking-wide">
-                {i18n.language === 'fr' ? 'Paiement 100% sécurisé' 
-                  : i18n.language === 'en' ? '100% secure payment'
-                  : i18n.language === 'es' ? 'Pago 100% seguro'
-                  : 'Pagamento 100% sicuro'}
-              </span>
-            </div>
-            <div className="hidden md:block w-px h-4 bg-white/40" />
-            <div className="hidden md:flex items-center gap-2 text-white/90">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span className="text-sm tracking-wide">
-                {i18n.language === 'fr' ? 'Service premium depuis 2011' 
-                  : i18n.language === 'en' ? 'Premium service since 2011'
-                  : i18n.language === 'es' ? 'Servicio premium desde 2011'
-                  : 'Servizio premium dal 2011'}
-              </span>
-            </div>
-          </div>
-          
-          <div
-            className="opacity-0 animate-fade-in"
-            style={{ animationDelay: '800ms' }}
-          >
-            <Link to="/properties">
-              <Button
-                className="orso-btn-primary bg-white text-[#2e2e2e] hover:bg-white/90"
-                data-testid="hero-cta"
-              >
-                {t('hero.cta')}
-                <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div
-          className="absolute bottom-0 left-0 right-0 z-20 opacity-0 animate-fade-in"
-          style={{ animationDelay: '1000ms' }}
-        >
-          <div className="orso-container pb-8 md:pb-16">
-            <div
-              className="bg-white p-4 md:p-6 border border-gray-100 shadow-lg max-w-4xl mx-auto"
-              data-testid="search-bar"
+        <div className="orso-container w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[70vh]">
+            {/* Left Side - Logo with Frame */}
+            <div 
+              className="flex items-center justify-center opacity-0 animate-fade-in"
+              style={{ animationDelay: '200ms' }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="relative border border-[#2e2e2e] p-12 md:p-16 lg:p-20">
+                {/* Top vertical line */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-12 md:h-16 bg-[#2e2e2e] -translate-y-full" />
+                
+                {/* Logo */}
+                <img 
+                  src="/orso-logo.png" 
+                  alt="ORSO Rental Selection" 
+                  className="w-48 md:w-64 lg:w-72 h-auto"
+                />
+                
+                {/* Bottom vertical line */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-12 md:h-16 bg-[#2e2e2e] translate-y-full" />
+              </div>
+            </div>
+
+            {/* Right Side - Text Content */}
+            <div 
+              className="flex flex-col justify-center opacity-0 animate-fade-in"
+              style={{ animationDelay: '400ms' }}
+            >
+              {/* Quote */}
+              <h1 
+                className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#2e2e2e] italic mb-12 lg:mb-16"
+                data-testid="hero-title"
+              >
+                « {t('hero.quote', 'Des Lieux uniques pour des moments hors du temps')} »
+              </h1>
+
+              {/* Two Columns: Secteurs & Critères */}
+              <div className="grid grid-cols-2 gap-8 lg:gap-12">
+                {/* Secteurs */}
+                <div className="border-r border-[#2e2e2e]/20 pr-8">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#2e2e2e]/60 mb-4">
+                    {t('hero.sectors', '3 secteurs')}
+                  </p>
+                  <ul className="space-y-2 text-[#2e2e2e]">
+                    <li className="font-light">Pinarello</li>
+                    <li className="font-light">Saint Cyprien</li>
+                    <li className="font-light">Cala Rossa</li>
+                  </ul>
+                </div>
+
+                {/* Critères */}
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#2e2e2e]/60 mb-4">
+                    {t('hero.criteria', '3 critères')}
+                  </p>
+                  <ul className="space-y-2 text-[#2e2e2e]">
+                    <li className="font-light">{t('categories.vue_mer')}</li>
+                    <li className="font-light">{t('categories.plage_a_pieds')}</li>
+                    <li className="font-light">{t('categories.pieds_dans_eau')}</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div className="mt-12 lg:mt-16">
+                <Link to="/properties">
+                  <Button
+                    className="orso-btn-primary"
+                    data-testid="hero-cta"
+                  >
+                    {t('hero.cta')}
+                    <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Search Bar Section */}
+      <section className="bg-orso-surface py-8">
+        <div className="orso-container">
+          <div
+            className="bg-white p-4 md:p-6 border border-gray-100 shadow-sm max-w-4xl mx-auto"
+            data-testid="search-bar"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Check-in */}
                 <Popover>
                   <PopoverTrigger asChild>
