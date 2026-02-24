@@ -58,6 +58,30 @@ const resources = {
         tagline: "NOS OFFRES",
         title: "Le Prestige Sur-Mesure",
         subtitle: "Parce que chaque voyage est unique, ORSO vous propose des offres sur mesure, adaptées à vos envies.",
+        intendance: {
+          title: "Intendance & Services à domicile",
+          subtitle: "Des prestations haut de gamme pour un quotidien sans contraintes.",
+          services: [
+            "Accueil personnalisé",
+            "Préparation du logement",
+            "Ménage quotidien ou intermédiaire"
+          ]
+        },
+        experiences: {
+          title: "Expériences & Loisirs",
+          subtitle: "Des activités exclusives et immersives pour sublimer chaque instant de votre séjour.",
+          services: [
+            "Excursions en bateau",
+            "Location de yacht",
+            "Randonnées guidées",
+            "Cours de cuisine corse"
+          ]
+        },
+        custom: {
+          title: "Demandes sur mesure",
+          subtitle: "Un accompagnement personnalisé pour concrétiser chacune de vos envies, même les plus spécifiques. Notre équipe est à votre disposition pour réaliser tous vos souhaits.",
+          cta: "Nous contacter"
+        },
         essentiel: {
           title: "ORSO ESSENTIEL",
           subtitle: "Vos vacances à la carte",
