@@ -12,7 +12,7 @@ const DEFAULT_IMAGES = {
 };
 
 const ServicesPage = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
 
   useEffect(() => {
@@ -29,18 +29,8 @@ const ServicesPage = () => {
     loadSiteImages();
   }, []);
 
-  const intendanceServices = [
-    'Accueil personnalisé',
-    'Préparation du logement',
-    'Ménage quotidien ou intermédiaire',
-  ];
-
-  const experienceServices = [
-    'Excursions en bateau',
-    'Location de yacht',
-    'Randonnées guidées',
-    'Cours de cuisine corse',
-  ];
+  const intendanceServices = t('services.intendance.services', { returnObjects: true }) || [];
+  const experienceServices = t('services.experiences.services', { returnObjects: true }) || [];
 
   return (
     <div className="pt-20" data-testid="services-page">
@@ -56,10 +46,10 @@ const ServicesPage = () => {
               className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#2e2e2e] mb-6"
               data-testid="services-title"
             >
-              Le Prestige Sur-Mesure
+              {t('services.title')}
             </h1>
             <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
-              Parce que chaque voyage est unique, ORSO vous propose des offres sur mesure, adaptées à vos envies.
+              {t('services.subtitle')}
             </p>
           </div>
         </div>
@@ -72,7 +62,7 @@ const ServicesPage = () => {
           <div className="h-[50vh] lg:h-auto lg:min-h-[70vh]">
             <img
               src={siteImages.services_intendance}
-              alt="Intendance & Services"
+              alt={t('services.intendance.title')}
               className="w-full h-full object-cover"
               data-testid="services-intendance-image"
             />
@@ -83,13 +73,13 @@ const ServicesPage = () => {
             <div className="max-w-lg">
               <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
               <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
-                Intendance & Services à domicile
+                {t('services.intendance.title')}
               </h2>
               <p className="text-gray-600 font-light mb-8 leading-relaxed">
-                Des prestations haut de gamme pour un quotidien sans contraintes.
+                {t('services.intendance.subtitle')}
               </p>
               <ul className="space-y-3">
-                {intendanceServices.map((service, i) => (
+                {Array.isArray(intendanceServices) && intendanceServices.map((service, i) => (
                   <li key={i} className="flex items-center gap-3 text-gray-700">
                     <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full" />
                     <span className="font-light">{service}</span>
@@ -109,13 +99,13 @@ const ServicesPage = () => {
             <div className="max-w-lg ml-auto">
               <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
               <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
-                Expériences & Loisirs
+                {t('services.experiences.title')}
               </h2>
               <p className="text-gray-600 font-light mb-8 leading-relaxed">
-                Des activités exclusives et immersives pour sublimer chaque instant de votre séjour.
+                {t('services.experiences.subtitle')}
               </p>
               <ul className="space-y-3">
-                {experienceServices.map((service, i) => (
+                {Array.isArray(experienceServices) && experienceServices.map((service, i) => (
                   <li key={i} className="flex items-center gap-3 text-gray-700">
                     <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full" />
                     <span className="font-light">{service}</span>
@@ -129,7 +119,7 @@ const ServicesPage = () => {
           <div className="h-[50vh] lg:h-auto lg:min-h-[70vh] order-1 lg:order-2">
             <img
               src={siteImages.services_experiences}
-              alt="Expériences & Loisirs"
+              alt={t('services.experiences.title')}
               className="w-full h-full object-cover"
               data-testid="services-experiences-image"
             />
@@ -143,17 +133,17 @@ const ServicesPage = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-12 h-px bg-white/40 mx-auto mb-8" />
             <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
-              Demandes sur mesure
+              {t('services.custom.title')}
             </h2>
             <p className="text-white/80 text-lg font-light leading-relaxed mb-10">
-              Un accompagnement personnalisé pour concrétiser chacune de vos envies, même les plus spécifiques. Notre équipe est à votre disposition pour réaliser tous vos souhaits.
+              {t('services.custom.subtitle')}
             </p>
             <Link to="/contact">
               <Button 
                 className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-4 rounded-full uppercase tracking-widest text-xs font-medium transition-all"
                 data-testid="services-contact-btn"
               >
-                Nous contacter
+                {t('services.custom.cta')}
                 <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
               </Button>
             </Link>
