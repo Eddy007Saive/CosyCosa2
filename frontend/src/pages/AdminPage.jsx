@@ -97,6 +97,14 @@ const SITE_IMAGE_PAGES = {
         label: 'Image Lifestyle',
         description: 'Photo lifestyle sur le côté droit',
       },
+      services_intendance: {
+        label: 'Image Intendance',
+        description: 'Photo pour la section Intendance & Services',
+      },
+      services_experiences: {
+        label: 'Image Expériences',
+        description: 'Photo pour la section Expériences & Loisirs',
+      },
     },
   },
   contact: {
