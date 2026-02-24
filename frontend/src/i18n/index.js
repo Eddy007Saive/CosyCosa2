@@ -322,7 +322,7 @@ const resources = {
       },
       hero: {
         tagline: "CÓRCEGA DEL SUR",
-        title: "Lugares únicos para momentos fuera del tiempo",
+        title: "¿Dónde sueñas estar?",
         subtitle: "Una selección de propiedades excepcionales en Córcega del Sur. Experiencias a medida y conserjería premium.",
         cta: "Descubrir nuestras propiedades"
       },
@@ -337,7 +337,7 @@ const resources = {
         selectDate: "Seleccionar"
       },
       categories: {
-        title: "Nuestras Colecciones",
+        title: "Nuestra Selección",
         subtitle: "Tres universos, una misma exigencia de excelencia",
         vue_mer: "Vista al Mar",
         vue_mer_desc: "Panoramas impresionantes sobre el Mediterráneo",
@@ -429,7 +429,7 @@ const resources = {
       },
       contact: {
         tagline: "CONTACTO",
-        title: "Hablemos de su proyecto",
+        title: "Contacto",
         subtitle: "Nuestro equipo está a su disposición para responder todas sus preguntas.",
         form: {
           name: "Su nombre",
@@ -443,8 +443,8 @@ const resources = {
         },
         info: {
           title: "Información",
-          address: "Porto-Vecchio, Córcega del Sur",
-          email: "hello@conciergerie-cosycasa.fr"
+          address: "Sainte Lucie de Porto Vecchio, Córcega del Sur",
+          email: "contact@orso-rs.com"
         }
       },
       footer: {
