@@ -128,11 +128,11 @@ const Footer = () => {
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-white/60 flex-shrink-0" strokeWidth={1.5} />
                 <a
-                  href="mailto:hello@conciergerie-cosycasa.fr"
+                  href="mailto:contact@orso-rs.com"
                   className="text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="footer-email"
                 >
-                  hello@conciergerie-cosycasa.fr
+                  contact@orso-rs.com
                 </a>
               </li>
             </ul>
