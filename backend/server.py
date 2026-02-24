@@ -84,6 +84,8 @@ DEFAULT_SITE_IMAGES = {
     # Page Services
     "services_hero": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=1920&q=80",
     "services_lifestyle": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80",
+    "services_intendance": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+    "services_experiences": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
     # Page Contact
     "contact_hero": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
     "contact_page": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=800&q=80",
