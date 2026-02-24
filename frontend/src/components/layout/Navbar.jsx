@@ -60,12 +60,11 @@ const Navbar = () => {
             className="flex items-center"
             data-testid="navbar-logo"
           >
-            <span className="font-serif text-2xl md:text-3xl tracking-tight text-[#2e2e2e]">
-              ORSO
-            </span>
-            <span className="hidden md:inline-block ml-2 text-xs uppercase tracking-widest text-gray-500">
-              Rental Selection
-            </span>
+            <img 
+              src="/orso-logo.png" 
+              alt="ORSO Rental Selection" 
+              className="h-8 md:h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -142,9 +141,11 @@ const Navbar = () => {
                 <div className="flex flex-col h-full">
                   {/* Header */}
                   <div className="flex items-center justify-between py-4 border-b border-gray-100">
-                    <span className="font-serif text-2xl tracking-tight">
-                      ORSO
-                    </span>
+                    <img 
+                      src="/orso-logo.png" 
+                      alt="ORSO Rental Selection" 
+                      className="h-8 w-auto"
+                    />
                     <SheetClose asChild>
                       <Button
                         variant="ghost"
