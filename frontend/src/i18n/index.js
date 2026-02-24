@@ -33,7 +33,7 @@ const resources = {
       },
       categories: {
         title: "Notre Sélection",
-        subtitle: "Trois univers, une même exigence d'excellence",
+        subtitle: "Où rêvez-vous d'être ?",
         vue_mer: "Vue Mer",
         vue_mer_desc: "Des panoramas à couper le souffle sur la Méditerranée",
         plage_a_pieds: "Plage à Pieds",
@@ -190,7 +190,7 @@ const resources = {
       },
       categories: {
         title: "Our Selection",
-        subtitle: "Three universes, one standard of excellence",
+        subtitle: "Where do you dream of being?",
         vue_mer: "Sea View",
         vue_mer_desc: "Breathtaking panoramas over the Mediterranean",
         plage_a_pieds: "Beach Walking Distance",
@@ -347,7 +347,7 @@ const resources = {
       },
       categories: {
         title: "Nuestra Selección",
-        subtitle: "Tres universos, una misma exigencia de excelencia",
+        subtitle: "¿Dónde sueñas estar?",
         vue_mer: "Vista al Mar",
         vue_mer_desc: "Panoramas impresionantes sobre el Mediterráneo",
         plage_a_pieds: "Playa a Pie",
@@ -504,7 +504,7 @@ const resources = {
       },
       categories: {
         title: "La Nostra Selezione",
-        subtitle: "Tre universi, una stessa esigenza di eccellenza",
+        subtitle: "Dove sogni di essere?",
         vue_mer: "Vista Mare",
         vue_mer_desc: "Panorami mozzafiato sul Mediterraneo",
         plage_a_pieds: "Spiaggia a Piedi",
