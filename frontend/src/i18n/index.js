@@ -601,6 +601,30 @@ const resources = {
         tagline: "LE NOSTRE OFFERTE",
         title: "Prestigio Su Misura",
         subtitle: "Perché ogni viaggio è unico, ORSO vi offre pacchetti su misura adattati ai vostri desideri.",
+        intendance: {
+          title: "Gestione Casa & Servizi",
+          subtitle: "Servizi di alta gamma per un quotidiano senza pensieri.",
+          services: [
+            "Accoglienza personalizzata",
+            "Preparazione dell'alloggio",
+            "Pulizia giornaliera o intermedia"
+          ]
+        },
+        experiences: {
+          title: "Esperienze & Tempo Libero",
+          subtitle: "Attività esclusive e coinvolgenti per esaltare ogni momento del vostro soggiorno.",
+          services: [
+            "Escursioni in barca",
+            "Noleggio yacht",
+            "Escursioni guidate",
+            "Corsi di cucina corsa"
+          ]
+        },
+        custom: {
+          title: "Richieste su misura",
+          subtitle: "Un accompagnamento personalizzato per realizzare ogni vostro desiderio, anche il più specifico. Il nostro team è a vostra disposizione per realizzare tutti i vostri desideri.",
+          cta: "Contattaci"
+        },
         essentiel: {
           title: "ORSO ESSENZIALE",
           subtitle: "Le vostre vacanze à la carte",
