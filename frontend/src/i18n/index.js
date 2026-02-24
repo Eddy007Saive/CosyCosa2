@@ -14,7 +14,7 @@ const resources = {
       },
       hero: {
         tagline: "CORSE DU SUD",
-        title: "Des lieux uniques pour des moments hors du temps",
+        title: "Où rêvez-vous d'être ?",
         subtitle: "Une sélection de propriétés d'exception en Corse du Sud. Expériences sur-mesure et conciergerie premium.",
         cta: "Découvrir nos biens"
       },
@@ -29,7 +29,7 @@ const resources = {
         selectDate: "Sélectionner"
       },
       categories: {
-        title: "Nos Collections",
+        title: "Notre Sélection",
         subtitle: "Trois univers, une même exigence d'excellence",
         vue_mer: "Vue Mer",
         vue_mer_desc: "Des panoramas à couper le souffle sur la Méditerranée",
@@ -121,7 +121,7 @@ const resources = {
       },
       contact: {
         tagline: "CONTACT",
-        title: "Échangeons sur votre projet",
+        title: "Contact",
         subtitle: "Notre équipe est à votre disposition pour répondre à toutes vos questions.",
         form: {
           name: "Votre nom",
@@ -135,8 +135,8 @@ const resources = {
         },
         info: {
           title: "Informations",
-          address: "Porto-Vecchio, Corse du Sud",
-          email: "hello@conciergerie-cosycasa.fr"
+          address: "Sainte Lucie de Porto Vecchio, Corse du Sud",
+          email: "contact@orso-rs.com"
         }
       },
       footer: {
