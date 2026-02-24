@@ -168,7 +168,7 @@ const resources = {
       },
       hero: {
         tagline: "SOUTHERN CORSICA",
-        title: "Unique places for timeless moments",
+        title: "Where do you dream of being?",
         subtitle: "A selection of exceptional properties in Southern Corsica. Bespoke experiences and premium concierge services.",
         cta: "Discover our properties"
       },
@@ -183,7 +183,7 @@ const resources = {
         selectDate: "Select"
       },
       categories: {
-        title: "Our Collections",
+        title: "Our Selection",
         subtitle: "Three universes, one standard of excellence",
         vue_mer: "Sea View",
         vue_mer_desc: "Breathtaking panoramas over the Mediterranean",
@@ -275,7 +275,7 @@ const resources = {
       },
       contact: {
         tagline: "CONTACT",
-        title: "Let's discuss your project",
+        title: "Contact",
         subtitle: "Our team is at your disposal to answer all your questions.",
         form: {
           name: "Your name",
@@ -289,8 +289,8 @@ const resources = {
         },
         info: {
           title: "Information",
-          address: "Porto-Vecchio, Southern Corsica",
-          email: "hello@conciergerie-cosycasa.fr"
+          address: "Sainte Lucie de Porto Vecchio, Southern Corsica",
+          email: "contact@orso-rs.com"
         }
       },
       footer: {
