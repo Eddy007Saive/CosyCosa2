@@ -21,12 +21,11 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <h2 className="font-serif text-4xl md:text-5xl tracking-tight">
-                ORSO
-              </h2>
-              <span className="text-xs uppercase tracking-[0.3em] text-white/60 mt-2 block">
-                Rental Selection
-              </span>
+              <img 
+                src="/orso-logo.png" 
+                alt="ORSO Rental Selection" 
+                className="h-12 md:h-16 w-auto brightness-0 invert"
+              />
             </Link>
             <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
               {t('footer.tagline')}
