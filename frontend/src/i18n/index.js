@@ -239,6 +239,30 @@ const resources = {
         tagline: "OUR OFFERS",
         title: "Bespoke Prestige",
         subtitle: "Because every journey is unique, ORSO offers you tailor-made packages adapted to your desires.",
+        intendance: {
+          title: "Home Management & Services",
+          subtitle: "High-end services for a stress-free daily life.",
+          services: [
+            "Personalized welcome",
+            "Property preparation",
+            "Daily or intermediate cleaning"
+          ]
+        },
+        experiences: {
+          title: "Experiences & Leisure",
+          subtitle: "Exclusive and immersive activities to enhance every moment of your stay.",
+          services: [
+            "Boat excursions",
+            "Yacht rental",
+            "Guided hikes",
+            "Corsican cooking classes"
+          ]
+        },
+        custom: {
+          title: "Custom Requests",
+          subtitle: "Personalized support to fulfill your every wish, even the most specific. Our team is at your disposal to make all your desires come true.",
+          cta: "Contact us"
+        },
         essentiel: {
           title: "ORSO ESSENTIAL",
           subtitle: "Your holidays à la carte",
