@@ -327,47 +327,40 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Concept Section */}
+      {/* Concept Section - Full Width Text */}
       <section className="orso-section bg-orso-surface" data-testid="concept-section">
         <div className="orso-container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Image */}
-            <div className="relative aspect-[4/5] overflow-hidden">
-              <img
-                src={siteImages.home_concept}
-                alt="Intérieur luxueux"
-                className="w-full h-full object-cover"
-              />
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="orso-caption mb-6">{t('concept.tagline')}</p>
+            <h2 className="orso-h2 mb-12">{t('concept.title')}</h2>
+            
+            <div className="space-y-8 mb-16">
+              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
+                {t('concept.p1')}
+              </p>
+              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
+                {t('concept.p2')}
+              </p>
+              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
+                {t('concept.p3')}
+              </p>
             </div>
 
-            {/* Content */}
-            <div>
-              <p className="orso-caption mb-4">{t('concept.tagline')}</p>
-              <h2 className="orso-h2 mb-8">{t('concept.title')}</h2>
-              <div className="space-y-6 orso-body mb-10">
-                <p>{t('concept.p1')}</p>
-                <p>{t('concept.p2')}</p>
-                <p>{t('concept.p3')}</p>
-              </div>
-
-              {/* Values */}
-              <div className="space-y-6">
-                {['quality', 'discretion', 'authenticity'].map((value) => (
-                  <div key={value} className="flex items-start gap-4">
-                    <div className="w-10 h-10 flex items-center justify-center border border-[#2e2e2e] flex-shrink-0">
-                      <Check className="w-5 h-5" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-[#2e2e2e] mb-1">
-                        {t(`concept.${value}`)}
-                      </h4>
-                      <p className="text-gray-600 text-sm">
-                        {t(`concept.${value}_desc`)}
-                      </p>
-                    </div>
+            {/* Values - Horizontal Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-200">
+              {['quality', 'discretion', 'authenticity'].map((value) => (
+                <div key={value} className="text-center">
+                  <div className="w-12 h-12 flex items-center justify-center border border-[#2e2e2e] mx-auto mb-4">
+                    <Check className="w-5 h-5" strokeWidth={1.5} />
                   </div>
-                ))}
-              </div>
+                  <h4 className="font-serif text-xl text-[#2e2e2e] mb-2">
+                    {t(`concept.${value}`)}
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    {t(`concept.${value}_desc`)}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
