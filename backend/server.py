@@ -86,6 +86,7 @@ DEFAULT_SITE_IMAGES = {
     "services_lifestyle": "https://images.unsplash.com/photo-1766928102073-789c1ec6c2da?w=800&q=80",
     # Page Contact
     "contact_hero": "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+    "contact_page": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=800&q=80",
     # Page Propriétés
     "properties_hero": "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
 }
