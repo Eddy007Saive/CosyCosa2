@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Manrope', 'sans-serif'],
+        sans: ['Montserrat', 'Lato', 'sans-serif'],
         serif: ['Cormorant Garamond', 'serif'],
       },
       colors: {
