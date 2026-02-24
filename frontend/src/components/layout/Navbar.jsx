@@ -63,7 +63,7 @@ const Navbar = () => {
             <img 
               src="/orso-logo.png" 
               alt="ORSO Rental Selection" 
-              className="h-14 md:h-16 w-auto"
+              className="h-20 md:h-24 w-auto -my-4"
             />
           </Link>
 
