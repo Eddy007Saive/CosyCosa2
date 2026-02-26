@@ -1,6 +1,9 @@
+# robots.txt for orso-rs.com
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /api/
 
+# Sitemap
 Sitemap: https://orso-rs.com/sitemap.xml
+
+# Disallow admin
+Disallow: /admin

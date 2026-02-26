@@ -1,0 +1,27 @@
+{
+  "short_name": "ORSO RS",
+  "name": "ORSO RS - Villas de Luxe en Corse",
+  "description": "Conciergerie de luxe et locations de villas d'exception en Corse du Sud",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2e2e2e",
+  "background_color": "#ffffff",
+  "lang": "fr"
+}
