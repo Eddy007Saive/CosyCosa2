@@ -1202,8 +1202,9 @@ async def get_property_daily_prices(property_id: str, from_date: str, to_date: s
 async def debug_beds24_raw(room_id: str, arrival: str, departure: str):
     """Debug endpoint to see raw Beds24 API responses"""
     results = {}
+    property_id = "284254"  # Villa Blù
     
-    # 1. Calendar endpoint with all fields
+    # 1. Calendar with ALL possible fields
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
@@ -1213,36 +1214,61 @@ async def debug_beds24_raw(room_id: str, arrival: str, departure: str):
                     "roomId": room_id,
                     "startDate": arrival,
                     "endDate": departure,
-                    "includeNumAvail": "true",
-                    "includePrice": "true",
-                    "includePrice1": "true",
-                    "includePrice2": "true",
-                    "includePrice3": "true",
-                    "includeMinStay": "true"
+                    "fields": "price,price1,price2,price3,minStay,maxStay,numAvail,closed"
                 }
             )
-            results["calendar_with_prices"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+            results["calendar_fields"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
     except Exception as e:
-        results["calendar_with_prices"] = {"error": str(e)}
+        results["calendar_fields"] = {"error": str(e)}
     
-    # 2. Calendar with daily breakdown
+    # 2. Try properties endpoint for price rules
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
-                "https://api.beds24.com/v2/inventory/rooms/calendar",
+                f"https://api.beds24.com/v2/properties/{property_id}",
+                headers=await beds24_service._get_headers(),
+                params={
+                    "includeAllRooms": "true",
+                    "includeDailyPrices": "true",
+                    "includePriceRules": "true"
+                }
+            )
+            results["property_prices"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+    except Exception as e:
+        results["property_prices"] = {"error": str(e)}
+    
+    # 3. Try rooms endpoint directly
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(
+                f"https://api.beds24.com/v2/inventory/rooms",
+                headers=await beds24_service._get_headers(),
+                params={
+                    "roomId": room_id,
+                    "includePricing": "true"
+                }
+            )
+            results["room_pricing"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+    except Exception as e:
+        results["room_pricing"] = {"error": str(e)}
+    
+    # 4. Try pricing/rates endpoint
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(
+                f"https://api.beds24.com/v2/inventory/rooms/dailyPrices",
                 headers=await beds24_service._get_headers(),
                 params={
                     "roomId": room_id,
                     "startDate": arrival,
-                    "endDate": departure,
-                    "returnDayDetails": "true"
+                    "endDate": departure
                 }
             )
-            results["calendar_daily"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+            results["daily_prices"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
     except Exception as e:
-        results["calendar_daily"] = {"error": str(e)}
-    
-    # 3. Offers endpoint
+        results["daily_prices"] = {"error": str(e)}
+        
+    # 5. Offers without occupancy
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
@@ -1257,20 +1283,6 @@ async def debug_beds24_raw(room_id: str, arrival: str, departure: str):
             results["offers"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
     except Exception as e:
         results["offers"] = {"error": str(e)}
-    
-    # 4. Rates endpoint
-    try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.get(
-                "https://api.beds24.com/v2/inventory/properties/rates",
-                headers=await beds24_service._get_headers(),
-                params={
-                    "propertyId": room_id.split('-')[0] if '-' in room_id else "284254"
-                }
-            )
-            results["rates"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
-    except Exception as e:
-        results["rates"] = {"error": str(e)}
     
     return results
 
