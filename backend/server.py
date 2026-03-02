@@ -957,12 +957,25 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                 # Calculate total from daily prices
                 total_price = 0
                 price_per_night = 0
+                
                 for day in calendar:
-                    # price1 is the primary price from BeyondPricing
+                    # price1 is the primary price from BeyondPricing (per night)
                     day_price = day.get("price1") or day.get("price") or 0
                     if day_price > 0:
-                        total_price += day_price
-                        price_per_night = day_price  # Use last price as reference
+                        # Calculate number of days in this price range
+                        from_date = day.get("from")
+                        to_date = day.get("to")
+                        if from_date and to_date:
+                            range_start = datetime.strptime(from_date, "%Y-%m-%d")
+                            range_end = datetime.strptime(to_date, "%Y-%m-%d")
+                            days_in_range = (range_end - range_start).days
+                            if days_in_range <= 0:
+                                days_in_range = 1
+                            total_price += day_price * days_in_range
+                            price_per_night = day_price
+                        else:
+                            total_price += day_price
+                            price_per_night = day_price
                 
                 if total_price > 0:
                     return PriceQuote(
@@ -970,7 +983,7 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                         total_price=total_price,
                         currency=property_data.get("currency", "EUR"),
                         nights=nights,
-                        price_per_night=total_price / nights if nights > 0 else price_per_night
+                        price_per_night=price_per_night
                     )
     
     # Fallback to base price (for properties not connected to Beds24 or if API fails)
