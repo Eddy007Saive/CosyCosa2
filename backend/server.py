@@ -544,6 +544,8 @@ class Beds24Service:
                         "occupancy": str(occupancy)
                     }
                 )
+                logger.info(f"Beds24 offers API response status: {response.status_code}")
+                logger.info(f"Beds24 offers API response: {response.text[:500] if response.text else 'empty'}")
                 if response.status_code == 200:
                     return response.json()
                 elif response.status_code == 401 and retry:
@@ -552,6 +554,31 @@ class Beds24Service:
                     return await self.get_offers(room_id, from_date, to_date, occupancy, retry=False)
         except Exception as e:
             logger.error(f"Error fetching offers for room {room_id}: {e}")
+        return {}
+    
+    async def get_daily_prices(self, room_id: str, from_date: str, to_date: str, retry: bool = True) -> Dict:
+        """Get daily prices for specific dates"""
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.get(
+                    f"{self.base_url}/inventory/rooms/calendar",
+                    headers=await self._get_headers(),
+                    params={
+                        "roomId": room_id,
+                        "from": from_date,
+                        "to": to_date,
+                        "includeAllFields": "true",
+                        "includePrices": "true"
+                    }
+                )
+                logger.info(f"Beds24 daily prices API response: {response.text[:1000] if response.text else 'empty'}")
+                if response.status_code == 200:
+                    return response.json()
+                elif response.status_code == 401 and retry:
+                    await self.refresh_access_token()
+                    return await self.get_daily_prices(room_id, from_date, to_date, retry=False)
+        except Exception as e:
+            logger.error(f"Error fetching daily prices for room {room_id}: {e}")
         return {}
     
     async def create_booking(self, booking_data: Dict, retry: bool = True) -> Dict:
