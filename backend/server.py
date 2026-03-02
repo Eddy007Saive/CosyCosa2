@@ -1170,6 +1170,31 @@ async def get_beds24_property_details(property_id: str):
         "has_stripe_enabled": property_data.get("payment_settings", {}).get("gateways", {}).get("stripe", {}).get("type") == "enable"
     }
 
+@api_router.get("/properties/{property_id}/daily-prices")
+async def get_property_daily_prices(property_id: str, from_date: str, to_date: str):
+    """Get daily prices from Beds24 for a property"""
+    property_data = await db.properties.find_one(
+        {"id": property_id},
+        {"_id": 0}
+    )
+    
+    if not property_data:
+        raise HTTPException(status_code=404, detail="Property not found")
+    
+    room_id = property_data.get("beds24_room_id")
+    if not room_id:
+        raise HTTPException(status_code=400, detail="Property not connected to Beds24")
+    
+    daily_prices = await beds24_service.get_daily_prices(room_id, from_date, to_date)
+    
+    return {
+        "property_id": property_id,
+        "room_id": room_id,
+        "from_date": from_date,
+        "to_date": to_date,
+        "beds24_response": daily_prices
+    }
+
 # --- Contact ---
 @api_router.post("/contact")
 async def submit_contact(contact: ContactRequestCreate, background_tasks: BackgroundTasks):
