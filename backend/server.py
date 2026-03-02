@@ -949,6 +949,33 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                     price_per_night=total_price / nights if nights > 0 else 0,
                     breakdown=offer.get("breakdown", []) if isinstance(offer, dict) else []
                 )
+        
+        # Try to get prices from calendar with BeyondPricing
+        daily_prices = await beds24_service.get_daily_prices(room_id, check.check_in, check.check_out)
+        if daily_prices.get("data"):
+            calendar_data = daily_prices.get("data", [])
+            if isinstance(calendar_data, list) and len(calendar_data) > 0:
+                room_data = calendar_data[0]
+                calendar = room_data.get("calendar", [])
+                
+                # Calculate total from daily prices
+                total_price = 0
+                price_per_night = 0
+                for day in calendar:
+                    # price1 is the primary price from BeyondPricing
+                    day_price = day.get("price1") or day.get("price") or 0
+                    if day_price > 0:
+                        total_price += day_price
+                        price_per_night = day_price  # Use last price as reference
+                
+                if total_price > 0:
+                    return PriceQuote(
+                        available=True,
+                        total_price=total_price,
+                        currency=property_data.get("currency", "EUR"),
+                        nights=nights,
+                        price_per_night=total_price / nights if nights > 0 else price_per_night
+                    )
     
     # Fallback to base price (for properties not connected to Beds24 or if API fails)
     base_price = property_data.get("price_from") or 150  # Use 150 if price_from is None or 0
