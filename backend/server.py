@@ -539,9 +539,9 @@ class Beds24Service:
                     headers=await self._get_headers(),
                     params={
                         "roomId": room_id,
-                        "from": from_date,
-                        "to": to_date,
-                        "occupancy": str(occupancy)
+                        "arrival": from_date,
+                        "departure": to_date,
+                        "numAdult": str(occupancy)
                     }
                 )
                 logger.info(f"Beds24 offers API response status: {response.status_code}")
