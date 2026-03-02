@@ -534,18 +534,21 @@ class Beds24Service:
         """Get price offers for specific dates"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
+                params = {
+                    "roomId": room_id,
+                    "arrival": from_date,
+                    "departure": to_date
+                }
+                if occupancy:
+                    params["numAdult"] = str(occupancy)
+                    
                 response = await client.get(
                     f"{self.base_url}/inventory/rooms/offers",
                     headers=await self._get_headers(),
-                    params={
-                        "roomId": room_id,
-                        "arrival": from_date,
-                        "departure": to_date,
-                        "numAdult": str(occupancy)
-                    }
+                    params=params
                 )
                 logger.info(f"Beds24 offers API response status: {response.status_code}")
-                logger.info(f"Beds24 offers API response: {response.text[:500] if response.text else 'empty'}")
+                logger.info(f"Beds24 offers API response: {response.text[:1000] if response.text else 'empty'}")
                 if response.status_code == 200:
                     return response.json()
                 elif response.status_code == 401 and retry:
