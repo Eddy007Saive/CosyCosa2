@@ -898,6 +898,8 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
             check.guests
         )
         
+        logger.info(f"Beds24 offers response for room {room_id}: {offers}")
+        
         if offers.get("data"):
             offer_data = offers.get("data", [])
             if isinstance(offer_data, list) and len(offer_data) > 0:
