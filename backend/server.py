@@ -560,7 +560,7 @@ class Beds24Service:
         return {}
     
     async def get_daily_prices(self, room_id: str, from_date: str, to_date: str, retry: bool = True) -> Dict:
-        """Get daily prices for specific dates"""
+        """Get daily prices for specific dates with BeyondPricing support"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.get(
@@ -568,13 +568,14 @@ class Beds24Service:
                     headers=await self._get_headers(),
                     params={
                         "roomId": room_id,
-                        "from": from_date,
-                        "to": to_date,
-                        "includeAllFields": "true",
-                        "includePrices": "true"
+                        "startDate": from_date,
+                        "endDate": to_date,
+                        "includePrices": "true",
+                        "includeLinkedPrices": "true",
+                        "includeChannels": "true"
                     }
                 )
-                logger.info(f"Beds24 daily prices API response: {response.text[:1000] if response.text else 'empty'}")
+                logger.info(f"Beds24 daily prices response: {response.text[:500] if response.text else 'empty'}")
                 if response.status_code == 200:
                     return response.json()
                 elif response.status_code == 401 and retry:
