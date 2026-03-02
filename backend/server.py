@@ -1198,6 +1198,61 @@ async def get_property_daily_prices(property_id: str, from_date: str, to_date: s
         "beds24_response": daily_prices
     }
 
+@api_router.get("/debug/beds24-raw/{room_id}")
+async def debug_beds24_raw(room_id: str, arrival: str, departure: str):
+    """Debug endpoint to see raw Beds24 API responses"""
+    results = {}
+    
+    # 1. Calendar endpoint
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(
+                "https://api.beds24.com/v2/inventory/rooms/calendar",
+                headers=await beds24_service._get_headers(),
+                params={
+                    "roomId": room_id,
+                    "startDate": arrival,
+                    "endDate": departure,
+                    "includeNumAvail": "true"
+                }
+            )
+            results["calendar"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+    except Exception as e:
+        results["calendar"] = {"error": str(e)}
+    
+    # 2. Offers endpoint
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(
+                "https://api.beds24.com/v2/inventory/rooms/offers",
+                headers=await beds24_service._get_headers(),
+                params={
+                    "roomId": room_id,
+                    "arrival": arrival,
+                    "departure": departure
+                }
+            )
+            results["offers"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+    except Exception as e:
+        results["offers"] = {"error": str(e)}
+    
+    # 3. Property details
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(
+                f"https://api.beds24.com/v2/properties/{room_id.split('-')[0] if '-' in room_id else room_id}",
+                headers=await beds24_service._get_headers(),
+                params={
+                    "includeAllRooms": "true",
+                    "includePriceRules": "true"
+                }
+            )
+            results["property"] = {"status": response.status_code, "data": response.json() if response.status_code == 200 else response.text}
+    except Exception as e:
+        results["property"] = {"error": str(e)}
+    
+    return results
+
 # --- Contact ---
 @api_router.post("/contact")
 async def submit_contact(contact: ContactRequestCreate, background_tasks: BackgroundTasks):
