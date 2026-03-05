@@ -369,74 +369,95 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Services Preview Section */}
-      <section className="orso-section bg-white" data-testid="services-section">
-        <div className="orso-container">
-          <div className="text-center mb-16">
-            <p className="orso-caption mb-4">{t('services.tagline')}</p>
-            <h2 className="orso-h2 mb-4">{t('services.title')}</h2>
-            <p className="orso-body max-w-2xl mx-auto">
-              {t('services.subtitle')}
-            </p>
+      {/* Services Section - Checkerboard Layout */}
+      <section className="bg-[#f5f5f3]" data-testid="services-section">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Image */}
+          <div className="h-[50vh] lg:h-auto lg:min-h-[60vh]">
+            <img
+              src={siteImages.services_intendance || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"}
+              alt={t('services.intendance.title')}
+              className="w-full h-full object-cover"
+            />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* ORSO Essentiel */}
-            <div
-              className="service-card p-8 md:p-12 bg-orso-surface border border-transparent"
-              data-testid="service-essentiel"
-            >
-              <p className="orso-caption mb-4">{t('services.essentiel.title')}</p>
-              <h3 className="orso-h3 mb-4">{t('services.essentiel.subtitle')}</h3>
-              <p className="orso-body mb-8">{t('services.essentiel.desc')}</p>
-              <ul className="space-y-3 mb-8">
-                {t('services.essentiel.features', { returnObjects: true }).map(
-                  (feature, i) => (
-                    <li key={i} className="flex items-start gap-3 text-gray-600">
-                      <span className="text-[#2e2e2e]">—</span>
-                      {feature}
-                    </li>
-                  )
-                )}
-              </ul>
-              <Link to="/services">
-                <Button className="orso-btn-secondary">
-                  {t('services.learnMore')}
-                </Button>
-              </Link>
-            </div>
-
-            {/* ORSO Premium */}
-            <div
-              className="service-card p-8 md:p-12 bg-[#2e2e2e] text-white"
-              data-testid="service-premium"
-            >
-              <p className="orso-caption text-white/60 mb-4">
-                {t('services.premium.title')}
+          
+          {/* Text */}
+          <div className="flex items-center p-8 md:p-12 lg:p-16 xl:p-20">
+            <div className="max-w-lg">
+              <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
+              <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
+                {t('services.intendance.title')}
+              </h2>
+              <p className="text-gray-600 font-light mb-8 leading-relaxed">
+                {t('services.intendance.subtitle')}
               </p>
-              <h3 className="orso-h3 text-white mb-4">
-                {t('services.premium.subtitle')}
-              </h3>
-              <p className="text-white/80 mb-8">{t('services.premium.desc')}</p>
-              <ul className="space-y-3 mb-8">
-                {t('services.premium.features', { returnObjects: true }).map(
-                  (feature, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-3 text-white/80"
-                    >
-                      <span className="text-white">—</span>
-                      {feature}
-                    </li>
-                  )
-                )}
+              <ul className="space-y-3">
+                {(t('services.intendance.services', { returnObjects: true }) || []).map((service, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-700">
+                    <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full flex-shrink-0" />
+                    <span className="font-light">{service}</span>
+                  </li>
+                ))}
               </ul>
-              <Link to="/services">
-                <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-4 uppercase tracking-widest text-xs">
-                  {t('services.learnMore')}
-                </Button>
-              </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Experiences Section */}
+      <section className="bg-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Text */}
+          <div className="flex items-center p-8 md:p-12 lg:p-16 xl:p-20 order-2 lg:order-1">
+            <div className="max-w-lg ml-auto">
+              <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
+              <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
+                {t('services.experiences.title')}
+              </h2>
+              <p className="text-gray-600 font-light mb-8 leading-relaxed">
+                {t('services.experiences.subtitle')}
+              </p>
+              <ul className="space-y-3">
+                {(t('services.experiences.services', { returnObjects: true }) || []).map((service, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-700">
+                    <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full flex-shrink-0" />
+                    <span className="font-light">{service}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          
+          {/* Image */}
+          <div className="h-[50vh] lg:h-auto lg:min-h-[60vh] order-1 lg:order-2">
+            <img
+              src={siteImages.services_experiences || "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80"}
+              alt={t('services.experiences.title')}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Custom Requests Section */}
+      <section className="bg-[#2e2e2e] py-16 md:py-20">
+        <div className="orso-container">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-12 h-px bg-white/40 mx-auto mb-8" />
+            <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">
+              {t('services.custom.title')}
+            </h2>
+            <p className="text-white/80 text-base font-light leading-relaxed mb-8">
+              {t('services.custom.subtitle')}
+            </p>
+            <Link to="/contact">
+              <Button 
+                className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-3 rounded-full uppercase tracking-widest text-xs font-medium transition-all"
+              >
+                {t('services.custom.cta')}
+                <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
