@@ -8,6 +8,7 @@ const resources = {
       nav: {
         home: "Accueil",
         properties: "Nos Biens",
+        esprit: "Esprit",
         proprietaire: "Propriétaires",
         services: "Services",
         contact: "Contact",
@@ -235,6 +236,7 @@ const resources = {
       nav: {
         home: "Home",
         properties: "Properties",
+        esprit: "Spirit",
         proprietaire: "Owners",
         services: "Services",
         contact: "Contact",
@@ -462,6 +464,7 @@ const resources = {
       nav: {
         home: "Inicio",
         properties: "Propiedades",
+        esprit: "Espíritu",
         proprietaire: "Propietarios",
         services: "Servicios",
         contact: "Contacto",
@@ -689,6 +692,7 @@ const resources = {
       nav: {
         home: "Home",
         properties: "Proprietà",
+        esprit: "Spirito",
         proprietaire: "Proprietari",
         services: "Servizi",
         contact: "Contatto",

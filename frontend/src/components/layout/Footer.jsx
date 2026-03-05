@@ -91,11 +91,20 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/services"
+                  to="/esprit"
                   className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-services"
+                  data-testid="footer-link-esprit"
                 >
-                  {t('nav.services')}
+                  {t('nav.esprit')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/proprietaire"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                  data-testid="footer-link-proprietaire"
+                >
+                  {t('nav.proprietaire')}
                 </Link>
               </li>
               <li>

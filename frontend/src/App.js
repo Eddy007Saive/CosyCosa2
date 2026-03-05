@@ -12,6 +12,7 @@ import PropertiesPage from "@/pages/PropertiesPage";
 import PropertyDetailPage from "@/pages/PropertyDetailPage";
 import ContactPage from "@/pages/ContactPage";
 import ProprietairePage from "@/pages/ProprietairePage";
+import EspritPage from "@/pages/EspritPage";
 import LegalPage from "@/pages/LegalPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import AdminPage from "@/pages/AdminPage";
@@ -60,6 +61,7 @@ function App() {
                     <Route path="/properties" element={<PropertiesPage />} />
                     <Route path="/properties/:id" element={<PropertyDetailPage />} />
                     <Route path="/proprietaire" element={<ProprietairePage />} />
+                    <Route path="/esprit" element={<EspritPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/legal" element={<LegalPage />} />
                     <Route path="/privacy" element={<PrivacyPage />} />
