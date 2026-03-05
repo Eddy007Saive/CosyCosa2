@@ -91,24 +91,27 @@ const HomePage = () => {
       >
         <div className="orso-container w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[70vh]">
-            {/* Left Side - Logo with Frame */}
+            {/* Left Side - Logo with Lines */}
             <div 
               className="flex items-center justify-center opacity-0 animate-fade-in"
               style={{ animationDelay: '200ms' }}
             >
-              <div className="relative border border-[#2e2e2e] p-12 md:p-16 lg:p-20">
+              <div className="relative flex flex-col items-center">
                 {/* Top vertical line */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-12 md:h-16 bg-[#2e2e2e] -translate-y-full" />
+                <div className="w-px h-16 md:h-24 bg-[#2e2e2e] mb-8" />
                 
-                {/* Logo */}
-                <img 
-                  src="/orso-logo.png" 
-                  alt="ORSO Rental Selection" 
-                  className="w-48 md:w-64 lg:w-72 h-auto"
-                />
+                {/* Logo Text */}
+                <div className="text-center">
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[0.4em] text-[#2e2e2e] font-light">
+                    O R S O
+                  </h2>
+                  <p className="text-sm md:text-base tracking-[0.3em] text-[#2e2e2e] mt-3 uppercase">
+                    Rental Selection
+                  </p>
+                </div>
                 
                 {/* Bottom vertical line */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-12 md:h-16 bg-[#2e2e2e] translate-y-full" />
+                <div className="w-px h-16 md:h-24 bg-[#2e2e2e] mt-8" />
               </div>
             </div>
 
