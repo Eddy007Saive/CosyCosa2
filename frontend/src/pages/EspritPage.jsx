@@ -20,15 +20,6 @@ const EspritPage = () => {
               
               {/* Left Column - Julie's Photo */}
               <div className="lg:col-span-5 relative">
-                {/* Title overlaying the photo */}
-                <div className="absolute top-4 left-0 right-0 z-20 flex items-baseline gap-4 pl-4">
-                  <span className="text-5xl md:text-6xl font-serif text-gray-300/80 leading-none">01</span>
-                  <h2 className="font-serif text-lg md:text-xl lg:text-2xl text-[#2e2e2e] tracking-[0.1em] uppercase">
-                    Excellence & Savoir Faire:
-                  </h2>
-                </div>
-                
-                {/* Julie's Photo */}
                 <img
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=80"
                   alt="Julie - ORSO Rental Selection"
@@ -40,6 +31,14 @@ const EspritPage = () => {
               {/* Right Column - Content with beige background */}
               <div className="lg:col-span-7 bg-[#f5f5f0] p-8 md:p-12 lg:p-16 relative">
                 
+                {/* Title - At top of beige section */}
+                <div className="flex items-baseline gap-4 mb-10">
+                  <span className="text-5xl md:text-6xl lg:text-7xl font-serif text-gray-300 leading-none">01</span>
+                  <h2 className="font-serif text-lg md:text-xl lg:text-2xl text-[#2e2e2e] tracking-[0.1em] uppercase">
+                    Excellence & Savoir Faire:
+                  </h2>
+                </div>
+
                 {/* Julie's Description - CENTER ALIGNED */}
                 <div className="space-y-6 text-gray-700 leading-relaxed text-base md:text-lg text-center max-w-2xl mx-auto">
                   <p>
@@ -76,13 +75,12 @@ const EspritPage = () => {
               </div>
             </div>
             
-            {/* Bastien's Photo - Positioned at bottom left, overlapping */}
-            <div className="absolute bottom-0 left-0 z-30 transform translate-y-1/4">
+            {/* Bastien's Photo - Positioned at bottom RIGHT, overlapping */}
+            <div className="absolute bottom-0 right-0 z-30 transform translate-y-1/4 mr-4 lg:mr-8">
               <img
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80"
                 alt="Bastien - CASA TERRA Real Estate"
-                className="w-28 h-36 md:w-36 md:h-48 lg:w-40 lg:h-52 object-cover grayscale"
-                style={{ background: '#000' }}
+                className="w-28 h-36 md:w-36 md:h-48 lg:w-40 lg:h-52 object-cover grayscale shadow-lg"
               />
             </div>
           </div>
