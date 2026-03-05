@@ -80,7 +80,7 @@ const resources = {
         },
         custom: {
           title: "Demandes sur mesure",
-          subtitle: "Un accompagnement personnalisé pour concrétiser chacune de vos envies, même les plus spécifiques. Notre équipe est à votre disposition pour réaliser tous vos souhaits.",
+          subtitle: "Parce que votre imagination est notre seule limite, confiez-nous vos envies et vos idées : nous nous chargeons de tout avec une attention sur-mesure. Qu'il s'agisse d'un tête-à-tête intime, d'un événement en petit comité ou d'une réception d'envergure, privé ou professionnel, nos équipes orchestrent chaque détail pour sublimer votre moment.",
           cta: "Nous contacter"
         },
         essentiel: {
@@ -307,7 +307,7 @@ const resources = {
         },
         custom: {
           title: "Custom Requests",
-          subtitle: "Personalized support to fulfill your every wish, even the most specific. Our team is at your disposal to make all your desires come true.",
+          subtitle: "Because your imagination is our only limit, entrust us with your desires and ideas: we take care of everything with bespoke attention. Whether it's an intimate dinner for two, a small gathering, or a large-scale reception, private or professional, our teams orchestrate every detail to elevate your moment.",
           cta: "Contact us"
         },
         essentiel: {
@@ -534,7 +534,7 @@ const resources = {
         },
         custom: {
           title: "Solicitudes a medida",
-          subtitle: "Un acompañamiento personalizado para concretar cada uno de sus deseos, incluso los más específicos. Nuestro equipo está a su disposición para realizar todos sus deseos.",
+          subtitle: "Porque su imaginación es nuestro único límite, confíenos sus deseos e ideas: nos encargamos de todo con una atención personalizada. Ya sea una cena íntima para dos, un evento en pequeño comité o una recepción de gran envergadura, privada o profesional, nuestros equipos orquestan cada detalle para sublimar su momento.",
           cta: "Contáctenos"
         },
         essentiel: {
@@ -761,7 +761,7 @@ const resources = {
         },
         custom: {
           title: "Richieste su misura",
-          subtitle: "Un accompagnamento personalizzato per realizzare ogni vostro desiderio, anche il più specifico. Il nostro team è a vostra disposizione per realizzare tutti i vostri desideri.",
+          subtitle: "Perché la vostra immaginazione è il nostro unico limite, affidateci i vostri desideri e le vostre idee: ci occupiamo di tutto con un'attenzione su misura. Che si tratti di una cena intima per due, di un evento in piccolo comitato o di un ricevimento di grande portata, privato o professionale, i nostri team orchestrano ogni dettaglio per sublimare il vostro momento.",
           cta: "Contattaci"
         },
         essentiel: {
