@@ -18,14 +18,24 @@ const EspritPage = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               
-              {/* Left Column - Julie's Photo */}
+              {/* Left Column - Julie's Photo with Bastien overlay */}
               <div className="lg:col-span-5 relative">
+                {/* Julie's Photo */}
                 <img
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=80"
                   alt="Julie - ORSO Rental Selection"
                   className="w-full grayscale object-cover"
                   style={{ aspectRatio: '4/5' }}
                 />
+                
+                {/* Bastien's Photo - Superimposed at bottom RIGHT of Julie's photo */}
+                <div className="absolute bottom-4 right-0 translate-x-1/4 z-20">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80"
+                    alt="Bastien - CASA TERRA Real Estate"
+                    className="w-28 h-36 md:w-36 md:h-48 lg:w-40 lg:h-52 object-cover grayscale"
+                  />
+                </div>
               </div>
 
               {/* Right Column - Content with beige background */}
@@ -74,21 +84,9 @@ const EspritPage = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Bastien's Photo - Positioned at bottom RIGHT, overlapping */}
-            <div className="absolute bottom-0 right-0 z-30 transform translate-y-1/4 mr-4 lg:mr-8">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80"
-                alt="Bastien - CASA TERRA Real Estate"
-                className="w-28 h-36 md:w-36 md:h-48 lg:w-40 lg:h-52 object-cover grayscale shadow-lg"
-              />
-            </div>
           </div>
         </div>
       </section>
-
-      {/* Spacer for Bastien's photo overflow */}
-      <div className="h-16 md:h-20" />
 
       {/* CTA Section */}
       <section className="py-20 md:py-32 bg-[#2e2e2e]" data-testid="esprit-cta">
