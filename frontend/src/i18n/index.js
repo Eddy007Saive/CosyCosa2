@@ -62,19 +62,19 @@ const resources = {
           title: "Intendance & Services à domicile",
           subtitle: "Des prestations haut de gamme pour un quotidien sans contraintes.",
           services: [
-            "Accueil personnalisé",
-            "Préparation du logement",
-            "Ménage quotidien ou intermédiaire"
+            "Se faire livrer (Petit déjeuner / presse / vin …)",
+            "Se déplacer (Chauffeur privé, hélicoptère, location de voitures…)",
+            "Prendre soin de soi (Massages, soins esthétiques, coach…)",
+            "Personnel de maison (Chef à domicile, majordome, baby sitter…)"
           ]
         },
         experiences: {
           title: "Expériences & Loisirs",
           subtitle: "Des activités exclusives et immersives pour sublimer chaque instant de votre séjour.",
           services: [
-            "Excursions en bateau",
-            "Location de yacht",
-            "Randonnées guidées",
-            "Cours de cuisine corse"
+            "Sport (Jet ski, voile, randonnées…)",
+            "Aventures (Sortie bateau, balade à cheval…)",
+            "Expériences (Cours de cuisine, picnic luxe, escapades…)"
           ]
         },
         custom: {
@@ -243,19 +243,19 @@ const resources = {
           title: "Home Management & Services",
           subtitle: "High-end services for a stress-free daily life.",
           services: [
-            "Personalized welcome",
-            "Property preparation",
-            "Daily or intermediate cleaning"
+            "Delivery services (Breakfast / press / wine…)",
+            "Transportation (Private chauffeur, helicopter, car rental…)",
+            "Self-care (Massages, beauty treatments, coach…)",
+            "Household staff (Private chef, butler, babysitter…)"
           ]
         },
         experiences: {
           title: "Experiences & Leisure",
           subtitle: "Exclusive and immersive activities to enhance every moment of your stay.",
           services: [
-            "Boat excursions",
-            "Yacht rental",
-            "Guided hikes",
-            "Corsican cooking classes"
+            "Sports (Jet ski, sailing, hiking…)",
+            "Adventures (Boat trips, horseback riding…)",
+            "Experiences (Cooking classes, luxury picnic, getaways…)"
           ]
         },
         custom: {
@@ -424,19 +424,19 @@ const resources = {
           title: "Gestión del Hogar & Servicios",
           subtitle: "Servicios de alta gama para un día a día sin preocupaciones.",
           services: [
-            "Bienvenida personalizada",
-            "Preparación del alojamiento",
-            "Limpieza diaria o intermedia"
+            "Servicios de entrega (Desayuno / prensa / vino…)",
+            "Transporte (Chófer privado, helicóptero, alquiler de coches…)",
+            "Cuidado personal (Masajes, tratamientos estéticos, coach…)",
+            "Personal del hogar (Chef privado, mayordomo, niñera…)"
           ]
         },
         experiences: {
           title: "Experiencias & Ocio",
           subtitle: "Actividades exclusivas e inmersivas para sublimar cada momento de su estancia.",
           services: [
-            "Excursiones en barco",
-            "Alquiler de yate",
-            "Senderismo guiado",
-            "Clases de cocina corsa"
+            "Deportes (Jet ski, vela, senderismo…)",
+            "Aventuras (Paseos en barco, equitación…)",
+            "Experiencias (Clases de cocina, picnic de lujo, escapadas…)"
           ]
         },
         custom: {
@@ -605,19 +605,19 @@ const resources = {
           title: "Gestione Casa & Servizi",
           subtitle: "Servizi di alta gamma per un quotidiano senza pensieri.",
           services: [
-            "Accoglienza personalizzata",
-            "Preparazione dell'alloggio",
-            "Pulizia giornaliera o intermedia"
+            "Servizi di consegna (Colazione / stampa / vino…)",
+            "Trasporti (Autista privato, elicottero, noleggio auto…)",
+            "Cura di sé (Massaggi, trattamenti estetici, coach…)",
+            "Personale di casa (Chef privato, maggiordomo, babysitter…)"
           ]
         },
         experiences: {
           title: "Esperienze & Tempo Libero",
           subtitle: "Attività esclusive e coinvolgenti per esaltare ogni momento del vostro soggiorno.",
           services: [
-            "Escursioni in barca",
-            "Noleggio yacht",
-            "Escursioni guidate",
-            "Corsi di cucina corsa"
+            "Sport (Jet ski, vela, escursionismo…)",
+            "Avventure (Gite in barca, equitazione…)",
+            "Esperienze (Corsi di cucina, picnic di lusso, fughe…)"
           ]
         },
         custom: {
