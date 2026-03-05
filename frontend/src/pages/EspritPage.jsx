@@ -16,6 +16,19 @@ const EspritPage = () => {
         <div className="orso-container">
           <div className="relative">
             
+            {/* Title Row - At the height of the start of Julie's image, NO background */}
+            <div className="flex items-baseline gap-4 mb-0 pb-6">
+              {/* Empty space for Julie's image column */}
+              <div className="hidden lg:block lg:w-[41.666%]"></div>
+              {/* Title */}
+              <div className="flex items-baseline gap-4">
+                <span className="text-5xl md:text-6xl lg:text-7xl font-serif text-gray-300 leading-none">01</span>
+                <h2 className="font-serif text-lg md:text-xl lg:text-2xl text-[#2e2e2e] tracking-[0.1em] uppercase">
+                  Excellence & Savoir Faire:
+                </h2>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               
               {/* Left Column - Julie's Photo with Bastien overlay */}
@@ -38,49 +51,46 @@ const EspritPage = () => {
                 </div>
               </div>
 
-              {/* Right Column - Content with beige background */}
-              <div className="lg:col-span-7 bg-[#f5f5f0] p-8 md:p-12 lg:p-16 relative">
+              {/* Right Column - Content */}
+              <div className="lg:col-span-7 relative">
+                {/* Gray background - only covers top half */}
+                <div className="absolute top-0 left-0 right-0 h-1/2 bg-[#f5f5f0]"></div>
                 
-                {/* Title - At top of beige section */}
-                <div className="flex items-baseline gap-4 mb-10">
-                  <span className="text-5xl md:text-6xl lg:text-7xl font-serif text-gray-300 leading-none">01</span>
-                  <h2 className="font-serif text-lg md:text-xl lg:text-2xl text-[#2e2e2e] tracking-[0.1em] uppercase">
-                    Excellence & Savoir Faire:
-                  </h2>
-                </div>
+                {/* Content */}
+                <div className="relative z-10 p-8 md:p-12 lg:p-16">
+                  {/* Julie's Description - CENTER ALIGNED */}
+                  <div className="space-y-6 text-gray-700 leading-relaxed text-base md:text-lg text-center max-w-2xl mx-auto">
+                    <p>
+                      Julie, <strong className="font-semibold">votre interlocutrice</strong> ORSO Rental Selection, met son <strong className="font-semibold">expertise</strong> au service de votre bien, assurant un <strong className="font-semibold">pilotage sur mesure</strong> et une <strong className="font-semibold">valorisation optimale</strong>. Alliant discrétion, professionnalisme et sens du détail, elle veille à une <strong className="font-semibold">expérience fluide et sereine</strong> tant pour les propriétaires que pour leurs hôtes.
+                    </p>
+                    <p>
+                      Avec confiance, disponibilité et rigueur, Julie a à cœur de sublimer chaque propriété en offrant un service d'exception.
+                    </p>
+                  </div>
 
-                {/* Julie's Description - CENTER ALIGNED */}
-                <div className="space-y-6 text-gray-700 leading-relaxed text-base md:text-lg text-center max-w-2xl mx-auto">
-                  <p>
-                    Julie, <strong className="font-semibold">votre interlocutrice</strong> ORSO Rental Selection, met son <strong className="font-semibold">expertise</strong> au service de votre bien, assurant un <strong className="font-semibold">pilotage sur mesure</strong> et une <strong className="font-semibold">valorisation optimale</strong>. Alliant discrétion, professionnalisme et sens du détail, elle veille à une <strong className="font-semibold">expérience fluide et sereine</strong> tant pour les propriétaires que pour leurs hôtes.
-                  </p>
-                  <p>
-                    Avec confiance, disponibilité et rigueur, Julie a à cœur de sublimer chaque propriété en offrant un service d'exception.
-                  </p>
-                </div>
+                  {/* Vision Quote */}
+                  <div className="my-10 md:my-12">
+                    <p className="text-center font-serif text-lg md:text-xl text-[#2e2e2e] italic">
+                      Une vision commune, une sélection d'excellence.
+                    </p>
+                  </div>
 
-                {/* Vision Quote */}
-                <div className="my-10 md:my-12">
-                  <p className="text-center font-serif text-lg md:text-xl text-[#2e2e2e] italic">
-                    Une vision commune, une sélection d'excellence.
-                  </p>
-                </div>
+                  {/* Bastien Section - CENTER ALIGNED */}
+                  <div className="space-y-4 text-gray-700 leading-relaxed text-base md:text-lg text-center max-w-2xl mx-auto">
+                    <p>
+                      Fondateur de CASA TERRA Real Estate, Bastien s'entoure de Julie pour offrir un service haut de gamme alliant <strong className="font-semibold">authenticité & art de vivre en Corse</strong>.
+                    </p>
+                    <p>
+                      Leur complémentarité garantit un accompagnement humain et une sélection de biens d'exception pour une expérience exclusive
+                    </p>
+                  </div>
 
-                {/* Bastien Section - CENTER ALIGNED */}
-                <div className="space-y-4 text-gray-700 leading-relaxed text-base md:text-lg text-center max-w-2xl mx-auto">
-                  <p>
-                    Fondateur de CASA TERRA Real Estate, Bastien s'entoure de Julie pour offrir un service haut de gamme alliant <strong className="font-semibold">authenticité & art de vivre en Corse</strong>.
-                  </p>
-                  <p>
-                    Leur complémentarité garantit un accompagnement humain et une sélection de biens d'exception pour une expérience exclusive
-                  </p>
-                </div>
-
-                {/* Final Quote */}
-                <div className="mt-10 md:mt-12">
-                  <p className="text-center font-serif text-lg md:text-xl text-[#2e2e2e] italic font-semibold">
-                    « Des lieux uniques pour des moments hors du temps »
-                  </p>
+                  {/* Final Quote */}
+                  <div className="mt-10 md:mt-12">
+                    <p className="text-center font-serif text-lg md:text-xl text-[#2e2e2e] italic font-semibold">
+                      « Des lieux uniques pour des moments hors du temps »
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
