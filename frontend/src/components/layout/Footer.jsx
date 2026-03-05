@@ -11,31 +11,36 @@ const Footer = () => {
       className="bg-[#2e2e2e] text-white relative overflow-hidden"
       data-testid="footer"
     >
-      {/* Watermark */}
-      <div className="footer-watermark font-serif select-none text-white">
-        ORSO
-      </div>
-
       <div className="orso-container py-20 md:py-32 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <div className="text-white">
-                <h2 className="text-2xl md:text-3xl tracking-[0.3em] font-light">
-                  O R S O
-                </h2>
-                <p className="text-xs tracking-[0.2em] text-white/60 mt-1 uppercase">
-                  Rental Selection
-                </p>
+              {/* Logo with vertical lines like in hero */}
+              <div className="flex flex-col items-center">
+                {/* Top vertical line */}
+                <div className="w-px h-8 bg-white/40 mb-4" />
+                
+                {/* Logo Text */}
+                <div className="text-center">
+                  <h2 className="text-2xl md:text-3xl tracking-[0.4em] text-white font-light">
+                    O R S O
+                  </h2>
+                  <p className="text-xs tracking-[0.3em] text-white/60 mt-2 uppercase">
+                    Rental Selection
+                  </p>
+                </div>
+                
+                {/* Bottom vertical line */}
+                <div className="w-px h-8 bg-white/40 mt-4" />
               </div>
             </Link>
-            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
+            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6 text-center md:text-left">
               {t('footer.tagline')}
             </p>
             
             {/* Social Links + GMB */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 justify-center md:justify-start">
               <a
                 href="https://www.instagram.com/orso.rental.selection/"
                 target="_blank"
