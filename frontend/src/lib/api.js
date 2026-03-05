@@ -119,6 +119,19 @@ export const updateSingleSiteImage = async (imageKey, url) => {
   return response.data;
 };
 
+// Services PDF
+export const getServicesPdf = async () => {
+  const response = await apiClient.get('/settings/services-pdf');
+  return response.data;
+};
+
+export const updateServicesPdf = async (url) => {
+  const response = await apiClient.put('/settings/services-pdf', null, {
+    params: { url }
+  });
+  return response.data;
+};
+
 // Image Upload
 export const uploadImage = async (file) => {
   const formData = new FormData();

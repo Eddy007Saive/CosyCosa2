@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Calendar, Users, ArrowRight, Check } from 'lucide-react';
+import { Calendar, Users, ArrowRight, Check, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import {
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/popover';
 import { format, addDays } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { getCategories, getSiteImages } from '@/lib/api';
+import { getCategories, getSiteImages, getServicesPdf } from '@/lib/api';
 import SEO from '@/components/SEO';
 
 const locales = { fr, en: enUS, es, it };
@@ -30,6 +30,7 @@ const HomePage = () => {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
+  const [servicesPdfUrl, setServicesPdfUrl] = useState(null);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(2);
@@ -45,6 +46,18 @@ const HomePage = () => {
         }
       } catch (error) {
         console.error('Failed to load site images:', error);
+      }
+    };
+    
+    // Load services PDF URL
+    const loadServicesPdf = async () => {
+      try {
+        const data = await getServicesPdf();
+        if (data?.services_pdf_url) {
+          setServicesPdfUrl(data.services_pdf_url);
+        }
+      } catch (error) {
+        console.error('Failed to load services PDF:', error);
       }
     };
     
@@ -68,6 +81,7 @@ const HomePage = () => {
     };
     
     loadSiteImages();
+    loadServicesPdf();
     loadCategories();
   }, []);
 
@@ -369,91 +383,92 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Services Section - Checkerboard Layout */}
-      <section className="bg-[#f5f5f3]" data-testid="services-section">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* Image */}
-          <div className="h-[50vh] lg:h-auto lg:min-h-[60vh]">
-            <img
-              src={siteImages.services_intendance || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"}
-              alt={t('services.intendance.title')}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          {/* Text */}
-          <div className="flex items-center p-8 md:p-12 lg:p-16 xl:p-20">
-            <div className="max-w-lg">
+      {/* Services Section - Cards Layout */}
+      <section className="orso-section bg-white" data-testid="services-section">
+        <div className="orso-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Intendance Card */}
+            <div className="p-8 md:p-12 bg-orso-surface">
               <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
-              <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
+              <h3 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
                 {t('services.intendance.title')}
-              </h2>
+              </h3>
               <p className="text-gray-600 font-light mb-8 leading-relaxed">
                 {t('services.intendance.subtitle')}
               </p>
-              <ul className="space-y-3">
+              <ul className="space-y-3 mb-8">
                 {(t('services.intendance.services', { returnObjects: true }) || []).map((service, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-700">
-                    <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full flex-shrink-0" />
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <span className="text-[#2e2e2e] mt-1">—</span>
                     <span className="font-light">{service}</span>
                   </li>
                 ))}
               </ul>
+              {servicesPdfUrl ? (
+                <a href={servicesPdfUrl} target="_blank" rel="noopener noreferrer">
+                  <Button className="orso-btn-secondary" data-testid="intendance-pdf-btn">
+                    <FileText className="mr-2 h-4 w-4" strokeWidth={1.5} />
+                    {t('services.learnMore')}
+                  </Button>
+                </a>
+              ) : (
+                <Link to="/contact">
+                  <Button className="orso-btn-secondary">
+                    {t('services.learnMore')}
+                  </Button>
+                </Link>
+              )}
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Experiences Section */}
-      <section className="bg-white">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* Text */}
-          <div className="flex items-center p-8 md:p-12 lg:p-16 xl:p-20 order-2 lg:order-1">
-            <div className="max-w-lg ml-auto">
-              <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
-              <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
+            {/* Experiences Card */}
+            <div className="p-8 md:p-12 bg-[#2e2e2e] text-white">
+              <div className="w-10 h-px bg-white/40 mb-6" />
+              <h3 className="font-serif text-2xl md:text-3xl text-white mb-4">
                 {t('services.experiences.title')}
-              </h2>
-              <p className="text-gray-600 font-light mb-8 leading-relaxed">
+              </h3>
+              <p className="text-white/80 font-light mb-8 leading-relaxed">
                 {t('services.experiences.subtitle')}
               </p>
-              <ul className="space-y-3">
+              <ul className="space-y-3 mb-8">
                 {(t('services.experiences.services', { returnObjects: true }) || []).map((service, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-700">
-                    <span className="w-1.5 h-1.5 bg-[#2e2e2e] rounded-full flex-shrink-0" />
+                  <li key={i} className="flex items-start gap-3 text-white/80">
+                    <span className="text-white mt-1">—</span>
                     <span className="font-light">{service}</span>
                   </li>
                 ))}
               </ul>
+              {servicesPdfUrl ? (
+                <a href={servicesPdfUrl} target="_blank" rel="noopener noreferrer">
+                  <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-4 rounded-full uppercase tracking-widest text-xs font-medium" data-testid="experiences-pdf-btn">
+                    <FileText className="mr-2 h-4 w-4" strokeWidth={1.5} />
+                    {t('services.learnMore')}
+                  </Button>
+                </a>
+              ) : (
+                <Link to="/contact">
+                  <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-4 rounded-full uppercase tracking-widest text-xs font-medium">
+                    {t('services.learnMore')}
+                  </Button>
+                </Link>
+              )}
             </div>
-          </div>
-          
-          {/* Image */}
-          <div className="h-[50vh] lg:h-auto lg:min-h-[60vh] order-1 lg:order-2">
-            <img
-              src={siteImages.services_experiences || "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80"}
-              alt={t('services.experiences.title')}
-              className="w-full h-full object-cover"
-            />
           </div>
         </div>
       </section>
 
       {/* Custom Requests Section */}
-      <section className="bg-[#2e2e2e] py-16 md:py-20">
+      <section className="bg-orso-surface py-16 md:py-20">
         <div className="orso-container">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="w-12 h-px bg-white/40 mx-auto mb-8" />
-            <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">
+            <div className="w-12 h-px bg-[#2e2e2e] mx-auto mb-8" />
+            <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-6">
               {t('services.custom.title')}
             </h2>
-            <p className="text-white/80 text-base font-light leading-relaxed mb-8">
+            <p className="text-gray-600 text-base font-light leading-relaxed mb-8">
               {t('services.custom.subtitle')}
             </p>
             <Link to="/contact">
-              <Button 
-                className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-3 rounded-full uppercase tracking-widest text-xs font-medium transition-all"
-              >
+              <Button className="orso-btn-primary">
                 {t('services.custom.cta')}
                 <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
               </Button>

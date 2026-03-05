@@ -135,9 +135,34 @@ async def update_single_image(image_key: str, url: str = None):
     )
     return {"success": True, "message": f"Image {image_key} updated"}
 
+# ============== SERVICES PDF SETTINGS ==============
+
+@api_router.get("/settings/services-pdf")
+async def get_services_pdf():
+    """Get services PDF URL"""
+    settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
+    if settings and settings.get("services_pdf_url"):
+        return {"services_pdf_url": settings["services_pdf_url"]}
+    return {"services_pdf_url": None}
+
+@api_router.put("/settings/services-pdf")
+async def update_services_pdf(url: str):
+    """Update services PDF URL"""
+    await db.site_settings.update_one(
+        {"id": "site_settings"},
+        {
+            "$set": {
+                "services_pdf_url": url,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    return {"success": True, "message": "Services PDF URL updated"}
+
 # ============== FILE UPLOAD ==============
 
-ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 @api_router.post("/upload/image")

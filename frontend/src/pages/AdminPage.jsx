@@ -22,6 +22,7 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  FileText,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,7 +52,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { getProperties, getSiteImages, updateSiteImages, uploadImage, getAdminProperties, getSyncStatus, triggerSync, adminLogin } from '@/lib/api';
+import { getProperties, getSiteImages, updateSiteImages, uploadImage, getAdminProperties, getSyncStatus, triggerSync, adminLogin, getServicesPdf, updateServicesPdf } from '@/lib/api';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -150,6 +151,11 @@ const AdminPage = () => {
   const [loadingImages, setLoadingImages] = useState(false);
   const [savingImages, setSavingImages] = useState(false);
   
+  // Services PDF state
+  const [servicesPdfUrl, setServicesPdfUrl] = useState('');
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  const [savingPdf, setSavingPdf] = useState(false);
+  
   // Sync status
   const [syncStatus, setSyncStatus] = useState(null);
   
@@ -203,6 +209,7 @@ const AdminPage = () => {
     if (isAuthenticated) {
       loadProperties();
       loadSiteImages();
+      loadServicesPdf();
     }
   }, [isAuthenticated]);
 
@@ -253,6 +260,31 @@ const AdminPage = () => {
       toast.error('Erreur de chargement des images');
     } finally {
       setLoadingImages(false);
+    }
+  };
+
+  const loadServicesPdf = async () => {
+    setLoadingPdf(true);
+    try {
+      const data = await getServicesPdf();
+      setServicesPdfUrl(data.services_pdf_url || '');
+    } catch (error) {
+      console.error('Failed to load services PDF:', error);
+    } finally {
+      setLoadingPdf(false);
+    }
+  };
+
+  const saveServicesPdf = async () => {
+    setSavingPdf(true);
+    try {
+      await updateServicesPdf(servicesPdfUrl);
+      toast.success('Lien PDF enregistré');
+    } catch (error) {
+      console.error('Failed to save services PDF:', error);
+      toast.error('Erreur lors de la sauvegarde du PDF');
+    } finally {
+      setSavingPdf(false);
     }
   };
 
@@ -712,6 +744,18 @@ const AdminPage = () => {
               <ImageIcon className="w-4 h-4 inline mr-2" />
               Images du site
             </button>
+            <button
+              onClick={() => setActiveTab('pdf-services')}
+              className={`py-4 text-sm uppercase tracking-widest border-b-2 transition-colors ${
+                activeTab === 'pdf-services'
+                  ? 'border-[#2e2e2e] text-[#2e2e2e]'
+                  : 'border-transparent text-gray-400 hover:text-gray-600'
+              }`}
+              data-testid="tab-pdf-services"
+            >
+              <FileText className="w-4 h-4 inline mr-2" />
+              PDF Services
+            </button>
           </nav>
         </div>
       </div>
@@ -1068,6 +1112,92 @@ const AdminPage = () => {
                 <li>• Vous pouvez aussi coller une URL d'image externe (Unsplash, Cloudinary, etc.)</li>
                 <li>• Les modifications seront visibles sur le site après avoir cliqué sur "Enregistrer"</li>
               </ul>
+            </div>
+          </div>
+        )}
+
+        {/* PDF Services Tab */}
+        {activeTab === 'pdf-services' && (
+          <div className="space-y-8" data-testid="pdf-services-tab">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-serif text-2xl text-[#2e2e2e]">PDF Services</h2>
+                <p className="text-gray-600 mt-1">
+                  Configurez le lien du PDF qui s'ouvrira quand les visiteurs cliquent sur "EN SAVOIR PLUS" dans la section services
+                </p>
+              </div>
+              <Button
+                onClick={saveServicesPdf}
+                disabled={savingPdf}
+                className="orso-btn-primary"
+                data-testid="save-pdf-btn"
+              >
+                {savingPdf ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                Enregistrer
+              </Button>
+            </div>
+
+            <div className="bg-white border border-gray-100 p-6 space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="pdf-url" className="text-sm font-medium">
+                    URL du PDF des services
+                  </Label>
+                  <p className="text-xs text-gray-500 mt-1 mb-3">
+                    Ce PDF s'affichera quand les visiteurs cliquent sur "EN SAVOIR PLUS" pour les deux sections de services (Intendance et Expériences)
+                  </p>
+                  <div className="flex gap-3">
+                    <Input
+                      id="pdf-url"
+                      value={servicesPdfUrl}
+                      onChange={(e) => setServicesPdfUrl(e.target.value)}
+                      placeholder="https://example.com/services.pdf"
+                      className="flex-1"
+                      data-testid="pdf-url-input"
+                    />
+                    {servicesPdfUrl && (
+                      <a href={servicesPdfUrl} target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" className="gap-2">
+                          <Eye className="w-4 h-4" />
+                          Voir
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Info box */}
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Comment ça marche ?
+                </h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Collez l'URL d'un fichier PDF hébergé en ligne (Google Drive, Dropbox, votre serveur, etc.)</li>
+                  <li>• Si aucun PDF n'est configuré, le bouton "EN SAVOIR PLUS" redirigera vers la page de contact</li>
+                  <li>• Le PDF s'ouvrira dans un nouvel onglet du navigateur</li>
+                </ul>
+              </div>
+
+              {/* Status indicator */}
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
+                {servicesPdfUrl ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    <span className="text-sm text-green-700">PDF configuré</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="w-5 h-5 text-yellow-600" />
+                    <span className="text-sm text-yellow-700">Aucun PDF configuré - les boutons redirigeront vers la page contact</span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         )}

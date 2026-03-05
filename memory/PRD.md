@@ -114,6 +114,19 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 - ✅ **Bug calendrier désactivé (P0)** - Confirmé comme fonctionnel après tests
 - ⚠️ **SEO dynamique (P1)** - Maintenu désactivé car provoque bug page blanche. SEO statique suffisant.
 
+## Mises à jour récentes (Dec 2025)
+
+### ✅ Refonte section Services (Page d'accueil)
+- Section services redessinée : deux cartes côte à côte sans images
+- Boutons "EN SAVOIR PLUS" configurables pour ouvrir un PDF
+- Nouvel onglet "PDF Services" dans le panneau admin pour configurer l'URL du PDF
+- Si aucun PDF n'est configuré, les boutons redirigent vers la page contact
+
+### ✅ Backend - Nouveau endpoint
+- `GET /api/settings/services-pdf` - Récupère l'URL du PDF des services
+- `PUT /api/settings/services-pdf?url=...` - Met à jour l'URL du PDF
+- Support upload de fichiers PDF ajouté
+
 ## Remaining Tasks (Backlog)
 ### P1 - Prochain
 - [ ] **Upsells/Extras Beds24** - L'utilisateur veut afficher les extras. Les propriétés actuelles n'ont pas d'upsellItems configurés dans Beds24.

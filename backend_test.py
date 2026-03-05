@@ -7,7 +7,7 @@ import time
 from datetime import datetime, timedelta
 
 class ORSOBackendTester:
-    def __init__(self, base_url="https://lodging-manager-cors.preview.emergentagent.com"):
+    def __init__(self, base_url="https://orso-booking-stage.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
