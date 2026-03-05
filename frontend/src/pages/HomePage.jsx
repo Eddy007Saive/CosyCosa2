@@ -122,7 +122,7 @@ const HomePage = () => {
             >
               {/* Quote */}
               <h1 
-                className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#2e2e2e] italic mb-12 lg:mb-16"
+                className="text-xl md:text-2xl lg:text-3xl text-[#2e2e2e] font-light tracking-wide mb-12 lg:mb-16 whitespace-nowrap"
                 data-testid="hero-title"
               >
                 « {t('hero.quote', 'Des Lieux uniques pour des moments hors du temps')} »
