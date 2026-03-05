@@ -116,6 +116,15 @@ Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimali
 
 ## Mises à jour récentes (Dec 2025)
 
+### ✅ Nouvelle page "Propriétaires" (/proprietaire)
+- Page dédiée aux propriétaires de villas souhaitant confier leur bien
+- Hero section avec image de fond et CTA "Contactez-nous"
+- Section "Intendance locative" avec liste des services (création annonce, gestion planning, accueil voyageurs, etc.)
+- Section "Intendance propriété" avec services à la carte (contrôles réguliers, coordination prestataires, etc.)
+- Section CTA finale "Parlons de votre villa"
+- Traductions complètes FR/EN/ES/IT
+- Lien ajouté dans la navigation principale
+
 ### ✅ Refonte section Services (Page d'accueil)
 - Section services redessinée : deux cartes côte à côte sans images
 - Boutons "EN SAVOIR PLUS" configurables pour ouvrir un PDF

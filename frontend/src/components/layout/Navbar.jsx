@@ -34,6 +34,7 @@ const Navbar = () => {
   const navLinks = [
     { href: '/', label: t('nav.home') },
     { href: '/properties', label: t('nav.properties') },
+    { href: '/proprietaire', label: t('nav.proprietaire') },
     { href: '/contact', label: t('nav.contact') },
   ];
 
