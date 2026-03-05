@@ -18,6 +18,13 @@ const Navbar = () => {
 
   const languages = ['FR', 'EN', 'ES', 'IT'];
 
+  // Pages with dark hero backgrounds that need light text
+  const darkHeroPages = ['/proprietaire', '/contact'];
+  const hasDarkHero = darkHeroPages.includes(location.pathname);
+  
+  // Use light text when on dark hero pages AND not scrolled
+  const useLightText = hasDarkHero && !isScrolled;
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -73,10 +80,10 @@ const Navbar = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`nav-link text-sm uppercase tracking-widest transition-opacity ${
+                className={`nav-link text-sm uppercase tracking-widest transition-all ${
                   isActive(link.href)
-                    ? 'text-[#2e2e2e] opacity-100'
-                    : 'text-[#2e2e2e] opacity-60 hover:opacity-100'
+                    ? useLightText ? 'text-white opacity-100' : 'text-[#2e2e2e] opacity-100'
+                    : useLightText ? 'text-white opacity-70 hover:opacity-100' : 'text-[#2e2e2e] opacity-60 hover:opacity-100'
                 }`}
                 data-testid={`nav-link-${link.href.slice(1) || 'home'}`}
               >
@@ -88,7 +95,7 @@ const Navbar = () => {
           {/* Language Switcher + CTA */}
           <div className="hidden lg:flex items-center gap-6">
             {/* Language Switcher */}
-            <div className="lang-switch flex items-center gap-2 text-xs uppercase tracking-widest">
+            <div className={`lang-switch flex items-center gap-2 text-xs uppercase tracking-widest ${useLightText ? 'text-white' : 'text-[#2e2e2e]'}`}>
               {languages.map((lang, index) => (
                 <span key={lang} className="flex items-center">
                   <button
@@ -112,7 +119,7 @@ const Navbar = () => {
             {/* Book CTA */}
             <Link to="/properties">
               <Button
-                className="orso-btn-primary"
+                className={useLightText ? "bg-white text-[#2e2e2e] hover:bg-white/90 px-6 py-2 rounded-full uppercase tracking-widest text-xs font-medium" : "orso-btn-primary"}
                 data-testid="nav-book-btn"
               >
                 {t('nav.book')}
@@ -127,7 +134,7 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-[#2e2e2e]"
+                  className={useLightText ? "text-white" : "text-[#2e2e2e]"}
                   data-testid="mobile-menu-trigger"
                   aria-label="Open menu"
                 >
