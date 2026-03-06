@@ -68,11 +68,23 @@ const Navbar = () => {
             className="flex items-center"
             data-testid="navbar-logo"
           >
-            <img 
-              src="/orso-logo.png" 
-              alt="ORSO Rental Selection" 
-              className="h-20 md:h-24 w-auto -my-4"
-            />
+            <div className={`flex flex-col items-center ${useLightText ? 'text-white' : 'text-[#2e2e2e]'}`}>
+              {/* Top vertical line */}
+              <div className={`w-px h-4 ${useLightText ? 'bg-white/40' : 'bg-[#2e2e2e]/30'}`} />
+              
+              {/* Logo Text */}
+              <div className="text-center my-1">
+                <h1 className="text-lg md:text-xl tracking-[0.3em] font-light">
+                  O R S O
+                </h1>
+                <p className={`text-[8px] tracking-[0.2em] ${useLightText ? 'text-white/60' : 'text-[#2e2e2e]/60'} uppercase`}>
+                  Rental Selection
+                </p>
+              </div>
+              
+              {/* Bottom vertical line */}
+              <div className={`w-px h-4 ${useLightText ? 'bg-white/40' : 'bg-[#2e2e2e]/30'}`} />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
