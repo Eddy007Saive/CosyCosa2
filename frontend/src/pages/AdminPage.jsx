@@ -121,6 +121,19 @@ const SITE_IMAGE_PAGES = {
       },
     },
   },
+  esprit: {
+    label: 'Esprit',
+    images: {
+      esprit_julie: {
+        label: 'Photo Julie',
+        description: 'Grande photo de Julie (format portrait, noir et blanc recommandé)',
+      },
+      esprit_bastien: {
+        label: 'Photo Bastien',
+        description: 'Petite photo de Bastien (format portrait, noir et blanc recommandé)',
+      },
+    },
+  },
   properties: {
     label: 'Propriétés',
     images: {

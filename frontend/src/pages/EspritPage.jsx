@@ -1,10 +1,38 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSiteImages } from '@/lib/api';
+
+// Default images (Unsplash placeholders)
+const DEFAULT_IMAGES = {
+  esprit_julie: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=80',
+  esprit_bastien: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80',
+};
 
 const EspritPage = () => {
   const { t } = useTranslation();
+  const [images, setImages] = useState(DEFAULT_IMAGES);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const data = await getSiteImages();
+        if (data?.images) {
+          setImages(prev => ({
+            ...prev,
+            ...Object.fromEntries(
+              Object.entries(data.images).filter(([key]) => key.startsWith('esprit_'))
+            )
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to load esprit images:', error);
+      }
+    };
+    loadImages();
+  }, []);
 
   return (
     <div data-testid="esprit-page" className="bg-white overflow-x-hidden">
@@ -35,7 +63,7 @@ const EspritPage = () => {
               <div className="lg:col-span-5 relative">
                 {/* Julie's Photo */}
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=80"
+                  src={images.esprit_julie || DEFAULT_IMAGES.esprit_julie}
                   alt="Julie - ORSO Rental Selection"
                   className="w-full grayscale object-cover"
                   style={{ aspectRatio: '4/5' }}
@@ -44,7 +72,7 @@ const EspritPage = () => {
                 {/* Bastien's Photo - Superimposed at bottom RIGHT of Julie's photo */}
                 <div className="absolute bottom-4 right-0 translate-x-1/4 z-20">
                   <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80"
+                    src={images.esprit_bastien || DEFAULT_IMAGES.esprit_bastien}
                     alt="Bastien - CASA TERRA Real Estate"
                     className="w-28 h-36 md:w-36 md:h-48 lg:w-40 lg:h-52 object-cover grayscale"
                   />
