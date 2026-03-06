@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Montserrat', 'Lato', 'sans-serif'],
+        sans: ['Cormorant Garamond', 'serif'],
         serif: ['Cormorant Garamond', 'serif'],
       },
       colors: {
