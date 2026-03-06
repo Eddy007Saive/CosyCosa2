@@ -17,11 +17,21 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
+import cloudinary
+import cloudinary.uploader
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# Create uploads directory
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
+# Create uploads directory (for backward compatibility)
 UPLOADS_DIR = ROOT_DIR / 'uploads'
 UPLOADS_DIR.mkdir(exist_ok=True)
 
@@ -160,14 +170,14 @@ async def update_services_pdf(url: str):
     )
     return {"success": True, "message": "Services PDF URL updated"}
 
-# ============== FILE UPLOAD ==============
+# ============== FILE UPLOAD (CLOUDINARY) ==============
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 @api_router.post("/upload/image")
 async def upload_image(file: UploadFile = File(...)):
-    """Upload an image file and return its URL"""
+    """Upload an image file to Cloudinary and return its URL"""
     # Validate file extension
     file_ext = Path(file.filename).suffix.lower()
     if file_ext not in ALLOWED_EXTENSIONS:
@@ -183,28 +193,31 @@ async def upload_image(file: UploadFile = File(...)):
     if len(content) > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="File too large. Max 10MB")
     
-    # Generate unique filename
-    unique_id = str(uuid.uuid4())[:8]
-    safe_filename = f"{unique_id}{file_ext}"
-    file_path = UPLOADS_DIR / safe_filename
-    
-    # Save file
-    with open(file_path, 'wb') as f:
-        f.write(content)
-    
-    # Return relative URL (frontend will prepend the base URL)
-    image_url = f"/api/uploads/{safe_filename}"
-    
-    logger.info(f"Image uploaded: {safe_filename}")
-    return {
-        "success": True,
-        "url": image_url,
-        "filename": safe_filename
-    }
+    try:
+        # Upload to Cloudinary
+        import io
+        result = cloudinary.uploader.upload(
+            io.BytesIO(content),
+            folder="orso-rs",
+            resource_type="auto"
+        )
+        
+        # Get the secure URL from Cloudinary
+        image_url = result.get('secure_url')
+        
+        logger.info(f"Image uploaded to Cloudinary: {image_url}")
+        return {
+            "success": True,
+            "url": image_url,
+            "public_id": result.get('public_id')
+        }
+    except Exception as e:
+        logger.error(f"Cloudinary upload error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 @api_router.get("/uploads/{filename}")
 async def get_uploaded_image(filename: str):
-    """Serve uploaded images"""
+    """Serve uploaded images (backward compatibility for local files)"""
     from fastapi.responses import FileResponse
     
     file_path = UPLOADS_DIR / filename
