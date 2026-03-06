@@ -134,6 +134,23 @@ const SITE_IMAGE_PAGES = {
       },
     },
   },
+  proprietaire: {
+    label: 'Propriétaires',
+    images: {
+      proprietaire_hero: {
+        label: 'Image Hero',
+        description: 'Grande image de fond en haut de la page (villa de luxe recommandée)',
+      },
+      proprietaire_locative: {
+        label: 'Image Intendance Locative',
+        description: 'Photo pour la section intendance locative (format carré)',
+      },
+      proprietaire_propriete: {
+        label: 'Image Intendance Propriété',
+        description: 'Photo pour la section intendance propriété (format carré)',
+      },
+    },
+  },
   properties: {
     label: 'Propriétés',
     images: {

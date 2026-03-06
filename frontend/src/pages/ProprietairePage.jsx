@@ -1,10 +1,39 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Home, Key, Shield, Calendar, Wrench, Users } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSiteImages } from '@/lib/api';
+
+// Default images (Unsplash placeholders)
+const DEFAULT_IMAGES = {
+  proprietaire_hero: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
+  proprietaire_locative: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+  proprietaire_propriete: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80',
+};
 
 const ProprietairePage = () => {
   const { t } = useTranslation();
+  const [images, setImages] = useState(DEFAULT_IMAGES);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const data = await getSiteImages();
+        if (data?.images) {
+          setImages(prev => ({
+            ...prev,
+            ...Object.fromEntries(
+              Object.entries(data.images).filter(([key]) => key.startsWith('proprietaire_'))
+            )
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to load proprietaire images:', error);
+      }
+    };
+    loadImages();
+  }, []);
 
   return (
     <div data-testid="proprietaire-page">
@@ -12,7 +41,7 @@ const ProprietairePage = () => {
       <section 
         className="relative min-h-[60vh] flex items-center justify-center bg-cover bg-center"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80")'
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("${images.proprietaire_hero || DEFAULT_IMAGES.proprietaire_hero}")`
         }}
         data-testid="proprietaire-hero"
       >
@@ -100,7 +129,7 @@ const ProprietairePage = () => {
             {/* Image */}
             <div className="relative aspect-[4/5] lg:aspect-square overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+                src={images.proprietaire_locative || DEFAULT_IMAGES.proprietaire_locative}
                 alt="Villa intendance"
                 className="w-full h-full object-cover"
               />
@@ -116,7 +145,7 @@ const ProprietairePage = () => {
             {/* Image - Order reversed on desktop */}
             <div className="relative aspect-[4/5] lg:aspect-square overflow-hidden lg:order-1">
               <img
-                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80"
+                src={images.proprietaire_propriete || DEFAULT_IMAGES.proprietaire_propriete}
                 alt="Villa propriété"
                 className="w-full h-full object-cover"
               />
