@@ -1066,64 +1066,37 @@ const AdminPage = () => {
                         <p className="text-xs text-gray-500">{config.description}</p>
                       </div>
                       
-                      {/* Drag & Drop Zone + Image Preview */}
-                      <div
-                        className={`aspect-video bg-gray-100 overflow-hidden relative border-2 border-dashed transition-colors cursor-pointer ${
-                          dragOverKey === key
-                            ? 'border-[#2e2e2e] bg-gray-200'
-                            : 'border-transparent hover:border-gray-300'
-                        }`}
-                        onDragOver={(e) => handleDragOver(e, key)}
-                        onDragLeave={handleDragLeave}
-                        onDrop={(e) => handleDrop(e, key)}
-                        onClick={() => document.getElementById(`file-input-${key}`)?.click()}
-                      >
-                        {uploadingKey === key ? (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
-                            <Loader2 className="w-8 h-8 animate-spin mb-2" />
-                            <span className="text-sm">Téléchargement...</span>
-                          </div>
-                        ) : siteImages[key] ? (
-                          <>
-                            <img
-                              src={siteImages[key]}
-                              alt={config.label}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
-                                e.target.className = 'hidden';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
-                              <div className="text-white text-center">
-                                <Upload className="w-6 h-6 mx-auto mb-1" />
-                                <span className="text-sm">Glissez une image ou cliquez</span>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                            <Upload className="w-8 h-8 mb-2" />
-                            <span className="text-sm">Glissez une image ici</span>
-                            <span className="text-xs">ou cliquez pour parcourir</span>
-                          </div>
-                        )}
-                        <input
-                          id={`file-input-${key}`}
-                          type="file"
-                          accept="image/jpeg,image/png,image/webp,image/gif"
-                          className="hidden"
-                          onChange={(e) => handleFileInputChange(e, key)}
-                        />
+                      {/* Image Preview */}
+                      <div className="aspect-video bg-gray-100 overflow-hidden relative border border-gray-200">
+                        {siteImages[key] ? (
+                          <img
+                            src={siteImages[key]}
+                            alt={config.label}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className={`w-full h-full flex flex-col items-center justify-center text-gray-400 ${siteImages[key] ? 'hidden' : ''}`}
+                          style={{ display: siteImages[key] ? 'none' : 'flex' }}
+                        >
+                          <ImageIcon className="w-8 h-8 mb-2" />
+                          <span className="text-sm">Aucune image</span>
+                          <span className="text-xs">Collez une URL ci-dessous</span>
+                        </div>
                       </div>
                       
                       {/* URL Input */}
-                      <div className="flex gap-2">
+                      <div className="space-y-2">
+                        <Label className="text-xs text-gray-500">URL de l'image</Label>
                         <Input
                           value={siteImages[key] || ''}
                           onChange={(e) => handleSiteImageChange(key, e.target.value)}
-                          placeholder="https://example.com/image.jpg ou glissez une image"
-                          className="text-sm flex-1"
+                          placeholder="https://exemple.com/mon-image.jpg"
+                          className="text-sm"
                         />
                       </div>
                     </div>
@@ -1133,15 +1106,20 @@ const AdminPage = () => {
             )}
 
             {/* Tips */}
-            <div className="bg-gray-50 border border-gray-100 p-6">
-              <h3 className="font-medium mb-3">Conseils pour les images</h3>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• <strong>Glissez-déposez</strong> vos images directement sur les zones ou cliquez pour parcourir</li>
-                <li>• Formats acceptés : JPG, PNG, WebP, GIF (max 10MB)</li>
-                <li>• Utilisez des images de haute qualité (min. 1920px de large pour les images héro)</li>
-                <li>• Vous pouvez aussi coller une URL d'image externe (Unsplash, Cloudinary, etc.)</li>
-                <li>• Les modifications seront visibles sur le site après avoir cliqué sur "Enregistrer"</li>
+            <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+              <h3 className="font-medium mb-3 text-blue-900">Comment ajouter des images ?</h3>
+              <ul className="text-sm text-blue-800 space-y-2">
+                <li>• <strong>Hébergez vos images</strong> sur un service externe : Google Drive, Dropbox, Imgur, Cloudinary, ou votre serveur Hostinger</li>
+                <li>• <strong>Copiez l'URL directe</strong> de l'image (doit finir par .jpg, .png, .webp, etc.)</li>
+                <li>• <strong>Collez l'URL</strong> dans le champ correspondant</li>
+                <li>• <strong>Cliquez sur "Enregistrer"</strong> pour appliquer les modifications</li>
               </ul>
+              <div className="mt-4 pt-4 border-t border-blue-200">
+                <p className="text-xs text-blue-700">
+                  <strong>Astuce Google Drive :</strong> Pour obtenir un lien direct, utilisez le format : 
+                  <code className="bg-blue-100 px-1 rounded">https://drive.google.com/uc?export=view&id=VOTRE_ID</code>
+                </p>
+              </div>
             </div>
           </div>
         )}
