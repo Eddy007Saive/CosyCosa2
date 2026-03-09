@@ -778,26 +778,40 @@ const PropertyDetailPage = () => {
                       </Label>
                       <Calendar
                         mode="range"
+                        defaultMonth={new Date()}
                         selected={{ from: checkIn, to: checkOut }}
                         onSelect={(range) => {
-                          // Check if selected range has blocked dates
-                          if (range?.from && range?.to) {
-                            if (hasBlockedDatesInRange(range.from, range.to)) {
+                          if (!range) {
+                            setCheckIn(null);
+                            setCheckOut(null);
+                            return;
+                          }
+                          
+                          const { from, to } = range;
+                          
+                          // If both dates selected, check for blocked dates
+                          if (from && to) {
+                            if (hasBlockedDatesInRange(from, to)) {
                               toast.error('Certaines dates de votre sélection ne sont pas disponibles');
+                              setCheckIn(null);
+                              setCheckOut(null);
                               return;
                             }
                           }
-                          setCheckIn(range?.from || null);
-                          setCheckOut(range?.to || null);
+                          
+                          setCheckIn(from || null);
+                          setCheckOut(to || null);
                         }}
                         disabled={(date) => {
                           // Disable past dates
-                          if (date < new Date()) return true;
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          if (date < today) return true;
                           // Disable blocked dates from Beds24
                           return isDateBlocked(date);
                         }}
                         locale={locale}
-                        numberOfMonths={1}
+                        numberOfMonths={2}
                         className="border border-gray-200 p-4"
                         data-testid="booking-calendar"
                         modifiers={{
