@@ -812,7 +812,7 @@ const PropertyDetailPage = () => {
                         }}
                         locale={locale}
                         numberOfMonths={2}
-                        className="border border-gray-200 p-4"
+                        className="border-2 border-gray-200 rounded-xl shadow-xl p-6 bg-white"
                         data-testid="booking-calendar"
                         modifiers={{
                           blocked: blockedDates
