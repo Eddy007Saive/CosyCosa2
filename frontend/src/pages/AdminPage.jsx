@@ -24,6 +24,7 @@ import {
   AlertCircle,
   FileText,
   MapPin,
+  BookOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,6 +55,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { getProperties, getSiteImages, updateSiteImages, uploadImage, getAdminProperties, getSyncStatus, triggerSync, adminLogin, getServicesPdf, updateServicesPdf } from '@/lib/api';
+import BlogTab from '@/components/admin/BlogTab';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -922,6 +924,18 @@ const AdminPage = () => {
               <MapPin className="w-4 h-4 inline mr-2" />
               Secteurs
             </button>
+            <button
+              onClick={() => setActiveTab('blog')}
+              className={`py-4 text-sm uppercase tracking-widest border-b-2 transition-colors ${
+                activeTab === 'blog'
+                  ? 'border-[#2e2e2e] text-[#2e2e2e]'
+                  : 'border-transparent text-gray-400 hover:text-gray-600'
+              }`}
+              data-testid="tab-blog"
+            >
+              <BookOpen className="w-4 h-4 inline mr-2" />
+              Blog
+            </button>
           </nav>
         </div>
       </div>
@@ -1447,6 +1461,11 @@ const AdminPage = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* Blog Tab */}
+        {activeTab === 'blog' && (
+          <BlogTab />
         )}
       </main>
 

@@ -193,6 +193,61 @@ html.lenis {
   color: white;
 }
 
+/* Blog content prose */
+.blog-content h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2e2e2e;
+}
+
+.blog-content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: #2e2e2e;
+}
+
+.blog-content p {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: #555;
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+
+.blog-content strong {
+  color: #2e2e2e;
+  font-weight: 600;
+}
+
+.blog-content a {
+  color: #2e2e2e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-content a:hover {
+  opacity: 0.7;
+}
+
+.blog-content ul, .blog-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.blog-content li {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
