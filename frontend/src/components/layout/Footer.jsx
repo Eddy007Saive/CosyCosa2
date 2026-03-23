@@ -19,7 +19,7 @@ const Footer = () => {
               <img 
                 src="/cosycasa-logo.png" 
                 alt="Cosy Casa" 
-                className="h-16 w-auto brightness-0 invert"
+                className="h-24 w-auto brightness-0 invert"
               />
             </Link>
             <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
