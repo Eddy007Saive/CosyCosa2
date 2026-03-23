@@ -359,7 +359,7 @@ const PropertyDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="pt-24 md:pt-32 orso-container">
+      <div className="pt-40 md:pt-44 orso-container">
         <Skeleton className="h-[60vh] w-full mb-8" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2 space-y-4">
@@ -375,7 +375,7 @@ const PropertyDetailPage = () => {
 
   if (!property) {
     return (
-      <div className="pt-24 md:pt-32 orso-container text-center py-20">
+      <div className="pt-40 md:pt-44 orso-container text-center py-20">
         <p className="orso-body">Propriété non trouvée</p>
         <Link to="/locations-vacances-cosy-casa">
           <Button className="orso-btn-secondary mt-8">{t('common.back')}</Button>
@@ -409,7 +409,7 @@ const PropertyDetailPage = () => {
     : ['https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1200'];
 
   return (
-    <div className="pt-20 md:pt-24" data-testid="property-detail-page">
+    <div className="pt-36 md:pt-40" data-testid="property-detail-page">
       {/* SEO */}
       <PropertySEO property={property} lang={i18n.language} />
       

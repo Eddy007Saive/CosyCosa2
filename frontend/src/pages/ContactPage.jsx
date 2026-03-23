@@ -30,7 +30,7 @@ const ContactPage = () => {
   });
 
   return (
-    <div className="pt-20" data-testid="contact-page">
+    <div className="pt-36" data-testid="contact-page">
 
       {/* Hero Section - Image + Contact Info */}
       <section className="min-h-[80vh] bg-white">

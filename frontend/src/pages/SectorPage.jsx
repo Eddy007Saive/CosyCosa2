@@ -51,7 +51,7 @@ const SectorPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24">
+      <div className="min-h-screen flex items-center justify-center pt-40">
         <p className="text-gray-400 font-light">{t('common.loading')}</p>
       </div>
     );
@@ -59,7 +59,7 @@ const SectorPage = () => {
 
   if (!sector) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24">
+      <div className="min-h-screen flex items-center justify-center pt-40">
         <div className="text-center">
           <p className="text-gray-500 mb-4">Page non trouvée</p>
           <Link to="/">
@@ -77,7 +77,7 @@ const SectorPage = () => {
     <div data-testid={`sector-page-${slug}`}>
       {/* Hero */}
       <section
-        className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-20"
+        className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-36"
         style={{ backgroundImage: sector.hero_image ? `url(${sector.hero_image})` : undefined, backgroundColor: '#2e2e2e' }}
       >
         {sector.hero_image && <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />}

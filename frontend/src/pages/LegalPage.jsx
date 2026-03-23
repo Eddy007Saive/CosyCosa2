@@ -5,7 +5,7 @@ const LegalPage = () => {
   const { i18n } = useTranslation();
 
   return (
-    <div className="pt-24 md:pt-32 pb-20" data-testid="legal-page">
+    <div className="pt-40 md:pt-44 pb-20" data-testid="legal-page">
       <LegalSEO page="legal" lang={i18n.language} />
       
       <div className="orso-container">

@@ -29,7 +29,7 @@ const ConciergeriePage = () => {
   return (
     <div data-testid="conciergerie-page">
       {/* Hero */}
-      <section className="relative min-h-[60vh] flex items-center justify-center bg-[#2e2e2e] pt-20">
+      <section className="relative min-h-[60vh] flex items-center justify-center bg-[#2e2e2e] pt-36">
         <div className="relative z-10 text-center text-white px-6 max-w-3xl mx-auto">
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6" data-testid="conciergerie-title">
             {t('conciergerie.hero.title')}

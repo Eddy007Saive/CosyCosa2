@@ -13,6 +13,9 @@ const resources = {
         sectors: "Secteurs",
         properties: "Nos Locations",
         conciergerie: "Conciergerie",
+        about: "À propos",
+        partners: "Partenaires",
+        blog: "Blog",
         contact: "Contact",
         book: "Réserver"
       },
@@ -249,6 +252,9 @@ const resources = {
         sectors: "Sectors",
         properties: "Rentals",
         conciergerie: "Concierge",
+        about: "About",
+        partners: "Partners",
+        blog: "Blog",
         contact: "Contact",
         book: "Book"
       },
@@ -467,6 +473,9 @@ const resources = {
         sectors: "Sectores",
         properties: "Alquileres",
         conciergerie: "Conserjería",
+        about: "Acerca de",
+        partners: "Socios",
+        blog: "Blog",
         contact: "Contacto",
         book: "Reservar"
       },
@@ -550,6 +559,9 @@ const resources = {
         sectors: "Settori",
         properties: "Affitti",
         conciergerie: "Concierge",
+        about: "Chi siamo",
+        partners: "Partner",
+        blog: "Blog",
         contact: "Contatto",
         book: "Prenota"
       },

@@ -113,7 +113,7 @@ const BlogPage = ({ slug }) => {
   const lang = i18n.language;
   const data = BLOG_DATA[slug];
 
-  if (!data) return <div className="pt-24 text-center">Page not found</div>;
+  if (!data) return <div className="pt-40 text-center">Page not found</div>;
 
   const getLangContent = (section, field) => {
     const langMap = { fr: 'Fr', en: 'En', es: 'Es', it: 'It' };
@@ -131,7 +131,7 @@ const BlogPage = ({ slug }) => {
     <div data-testid={`blog-page-${slug}`}>
       {/* Hero */}
       <section
-        className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-20"
+        className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-36"
         style={{ backgroundImage: `url(${data.heroImage})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />

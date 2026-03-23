@@ -116,7 +116,7 @@ const ProprietairesPage = () => {
   return (
     <div data-testid="proprietaires-page">
       {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center justify-center bg-[#2e2e2e] pt-20">
+      <section className="relative min-h-[50vh] flex items-center justify-center bg-[#2e2e2e] pt-36">
         <div className="relative z-10 text-center text-white px-6 max-w-3xl mx-auto">
           <p className="text-xs uppercase tracking-[0.3em] text-white/60 mb-6">
             {t('proprietaires.hero.tagline')}

@@ -57,7 +57,7 @@ const HomePage = () => {
     <div data-testid="home-page">
       {/* Hero Section */}
       <section
-        className="relative min-h-screen flex items-center justify-center bg-cover bg-center pt-20"
+        className="relative min-h-screen flex items-center justify-center bg-cover bg-center pt-36"
         style={{ backgroundImage: `url(${siteImages.home_hero})` }}
         data-testid="hero-section"
       >

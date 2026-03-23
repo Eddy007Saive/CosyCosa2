@@ -82,7 +82,7 @@ const PropertiesPage = () => {
   };
 
   return (
-    <div className="pt-24 md:pt-32" data-testid="properties-page">
+    <div className="pt-40 md:pt-44" data-testid="properties-page">
       
       {/* Header */}
       <section className="orso-container py-12 md:py-20">
