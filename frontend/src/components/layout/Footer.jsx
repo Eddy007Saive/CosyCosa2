@@ -12,7 +12,7 @@ const Footer = () => {
       data-testid="footer"
     >
       <div className="orso-container py-20 md:py-32 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 md:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
@@ -103,6 +103,42 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Infos */}
+          <div>
+            <h3 className="text-xs uppercase tracking-[0.2em] text-white/60 mb-6">
+              Infos
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <Link
+                  to="/legal"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                  data-testid="footer-link-legal"
+                >
+                  Mentions légales
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/privacy"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                  data-testid="footer-link-privacy"
+                >
+                  Politique de confidentialité
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/conditions-generales-dutilisation"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                  data-testid="footer-link-cgu"
+                >
+                  Conditions générales d'utilisations
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Contact Info */}
           <div>
             <h3 className="text-xs uppercase tracking-[0.2em] text-white/60 mb-6">
@@ -146,18 +182,6 @@ const Footer = () => {
               {currentYear} Cosy Casa. {t('footer.rights')}
             </p>
             <div className="flex items-center gap-6">
-              <Link
-                to="/legal"
-                className="text-white/50 hover:text-white/80 text-xs uppercase tracking-widest transition-colors"
-              >
-                {t('footer.legal')}
-              </Link>
-              <Link
-                to="/privacy"
-                className="text-white/50 hover:text-white/80 text-xs uppercase tracking-widest transition-colors"
-              >
-                {t('footer.privacy')}
-              </Link>
               <Link
                 to="/admin"
                 className="text-white/30 hover:text-white/50 text-xs uppercase tracking-widest transition-colors"
