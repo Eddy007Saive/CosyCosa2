@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Plus, Edit, Trash2, Eye, EyeOff, Save, X, Loader2,
+  Plus, Edit, Trash2, Eye, EyeOff, Save, X, Loader2, Upload, ImageIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -53,6 +53,7 @@ const BlogTab = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [form, setForm] = useState(EMPTY_POST);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const fetchPosts = async () => {
     try {
@@ -163,6 +164,28 @@ const BlogTab = () => {
   };
 
   const quillModules = useMemo(() => QUILL_MODULES, []);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_URL}/upload/image`, { method: 'POST', body: formData });
+      if (res.ok) {
+        const data = await res.json();
+        setForm(prev => ({ ...prev, hero_image: data.url }));
+        toast.success('Image uploadée');
+      } else {
+        toast.error("Erreur lors de l'upload");
+      }
+    } catch (err) {
+      toast.error('Erreur réseau');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="space-y-6" data-testid="blog-tab">
@@ -279,18 +302,41 @@ const BlogTab = () => {
 
             {/* Hero Image */}
             <div>
-              <Label className="text-xs uppercase tracking-widest text-gray-500">Image Hero (URL)</Label>
-              <Input
-                value={form.hero_image}
-                onChange={(e) => setForm(prev => ({ ...prev, hero_image: e.target.value }))}
-                className="mt-1"
-                placeholder="https://images.unsplash.com/..."
-                data-testid="blog-form-hero-image"
-              />
-              {form.hero_image && (
-                <div className="mt-2 h-32 bg-gray-100 overflow-hidden">
-                  <img src={form.hero_image} alt="Preview" className="w-full h-full object-cover" />
+              <Label className="text-xs uppercase tracking-widest text-gray-500">Image Hero</Label>
+              {form.hero_image ? (
+                <div className="mt-2 relative group">
+                  <div className="h-40 bg-gray-100 overflow-hidden border border-gray-200">
+                    <img src={form.hero_image} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                    <label className="cursor-pointer bg-white text-[#2e2e2e] px-4 py-2 text-xs uppercase tracking-widest hover:bg-gray-100 transition-colors">
+                      <Upload className="w-3.5 h-3.5 inline mr-2" />
+                      Remplacer
+                      <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setForm(prev => ({ ...prev, hero_image: '' }))}
+                      className="bg-red-500 text-white px-4 py-2 text-xs uppercase tracking-widest hover:bg-red-600 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5 inline mr-1" />
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
+              ) : (
+                <label className="mt-2 flex flex-col items-center justify-center h-40 border-2 border-dashed border-gray-300 hover:border-gray-400 cursor-pointer transition-colors bg-gray-50 hover:bg-gray-100" data-testid="blog-form-hero-image">
+                  {uploading ? (
+                    <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+                  ) : (
+                    <>
+                      <ImageIcon className="w-8 h-8 text-gray-400 mb-2" strokeWidth={1.5} />
+                      <span className="text-sm text-gray-500">Cliquez pour uploader une image</span>
+                      <span className="text-xs text-gray-400 mt-1">JPG, PNG, WebP</span>
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                </label>
               )}
             </div>
 
