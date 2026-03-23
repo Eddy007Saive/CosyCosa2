@@ -51,53 +51,45 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Plan du site */}
           <div>
             <h3 className="text-xs uppercase tracking-[0.2em] text-white/60 mb-6">
-              {t('footer.quickLinks')}
+              Plan du site
             </h3>
             <ul className="space-y-4">
               <li>
-                <Link
-                  to="/locations-vacances-cosy-casa"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-properties"
-                >
-                  {t('nav.properties')}
+                <Link to="/" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Accueil
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/conciergerie"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-conciergerie"
-                >
-                  {t('nav.conciergerie')}
+                <Link to="/locations-vacances-cosy-casa" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Nos secteurs
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/contact-conciergerie-cosy-casa"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-contact"
-                >
-                  {t('nav.contact')}
+                <Link to="/a-propos-conciergerie-cosy-casa-en-corse" className="text-white/80 hover:text-white transition-colors text-sm">
+                  A propos
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/conciergerie-cosy-casa-a-lecci"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                >
-                  Conciergerie Lecci
+                <Link to="/partenaires" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Partenaires
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/conciergerie-cosy-casa-a-pinarello"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                >
-                  Conciergerie Pinarello
+                <Link to="/temoignages" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Témoignages
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact-conciergerie-cosy-casa" className="text-white/80 hover:text-white transition-colors text-sm">
+                  Contact
                 </Link>
               </li>
             </ul>
