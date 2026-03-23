@@ -15,6 +15,7 @@ import ConciergeriePage from "@/pages/ConciergeriePage";
 import ProprietairesPage from "@/pages/ProprietairesPage";
 import SectorPage from "@/pages/SectorPage";
 import AboutPage from "@/pages/AboutPage";
+import PartnersPage from "@/pages/PartnersPage";
 import LegalPage from "@/pages/LegalPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import AdminPage from "@/pages/AdminPage";
@@ -65,6 +66,7 @@ function App() {
                     <Route path="/conciergerie-pour-proprietaires-corse" element={<ProprietairesPage />} />
                     <Route path="/contact-conciergerie-cosy-casa" element={<ContactPage />} />
                     <Route path="/a-propos-conciergerie-cosy-casa-en-corse" element={<AboutPage />} />
+                    <Route path="/partenaires-conciergerie-corse" element={<PartnersPage />} />
                     <Route path="/legal" element={<LegalPage />} />
                     <Route path="/privacy" element={<PrivacyPage />} />
                     {/* Dynamic sector pages - catch-all for sector slugs */}

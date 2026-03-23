@@ -90,7 +90,7 @@ const Navbar = () => {
       items: sectorItems
     }] : []),
     { type: 'link', href: '/a-propos-conciergerie-cosy-casa-en-corse', label: t('nav.about') },
-    { type: 'link', href: '/partenaires', label: t('nav.partners') },
+    { type: 'link', href: '/partenaires-conciergerie-corse', label: t('nav.partners') },
     { type: 'link', href: '/blog', label: t('nav.blog') },
     { type: 'link', href: '/contact-conciergerie-cosy-casa', label: t('nav.contact') },
   ];
