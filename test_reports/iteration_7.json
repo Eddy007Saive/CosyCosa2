@@ -85,8 +85,8 @@
   "test_credentials": {
     "admin_url": "/admin",
     "admin_password": "orso2024",
-    "frontend_url": "https://orso-preview-1.preview.emergentagent.com",
-    "backend_api": "https://orso-preview-1.preview.emergentagent.com/api"
+    "frontend_url": "https://concierge-staging-2.preview.emergentagent.com",
+    "backend_api": "https://concierge-staging-2.preview.emergentagent.com/api"
   },
   "seed_data_creation": "None - used existing Beds24 synced properties and mock data",
   "retest_needed": false,

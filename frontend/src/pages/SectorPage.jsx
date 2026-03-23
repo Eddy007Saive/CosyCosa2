@@ -80,7 +80,7 @@ const SectorPage = () => {
         className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-20"
         style={{ backgroundImage: sector.hero_image ? `url(${sector.hero_image})` : undefined, backgroundColor: '#2e2e2e' }}
       >
-        {sector.hero_image && <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30" />}
+        {sector.hero_image && <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />}
         <div className="relative z-10 orso-container pb-12">
           <div className="flex items-center gap-2 text-white/70 text-sm mb-4">
             <MapPin className="w-4 h-4" strokeWidth={1.5} />

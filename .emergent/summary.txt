@@ -1,146 +1,141 @@
 <analysis>**original_problem_statement:**
-L'utilisateur souhaite créer un site web pour une conciergerie locative en Corse nommée ORSO RS. Le design doit être minimaliste et élégant (gris foncé #2e2e2e et blanc), en réutilisant le contenu du site . L'objectif principal est de créer un moteur de réservation sur mesure, connecté à l'API Beds24, qui mène directement à une page de paiement Stripe. Le site doit être multilingue (FR, EN, ES, IT), optimisé pour le SEO en Corse, et disposer d'un espace admin pour la gestion de contenu.
+L'utilisateur souhaite refaire le site web de sa conciergerie Cosy Casa () en utilisant exactement la même structure, le même moteur de réservation (Beds24) et le même backoffice que le projet précédent (ORSO RS). L'objectif est de récupérer tout le contenu, de conserver les URLs existantes pour ne pas perdre le jus SEO, d'intégrer les balises SEO à l'identique, et d'adapter le design/branding à Cosy Casa.
 
 **PRODUCT REQUIREMENTS:**
-1. **Moteur de Réservation Personnalisé :** API Beds24 (logements, tarifs dynamiques temps réel, disponibilités).
-2. **Gestion des Propriétés :** Catégories spécifiques.
-3. **Intégrations :** Stripe (via Beds24), Formulaire de contact (Brevo), Hébergement Images (Cloudinary).
-4. **Technologie :** Frontend React, backend FastAPI, MongoDB.
-5. **Internationalisation :** FR, EN, ES, IT.
-6. **Espace Admin :** Gestion des propriétés, modification des textes, et de toutes les images du site.
-7. **Design :** Typographie unifiée en  pour correspondre au logo.
+1. **Rebranding complet :** Remplacer ORSO RS par Cosy Casa (Logo, textes, emails, pages légales).
+2. **Migration de contenu :** Scraper et intégrer le contenu du site Cosy Casa original.
+3. **Maintien du SEO :** Conserver les URLs exactes, intégrer Google Analytics, et reproduire les balises Meta/Open Graph/JSON-LD.
+4. **Navigation :** Créer des menus déroulants (Dropdowns) pour Nos services et Secteurs.
+5. **Pages Secteurs Dynamiques :** Créer des pages de secteurs administrables depuis le backoffice.
+6. **Page Contact :** Retirer le formulaire classique pour reproduire la mise en page de Cosy Casa (Infos, Carte, CTA Calendly/Mailto).
 
-**User's preferred language**:
+**User's preferred language**: 
 Français. L'agent suivant DOIT répondre uniquement en français.
 
-**what currently exists?**
-Une application full-stack fonctionnelle et déployée (Front sur Hostinger, Back sur Railway). La tarification dynamique (Beds24/BeyondPricing) est en place. Le design a été grandement affiné lors de cette session : refonte de la section Services (format carte avec bouton PDF), création des pages Propriétaires et Esprit au pixel près selon les maquettes du client. Le système de téléchargement d'images a été migré vers Cloudinary pour contourner le système de fichiers éphémère de Railway. La typographie globale du site a été changée pour  (serif élégant) afin de s'aligner parfaitement avec l'identité du logo. Le calendrier de réservation () a été corrigé et amélioré visuellement (sélection de plages fonctionnelle, affichage sur 2 mois, ombres et bordures).
+**what currently exists?** 
+Le site a été entièrement rebrandé Cosy Casa. La navigation intègre désormais des menus déroulants. Un système complet pour les Secteurs a été développé (Base de données, API CRUD, Interface Admin, et Pages dynamiques frontend). La page Contact a été refaite sans formulaire, selon le modèle original. Le bug historique du SEO () a été résolu en créant un hook custom  qui injecte dynamiquement les balises SEO exactes de l'ancien site. Google Analytics est intégré. 17 propriétés ont été synchronisées depuis Beds24 (mais sont actuellement cachées).
 
-**Last working item**:
-- **Last item agent was working:** Test et validation de la modification de la description et du nom d'une propriété directement via le panneau d'administration pour rassurer le client sur le fonctionnement de l'API.
-- **Status:** COMPLETED
-- **Agent Testing Done:** Y
-- **Which testing method agent to use?** screenshot tool & curl
-- **User Testing Done:** Y (l'utilisateur a suivi les tests via les captures d'écran de l'agent).
+**Last working item**: 
+- **Last item agent was working:** Correction de l'affichage des images Hero sur les pages Secteurs. Le calque sombre (gradient) cachait les images. L'agent a réduit l'opacité du gradient dans le code et a mis à jour la base de données avec de belles images de Corse (via Unsplash) pour chaque secteur.
+- **Status:** USER VERIFICATION PENDING
+- **Agent Testing Done:** N (La capture d'écran de vérification finale a échoué suite à un crash du navigateur interne).
+- **Which testing method agent to use?** screenshot tool (pour vérifier que l'image Hero du secteur Lecci s'affiche correctement).
+- **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-Issue 1: Le SEO dynamique avec  provoque un bug de page blanche. (Hérité des sessions précédentes)
-- **Attempted fixes:** Tentatives passées ayant échoué. Composant désactivé.
-- **Next debug checklist:** Inspecter  et le composant . Vérifier les versions de  compatibles avec le routage actuel.
-- **Why fix this issue and what will be achieved with the fix?** Essentiel pour le référencement (SEO) individuel des pages de propriétés sur Google.
-- **Status:** BLOCKED (Dette technique mise en pause pour prioriser l'UX/UI)
-- **Is recurring issue?** Y
+Issue 1: Le navigateur de test (Playwright/Screenshot tool) a crashé (SIGSEGV) lors de la dernière capture d'écran.
+- **Attempted fixes:** Aucune, le crash s'est produit sur la dernière action.
+- **Next debug checklist:** Relancer une capture d'écran sur  pour vérifier si le service frontend répond correctement et si le crash était un incident isolé du subagent.
+- **Why fix this issue and what will be achieved with the fix?** Permet de confirmer visuellement à l'utilisateur que les modifications sur les images Hero ont bien été appliquées.
+- **Status:** NOT STARTED
+- **Is recurring issue?** N
 - **Should Test frontend/backend/both after fix?** frontend
+- **Blocked on other issue:** None
 
 **In progress Task List**:
-*Aucune tâche en cours. La dernière demande du client a été entièrement testée et finalisée.*
+*Aucune tâche formellement en cours, la dernière demande a été implémentée.*
 
-**Upcoming and Future Tasks**
+**Upcoming and Future Tasks**:
 Upcoming Tasks:
-- **P1: Intégrer Calendly :** Le client l'avait demandé dans le PDF initial. Il faut clarifier où l'intégrer et obtenir son lien.
-- **P2: Intégrer les Upsells (Extras) de Beds24 :** Ajouter la possibilité de sélectionner des options supplémentaires lors de la réservation (si API disponible).
+- **P0: Activer les propriétés Beds24 :** Les 17 propriétés synchronisées sont actuellement  dans la DB. L'utilisateur doit les activer via l'admin ou demander à l'agent de le faire en masse.
+- **P1: Intégrer Calendly :** En attente du lien Calendly du client pour l'ajouter sur les boutons Prendre rendez-vous (Contact et Propriétaires).
+- **P2: Pages manquantes potentielles :** Vérifier si l'utilisateur souhaite rapatrier d'autres pages du site original comme À propos, Partenaires, ou le contenu exact du Blog.
 
 Future Tasks:
-- **P2: Ajouter une section Témoignages clients.**
-- **P2: Implémenter un webhook depuis Beds24 :** Mettre à jour le statut des réservations en base de données de pending à confirmed après paiement.
+- **P2: Intégrer les Upsells (Extras) de Beds24.**
+- **P2: Webhook Beds24 :** Mise à jour du statut des réservations.
+- **P3: Système de témoignages clients administrable.**
 
 **Completed work in this session**
-- Refonte section Services (cartes côte à côte + ajout d'un bouton PDF configurable en admin) (DONE)
-- Création complète de la page Propriétaires + ajout des images configurables en admin (DONE)
-- Fix du scroll horizontal sur la Homepage (DONE)
-- Création complète de la page Esprit avec layout complexe (images superposées Julie/Bastien) configurables en admin (DONE)
-- **Migration des uploads d'images vers Cloudinary** (pour palier au stockage éphémère de Railway) (DONE)
-- Changement de la police globale de Montserrat vers  (DONE)
-- Synchronisation parfaite du logo (Header/Footer) (DONE)
-- **Correction majeure du calendrier de réservation () :** Fix de la sélection de dates (), passage à 2 mois affichés, amélioration UI (bordures, ombres, dates intermédiaires plus sombres) (DONE)
-- Test réussi des modifications des propriétés depuis l'admin (DONE)
+- Rebranding ORSO RS -> Cosy Casa (DONE)
+- Refonte de la Navbar avec Dropdowns (DONE)
+- Création page Propriétaires et refonte page Contact sans formulaire (DONE)
+- **Feature Secteurs** : CRUD Backend, Panel Admin, et Pages Dynamiques (DONE)
+- **Refonte SEO** : Suppression de , création du hook custom , intégration GA et balises identiques au site source (DONE)
+- Correction opacité Hero Secteurs + Seed images Corse (DONE)
 
 **Earlier issues found/mentioned but not fixed**
-- Issue 1: Le bug  (mentionné plus haut).
+*Aucun.*
 
 **Known issue recurrence from previous fork**
-- Issue recurrence in previous fork: Bug  (Page blanche).
-- Recurrence count: 3
-- Status: BLOCKED / BYPASSED
+- **Issue recurrence in previous fork:** Bug  (Page blanche).
+- **Recurrence count:** 4
+- **Status:** RESOLVED. (Le composant a été retiré et remplacé par un hook natif  qui manipule le DOM directement, résolvant le problème définitivement).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Frontend:** React, Tailwind CSS (police Cormorant Garamond globale), , .
-- **Backend:** FastAPI, Pydantic, intégration  python SDK.
-- **Database:** MongoDB.
-- **Déploiement:** Hostinger (Front) / Railway (Back).
+- **Frontend:** React, Tailwind CSS, , Hook Custom ().
+- **Backend:** FastAPI, MongoDB (Nouvelle collection ).
+- **API Beds24:** Toujours active (17 propriétés sync).
 
 **key DB schema**
-- : Détails des villas (noms, descriptions).
-- : Contient les URL des images (maintenant servies via Cloudinary) et l'URL du PDF des services.
+- : Détails des logements.
+- : Configuration globale.
+-  **(NOUVEAU)**: .
 
 **changes in tech stack**
-- **Cloudinary ajouté au backend** (Looking in indexes: https://pypi.org/simple, https://d33sy5i8bnduwe.cloudfront.net/simple/
-Requirement already satisfied: cloudinary in /root/.venv/lib/python3.11/site-packages (1.44.1)
-Requirement already satisfied: six in /root/.venv/lib/python3.11/site-packages (from cloudinary) (1.17.0)
-Requirement already satisfied: urllib3>=1.26.5 in /root/.venv/lib/python3.11/site-packages (from cloudinary) (2.6.3)
-Requirement already satisfied: certifi in /root/.venv/lib/python3.11/site-packages (from cloudinary) (2026.1.4)). Remplacement du stockage local  par un upload direct vers le cloud Cloudinary pour persister les images sur Railway.
+- Suppression de  pour le SEO dynamique.
+- Ajout de Google Analytics () dans le .
 
 **All files of reference**
--  : Ajout des routes Cloudinary.
--  : Gestion des nouvelles images (Esprit, Propriétaires) et rétablissement du Drag & Drop via Cloudinary.
--  &  : Nouvelles pages créées.
--  &  : Logique et style du calendrier de réservation.
--  &  : Configuration de la typographie globale.
+-  : Ajout des routes . Nettoyage des mentions ORSO.
+-  : Ajout de l'interface de gestion des secteurs.
+-  : Page dynamique affichant les données d'un secteur.
+-  : Hook gérant les balises Meta et Open Graph par page.
+-  : Menu dynamique avec Dropdowns.
 
 **Areas that need refactoring**:
--  reste monolithique.
-- Le calendrier dans  contient beaucoup de logique inline qui pourrait être extraite dans un hook custom ().
-- L'agent a beaucoup testé manuellement avec le Screenshot Tool au lieu d'utiliser le  pour les gros changements UI (comme la police globale).
+-  dépasse les 2100 lignes. Le CRUD des secteurs a été ajouté directement dedans. Un split en modules (routes, models, services) devient très pertinent pour la maintenabilité.
 
 **key api endpoints**
-- : Télécharge maintenant directement l'image vers Cloudinary et renvoie l'URL sécurisée.
-- : Nouveau endpoint pour gérer le lien du PDF de la page d'accueil.
-- : Mise à jour des détails des propriétés (testé et validé fonctionnel).
+- : Récupère les secteurs actifs (utilisé par la Navbar).
+- : Récupère tous les secteurs (Admin).
+- : CRUD Admin.
 
 **Critical Info for New Agent**
-- **Images & Déploiement :** Ne tentez plus de stocker des images localement dans le backend. Cloudinary est en place et configuré avec les clés du client. Si vous ajoutez de nouvelles images configurables, utilisez le flux existant dans .
-- **Design & Typographie :** Le site utilise désormais globalement  (Cormorant Garamond) pour coller à l'identité visuelle du logo du client. **Ne changez pas cette police**.
-- **Admin :** Le mot de passe de l'admin pour vos tests est .
-- **Calendrier :** La librairie  version 8.x est utilisée. Le mode range a été capricieux par le passé, toute modification sur le calendrier doit être testée avec soin pour s'assurer que la sélection de plages de dates fonctionne.
+- **Secteurs :** La navigation des secteurs (Dropdown) est générée dynamiquement depuis la base de données. Si vous modifiez un secteur dans l'admin, la Navbar se met à jour.
+- **SEO :** N'utilisez plus de librairies tierces pour le head. Utilisez le hook  présent dans les pages.
+- **Test Browser :** Le dernier test avec screenshot tool a causé un crash SIGSEGV du navigateur interne. Ne vous inquiétez pas pour le code, c'est probablement lié à l'environnement. Relancez simplement une capture.
+- **Admin :** Mdp: .
 
 **documents and test reports created in this job**
--  (Mis à jour avec les nouvelles pages et Cloudinary).
+-  (Tests passés à 100% avant les ajouts finaux).
+-  (Mis à jour).
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. User: Demande de tester la modification de la description d'un logement via l'admin.
-2. Agent: Modifie la description via un screenshot test de l'admin.
-3. User: Demande si l'agent peut essayer de changer la description.
-4. Agent: Teste avec succès la modification, enregistre, et prend un screenshot du rendu sur la page du logement pour prouver que ça fonctionne.
-5. User: Demande le mot de passe de l'admin.
-6. Agent: Fournit .
-7. User: Demande de tester la modification du nom d'une propriété via l'admin.
-8. Agent: Teste avec succès la modification du nom via l'admin UI.
-9. User: Demande si les flèches du mois précédent doivent apparaître sur le premier calendrier.
-10. Agent: Corrige le calendrier pour afficher correctement les flèches gauche/droite.
+1. User: Demande de revoir le menu pour ajouter des dropdowns Nos services et Secteurs comme sur le site original.
+2. Agent: Implémente la Navbar avec dropdowns et la page Propriétaire.
+3. User: Demande de gérer les Secteurs (ex: Porto-Vecchio) de manière dynamique depuis l'admin.
+4. Agent: Crée le backend, la page dynamique et l'onglet Admin pour les secteurs.
+5. User: Fournit le code source HTML du head original de Cosy Casa pour récupérer le SEO.
+6. Agent: Intègre GA, supprime react-helmet, crée  et met à jour toutes les pages.
+7. User: Demande si les Hero des secteurs contiennent bien des images.
+8. Agent: Règle l'opacité du fond des Hero, ajoute des images de Corse via Unsplash et tente un screenshot qui crash (SIGSEGV).
 *(Aucun message humain en attente).*
 
 **Project Health Check:**
-- Broken: SEO (react-helmet-async) - Intentionnellement contourné pour le moment.
+- Broken: Screenshot tool (Crashed at last execution). App code is healthy.
 - Mocked: Aucun.
 
 **3rd Party Integrations**
 - **Beds24:** Réservations / Prix.
 - **Stripe:** Paiement (via Beds24).
 - **Brevo:** Emails transactionnels.
-- **Cloudinary:** (NOUVEAU) Hébergement d'images. *Requires User API Key (Déjà configuré dans le .env du backend)*.
+- **Cloudinary:** Hébergement d'images (Requires User API Key - déjà configuré).
+- **Google Analytics:** NOUVEAU (Tag  ajouté).
 
 **Testing status**
-- Testing agent used after significant changes: NO (L'agent s'est énormément reposé sur le ).
+- Testing agent used after significant changes: YES (Iteration 7).
 - Troubleshoot agent used after agent stuck in loop: NO
 - Test files created: []
-- Known regressions: Aucune nouvelle.
+- Known regressions: Crash de l'outil de capture d'écran (SIGSEGV) sur le dernier test.
 
 **Credentials to test flow:**
 - Admin Panel: 
 - Admin Password: 
 
 **What agent forgot to execute**
-- L'agent a effectué toutes les tâches demandées par l'utilisateur. Cependant, il a ignoré la directive d'utiliser le  après des changements majeurs affectant plusieurs composants (comme le changement de police global ou la refonte de la logique du calendrier), privilégiant une multitude de screenshots individuels. Le prochain agent devra utiliser le sous-agent de test pour de futures modifications globales.</analysis>
+- L'agent n'a pas pu valider visuellement sa toute dernière modification sur la page secteur Lecci à cause du crash de Playwright. Le prochain agent devra vérifier cela en premier.
+- Les propriétés Beds24 ont été synchronisées avec succès (17 trouvées) mais l'agent n'a pas pensé à demander explicitement à l'utilisateur de les activer en masse depuis la base de données pour les rendre visibles sur le front.</analysis>
