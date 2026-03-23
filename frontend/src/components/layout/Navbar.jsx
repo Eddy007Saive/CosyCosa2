@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, ChevronDown, Phone, Mail, Facebook, Instagram } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -22,6 +22,8 @@ const Navbar = () => {
   const [sectors, setSectors] = useState([]);
   const dropdownRef = useRef(null);
   const dropdownTimeout = useRef(null);
+
+  const languages = ['FR', 'EN', 'ES', 'IT'];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 80);
@@ -157,28 +159,26 @@ const Navbar = () => {
                 />
               </Link>
 
-              {/* Right: Social Icons */}
-              <div className="hidden md:flex items-center gap-3">
-                <a
-                  href="https://www.facebook.com/profile.php?id=61556104644895"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-white/80 hover:text-white hover:border-white transition-all"
-                  data-testid="topbar-facebook"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-4 h-4" strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://www.instagram.com/cosycasaconciergerie/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-white/80 hover:text-white hover:border-white transition-all"
-                  data-testid="topbar-instagram"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-4 h-4" strokeWidth={1.5} />
-                </a>
+              {/* Right: Language Switcher */}
+              <div className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest text-white">
+                {languages.map((lng, index) => (
+                  <span key={lng} className="flex items-center">
+                    <button
+                      onClick={() => i18n.changeLanguage(lng.toLowerCase())}
+                      className={`transition-opacity ${
+                        i18n.language.toUpperCase() === lng
+                          ? 'opacity-100 font-medium'
+                          : 'opacity-50 hover:opacity-80'
+                      }`}
+                      data-testid={`lang-switch-${lng.toLowerCase()}`}
+                    >
+                      {lng}
+                    </button>
+                    {index < languages.length - 1 && (
+                      <span className="mx-2 opacity-30">/</span>
+                    )}
+                  </span>
+                ))}
               </div>
 
               {/* Mobile: Hamburger */}
@@ -274,14 +274,20 @@ const Navbar = () => {
                         </ul>
                       </nav>
 
-                      {/* Mobile Social */}
+                      {/* Mobile Language Switcher */}
                       <div className="py-4 border-t border-white/10 flex items-center gap-4">
-                        <a href="https://www.facebook.com/profile.php?id=61556104644895" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white/70 hover:text-white hover:border-white transition-all" aria-label="Facebook">
-                          <Facebook className="w-4 h-4" strokeWidth={1.5} />
-                        </a>
-                        <a href="https://www.instagram.com/cosycasaconciergerie/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white/70 hover:text-white hover:border-white transition-all" aria-label="Instagram">
-                          <Instagram className="w-4 h-4" strokeWidth={1.5} />
-                        </a>
+                        {languages.map((lng) => (
+                          <button
+                            key={lng}
+                            onClick={() => i18n.changeLanguage(lng.toLowerCase())}
+                            className={`text-sm uppercase tracking-widest text-white transition-opacity ${
+                              i18n.language.toUpperCase() === lng ? 'opacity-100 font-medium' : 'opacity-40 hover:opacity-80'
+                            }`}
+                            data-testid={`mobile-lang-${lng.toLowerCase()}`}
+                          >
+                            {lng}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   </SheetContent>
