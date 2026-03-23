@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Mail, Phone, ExternalLink, Instagram, Facebook } from 'lucide-react';
+import { MapPin, Mail, Phone, Instagram, Facebook } from 'lucide-react';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -16,33 +16,20 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              {/* Logo with vertical lines like in hero */}
-              <div className="flex flex-col items-center">
-                {/* Top vertical line */}
-                <div className="w-px h-8 bg-white/40 mb-4" />
-                
-                {/* Logo Text */}
-                <div className="text-center">
-                  <h2 className="text-2xl md:text-3xl tracking-[0.4em] text-white font-light">
-                    O R S O
-                  </h2>
-                  <p className="text-xs tracking-[0.3em] text-white/60 mt-2 uppercase">
-                    Rental Selection
-                  </p>
-                </div>
-                
-                {/* Bottom vertical line */}
-                <div className="w-px h-8 bg-white/40 mt-4" />
-              </div>
+              <img 
+                src="/cosycasa-logo.png" 
+                alt="Cosy Casa" 
+                className="h-16 w-auto brightness-0 invert"
+              />
             </Link>
-            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6 text-center md:text-left">
+            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
               {t('footer.tagline')}
             </p>
             
-            {/* Social Links + GMB */}
-            <div className="flex items-center gap-4 justify-center md:justify-start">
+            {/* Social Links */}
+            <div className="flex items-center gap-4">
               <a
-                href="https://www.instagram.com/orso.rental.selection/"
+                href="https://www.instagram.com/cosycasaconciergerie/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-white/60 hover:bg-white/10 transition-all"
@@ -52,7 +39,7 @@ const Footer = () => {
                 <Instagram className="w-5 h-5" strokeWidth={1.5} />
               </a>
               <a
-                href="https://www.facebook.com/people/ORSO-Rental-Selection/61578475163360/"
+                href="https://www.facebook.com/profile.php?id=61556104644895"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-white/60 hover:bg-white/10 transition-all"
@@ -60,16 +47,6 @@ const Footer = () => {
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" strokeWidth={1.5} />
-              </a>
-              <a
-                href="https://share.google/AJqwlTVKrw5cqQIyD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm border border-white/20 px-4 py-2 hover:border-white/40"
-                data-testid="footer-gmb-link"
-              >
-                <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
-                {t('footer.googleMyBusiness', 'Voir sur Google')}
               </a>
             </div>
           </div>
@@ -82,7 +59,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li>
                 <Link
-                  to="/properties"
+                  to="/locations-vacances-cosy-casa"
                   className="text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="footer-link-properties"
                 >
@@ -91,20 +68,11 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/esprit"
+                  to="/conciergerie"
                   className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-esprit"
+                  data-testid="footer-link-conciergerie"
                 >
-                  {t('nav.esprit')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/proprietaire"
-                  className="text-white/80 hover:text-white transition-colors text-sm"
-                  data-testid="footer-link-proprietaire"
-                >
-                  {t('nav.proprietaire')}
+                  {t('nav.conciergerie')}
                 </Link>
               </li>
               <li>
@@ -114,6 +82,22 @@ const Footer = () => {
                   data-testid="footer-link-contact"
                 >
                   {t('nav.contact')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/conciergerie-cosy-casa-a-lecci"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                >
+                  Conciergerie Lecci
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/conciergerie-cosy-casa-a-pinarello"
+                  className="text-white/80 hover:text-white transition-colors text-sm"
+                >
+                  Conciergerie Pinarello
                 </Link>
               </li>
             </ul>
@@ -128,27 +112,27 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-white/60 mt-1 flex-shrink-0" strokeWidth={1.5} />
                 <span className="text-white/80 text-sm">
-                  {t('contact.info.address')}
+                  Porto-Vecchio, Corse du Sud
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-white/60 flex-shrink-0" strokeWidth={1.5} />
                 <a
-                  href="tel:+33615875470"
+                  href="tel:+33615876470"
                   className="text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="footer-phone"
                 >
-                  +33 6 15 87 54 70
+                  +33 6 15 87 64 70
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-white/60 flex-shrink-0" strokeWidth={1.5} />
                 <a
-                  href="mailto:contact@orso-rs.com"
+                  href="mailto:contact@cosycasa.fr"
                   className="text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="footer-email"
                 >
-                  contact@orso-rs.com
+                  contact@cosycasa.fr
                 </a>
               </li>
             </ul>
@@ -159,7 +143,7 @@ const Footer = () => {
         <div className="mt-16 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-white/50 text-xs uppercase tracking-widest">
-              {currentYear} ORSO RS. {t('footer.rights')}
+              {currentYear} Cosy Casa. {t('footer.rights')}
             </p>
             <div className="flex items-center gap-6">
               <Link

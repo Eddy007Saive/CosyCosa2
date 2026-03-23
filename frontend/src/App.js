@@ -11,8 +11,8 @@ import HomePage from "@/pages/HomePage";
 import PropertiesPage from "@/pages/PropertiesPage";
 import PropertyDetailPage from "@/pages/PropertyDetailPage";
 import ContactPage from "@/pages/ContactPage";
-import ProprietairePage from "@/pages/ProprietairePage";
-import EspritPage from "@/pages/EspritPage";
+import ConciergeriePage from "@/pages/ConciergeriePage";
+import BlogPage from "@/pages/BlogPage";
 import LegalPage from "@/pages/LegalPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import AdminPage from "@/pages/AdminPage";
@@ -23,7 +23,6 @@ import Footer from "@/components/layout/Footer";
 
 function App() {
   useEffect(() => {
-    // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -58,10 +57,12 @@ function App() {
                 <main className="flex-1">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/properties" element={<PropertiesPage />} />
-                    <Route path="/properties/:id" element={<PropertyDetailPage />} />
-                    <Route path="/proprietaire" element={<ProprietairePage />} />
-                    <Route path="/esprit" element={<EspritPage />} />
+                    <Route path="/locations-vacances-cosy-casa" element={<PropertiesPage />} />
+                    <Route path="/locations-vacances-cosy-casa/:id" element={<PropertyDetailPage />} />
+                    <Route path="/conciergerie" element={<ConciergeriePage />} />
+                    <Route path="/conciergerie-cosy-casa-a-lecci" element={<BlogPage slug="lecci" />} />
+                    <Route path="/conciergerie-cosy-casa-a-pinarello" element={<BlogPage slug="pinarello" />} />
+                    <Route path="/conciergerie-cosy-casa-a-corse" element={<BlogPage slug="corse" />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/legal" element={<LegalPage />} />
                     <Route path="/privacy" element={<PrivacyPage />} />

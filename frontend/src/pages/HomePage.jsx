@@ -1,43 +1,29 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Calendar, Users, ArrowRight, Check, FileText } from 'lucide-react';
+import { ArrowRight, Search, Home, CalendarCheck, Users, Wrench, Shield, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Calendar as CalendarComponent } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { format, addDays } from 'date-fns';
-import { fr, enUS, es, it } from 'date-fns/locale';
-import { getCategories, getSiteImages, getServicesPdf } from '@/lib/api';
-import SEO from '@/components/SEO';
+import { getSiteImages } from '@/lib/api';
 
-const locales = { fr, en: enUS, es, it };
-
-// Default images as fallback (using new key structure)
 const DEFAULT_IMAGES = {
-  home_hero: "https://images.unsplash.com/photo-1747512281554-1e259aab3cd2?w=1920&q=80",
-  home_category_vue_mer: "https://images.unsplash.com/photo-1744271688484-f0fa9dabf4b4?w=800",
-  home_category_plage_a_pieds: "https://images.unsplash.com/photo-1567525078525-cdae8c7f25c5?w=800",
-  home_category_pieds_dans_eau: "https://images.unsplash.com/photo-1662320281809-f03a655bc42f?w=800",
-  home_concept: "https://images.unsplash.com/photo-1758548157747-285c7012db5b?w=800&q=80",
-  home_cta: "https://images.unsplash.com/photo-1768424694845-edc1bab43419?w=1920&q=80",
+  home_hero: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80",
+  home_traveler: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
 };
+
+const OWNER_SERVICES = [
+  { icon: Search, key: 's1' },
+  { icon: CalendarCheck, key: 's2' },
+  { icon: Users, key: 's3' },
+  { icon: Wrench, key: 's4' },
+  { icon: Shield, key: 's5' },
+];
 
 const HomePage = () => {
   const { t, i18n } = useTranslation();
-  const [categories, setCategories] = useState([]);
   const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
-  const [servicesPdfUrl, setServicesPdfUrl] = useState(null);
-  const [checkIn, setCheckIn] = useState(null);
-  const [checkOut, setCheckOut] = useState(null);
-  const [guests, setGuests] = useState(2);
-  const locale = locales[i18n.language] || fr;
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   useEffect(() => {
-    // Load site images
     const loadSiteImages = async () => {
       try {
         const data = await getSiteImages();
@@ -48,294 +34,232 @@ const HomePage = () => {
         console.error('Failed to load site images:', error);
       }
     };
-    
-    // Load services PDF URL
-    const loadServicesPdf = async () => {
-      try {
-        const data = await getServicesPdf();
-        if (data?.services_pdf_url) {
-          setServicesPdfUrl(data.services_pdf_url);
-        }
-      } catch (error) {
-        console.error('Failed to load services PDF:', error);
-      }
-    };
-    
-    const loadCategories = async () => {
-      try {
-        const data = await getCategories();
-        if (data && data.length > 0) {
-          setCategories(data);
-        } else {
-          throw new Error('No categories');
-        }
-      } catch (error) {
-        console.error('Failed to load categories:', error);
-        // Use default categories with new image keys
-        setCategories([
-          { id: 'vue_mer', name: 'Vue Mer', image: DEFAULT_IMAGES.home_category_vue_mer },
-          { id: 'plage_a_pieds', name: 'Plage à Pieds', image: DEFAULT_IMAGES.home_category_plage_a_pieds },
-          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau", image: DEFAULT_IMAGES.home_category_pieds_dans_eau },
-        ]);
-      }
-    };
-    
     loadSiteImages();
-    loadServicesPdf();
-    loadCategories();
   }, []);
 
-  const handleSearch = () => {
-    const params = new URLSearchParams();
-    if (checkIn) params.set('checkIn', format(checkIn, 'yyyy-MM-dd'));
-    if (checkOut) params.set('checkOut', format(checkOut, 'yyyy-MM-dd'));
-    params.set('guests', guests.toString());
-    window.location.href = `/properties?${params.toString()}`;
+  const testimonials = t('testimonials.items', { returnObjects: true }) || [];
+
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
     <div data-testid="home-page">
-      {/* SEO */}
-      <SEO lang={i18n.language} />
-      
-      {/* Hero Section - Split Design */}
+      {/* Hero Section */}
       <section
-        className="min-h-screen flex items-center bg-white pt-20"
+        className="relative min-h-screen flex items-center justify-center bg-cover bg-center pt-20"
+        style={{ backgroundImage: `url(${siteImages.home_hero})` }}
         data-testid="hero-section"
       >
-        <div className="orso-container w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[70vh]">
-            {/* Left Side - Logo with Lines */}
-            <div 
-              className="flex items-center justify-center opacity-0 animate-fade-in"
-              style={{ animationDelay: '200ms' }}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto opacity-0 animate-fade-in" style={{ animationDelay: '200ms' }}>
+          <p className="text-xs uppercase tracking-[0.3em] text-white/70 mb-6">
+            {t('hero.tagline')}
+          </p>
+          <h1
+            className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"
+            data-testid="hero-title"
+          >
+            {t('hero.title')}
+          </h1>
+          <p className="text-lg md:text-xl font-light text-white/90 mb-10 tracking-wide">
+            {t('hero.subtitle')}
+          </p>
+          <Link to="/contact">
+            <Button
+              className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-5 rounded-full uppercase tracking-widest text-xs font-medium"
+              data-testid="hero-cta"
             >
-              <div className="relative flex flex-col items-center">
-                {/* Top vertical line */}
-                <div className="w-px h-16 md:h-24 bg-[#2e2e2e] mb-8" />
-                
-                {/* Logo Text */}
-                <div className="text-center">
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-[0.4em] text-[#2e2e2e] font-light">
-                    O R S O
-                  </h2>
-                  <p className="text-sm md:text-base tracking-[0.3em] text-[#2e2e2e] mt-3 uppercase">
-                    Rental Selection
-                  </p>
-                </div>
-                
-                {/* Bottom vertical line */}
-                <div className="w-px h-16 md:h-24 bg-[#2e2e2e] mt-8" />
-              </div>
+              {t('hero.cta')}
+              <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Welcome Section */}
+      <section className="orso-section bg-white" data-testid="welcome-section">
+        <div className="orso-container">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="orso-caption mb-4">{t('welcome.tagline')}</p>
+            <h2 className="orso-h2 mb-8">{t('welcome.title')}</h2>
+            <p className="text-lg font-light leading-relaxed text-gray-700 mb-6">
+              {t('welcome.p1')}
+            </p>
+            <p className="text-lg font-light leading-relaxed text-gray-600">
+              {t('welcome.p2')}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Owner Section */}
+      <section className="orso-section bg-[#f5f5f3]" data-testid="owner-section">
+        <div className="orso-container">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="orso-caption mb-4">{t('owner.tagline')}</p>
+              <h2 className="orso-h2 mb-6">{t('owner.title')}</h2>
+              <p className="text-lg font-light text-gray-700 mb-4 max-w-2xl mx-auto">
+                {t('owner.desc')}
+              </p>
+              <p className="text-lg font-light text-gray-700 mb-4 max-w-2xl mx-auto">
+                {t('owner.desc2')}
+              </p>
+              <p className="font-serif text-xl text-[#2e2e2e] italic mt-6">
+                {t('owner.motto')}
+              </p>
             </div>
 
-            {/* Right Side - Text Content */}
-            <div 
-              className="flex flex-col justify-center opacity-0 animate-fade-in"
-              style={{ animationDelay: '400ms' }}
-            >
-              {/* Quote */}
-              <h1 
-                className="text-xl md:text-2xl lg:text-3xl text-[#2e2e2e] font-light tracking-wide mb-12 lg:mb-16"
-                data-testid="hero-title"
-              >
-                « {t('hero.quote', 'Des Lieux uniques pour des moments hors du temps')} »
-              </h1>
-
-              {/* Two Columns: Secteurs & Critères */}
-              <div className="grid grid-cols-2 gap-8 lg:gap-12">
-                {/* Secteurs */}
-                <div className="border-r border-[#2e2e2e]/20 pr-8">
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#2e2e2e]/60 mb-4">
-                    {t('hero.sectors', '3 secteurs')}
+            {/* Services Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12">
+              {OWNER_SERVICES.map(({ icon: Icon, key }, index) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center text-center opacity-0 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="w-20 h-20 bg-white border border-gray-200 flex items-center justify-center mb-4 shadow-sm">
+                    <Icon className="w-8 h-8 text-[#2e2e2e]" strokeWidth={1.2} />
+                  </div>
+                  <p className="text-sm font-light text-gray-700 leading-snug">
+                    {t(`owner.services.${key}`)}
                   </p>
-                  <ul className="space-y-2 text-[#2e2e2e]">
-                    <li className="font-light">Pinarello</li>
-                    <li className="font-light">Saint Cyprien</li>
-                    <li className="font-light">Cala Rossa</li>
-                  </ul>
                 </div>
+              ))}
+            </div>
 
-                {/* Critères */}
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#2e2e2e]/60 mb-4">
-                    {t('hero.criteria', '3 critères')}
-                  </p>
-                  <ul className="space-y-2 text-[#2e2e2e]">
-                    <li className="font-light">{t('categories.vue_mer')}</li>
-                    <li className="font-light">{t('categories.plage_a_pieds')}</li>
-                    <li className="font-light">{t('categories.pieds_dans_eau')}</li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <div className="mt-12 lg:mt-16">
-                <Link to="/properties">
-                  <Button
-                    className="orso-btn-primary"
-                    data-testid="hero-cta"
-                  >
-                    {t('hero.cta')}
-                    <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-                  </Button>
-                </Link>
-              </div>
+            <div className="text-center">
+              <Link to="/conciergerie">
+                <Button className="orso-btn-primary" data-testid="owner-cta">
+                  {t('owner.cta')}
+                  <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Search Bar Section */}
-      <section className="bg-orso-surface py-8">
+      {/* Traveler Section */}
+      <section className="orso-section bg-white" data-testid="traveler-section">
         <div className="orso-container">
-          <div
-            className="bg-white p-4 md:p-6 border border-gray-100 shadow-sm max-w-4xl mx-auto"
-            data-testid="search-bar"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {/* Check-in */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      className="flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200 text-left w-full"
-                      data-testid="search-checkin"
-                    >
-                      <Calendar className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-                      <div>
-                        <p className="text-xs uppercase tracking-widest text-gray-500">
-                          {t('search.checkIn')}
-                        </p>
-                        <p className="font-serif text-lg">
-                          {checkIn
-                            ? format(checkIn, 'd MMM', { locale })
-                            : t('search.selectDate')}
-                        </p>
-                      </div>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <CalendarComponent
-                      mode="single"
-                      selected={checkIn}
-                      onSelect={(date) => {
-                        setCheckIn(date);
-                        if (!checkOut || date >= checkOut) {
-                          setCheckOut(addDays(date, 1));
-                        }
-                      }}
-                      disabled={(date) => date < new Date()}
-                      locale={locale}
-                    />
-                  </PopoverContent>
-                </Popover>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <img
+                src={siteImages.home_traveler}
+                alt="Voyageur"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <p className="orso-caption mb-4">{t('traveler.tagline')}</p>
+              <h2 className="orso-h2 mb-8">{t('traveler.title')}</h2>
+              <p className="text-lg font-light text-gray-700 mb-4">
+                <strong>{t('traveler.desc').split(' ')[0]}</strong> {t('traveler.desc').split(' ').slice(1).join(' ')}
+              </p>
+              <p className="text-lg font-light text-gray-700 mb-4">
+                {t('traveler.desc2')}
+              </p>
+              <p className="text-lg font-light text-gray-700 mb-8">
+                {t('traveler.desc3')}
+              </p>
+              <Link to="/locations-vacances-cosy-casa">
+                <Button className="orso-btn-primary" data-testid="traveler-cta">
+                  {t('traveler.cta')}
+                  <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                {/* Check-out */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      className="flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200 text-left w-full"
-                      data-testid="search-checkout"
-                    >
-                      <Calendar className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-                      <div>
-                        <p className="text-xs uppercase tracking-widest text-gray-500">
-                          {t('search.checkOut')}
-                        </p>
-                        <p className="font-serif text-lg">
-                          {checkOut
-                            ? format(checkOut, 'd MMM', { locale })
-                            : t('search.selectDate')}
-                        </p>
-                      </div>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <CalendarComponent
-                      mode="single"
-                      selected={checkOut}
-                      onSelect={setCheckOut}
-                      disabled={(date) =>
-                        date < (checkIn ? addDays(checkIn, 1) : new Date())
-                      }
-                      locale={locale}
-                    />
-                  </PopoverContent>
-                </Popover>
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <section className="orso-section bg-[#2e2e2e] text-white" data-testid="testimonials-section">
+          <div className="orso-container">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="font-serif text-3xl md:text-4xl mb-12 text-white">{t('testimonials.title')}</h2>
+              
+              <div className="relative min-h-[200px] flex items-center justify-center">
+                <button
+                  onClick={prevTestimonial}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                  data-testid="testimonial-prev"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
 
-                {/* Guests */}
-                <div className="flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-gray-200">
-                  <Users className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-                  <div className="flex-1">
-                    <p className="text-xs uppercase tracking-widest text-gray-500">
-                      {t('search.guests')}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setGuests(Math.max(1, guests - 1))}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 hover:border-gray-400 transition-colors"
-                        data-testid="guests-minus"
-                      >
-                        -
-                      </button>
-                      <span className="font-serif text-lg w-8 text-center">
-                        {guests}
-                      </span>
-                      <button
-                        onClick={() => setGuests(Math.min(20, guests + 1))}
-                        className="w-8 h-8 flex items-center justify-center border border-gray-300 hover:border-gray-400 transition-colors"
-                        data-testid="guests-plus"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+                <div className="px-12">
+                  <Quote className="w-8 h-8 text-white/30 mx-auto mb-6" />
+                  <p className="font-serif text-lg md:text-xl font-light leading-relaxed text-white/90 mb-6 italic">
+                    "{testimonials[activeTestimonial]?.text}"
+                  </p>
+                  <p className="text-sm uppercase tracking-widest text-white/60">
+                    <strong className="text-white/80">{testimonials[activeTestimonial]?.author}</strong>
+                  </p>
                 </div>
 
-                {/* Search Button */}
-                <div className="flex items-center">
-                  <Button
-                    onClick={handleSearch}
-                    className="orso-btn-primary w-full h-full"
-                    data-testid="search-submit"
-                  >
-                    {t('search.search')}
-                  </Button>
-                </div>
+                <button
+                  onClick={nextTestimonial}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                  data-testid="testimonial-next"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Dots */}
+              <div className="flex justify-center gap-2 mt-8">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveTestimonial(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === activeTestimonial ? 'bg-white w-6' : 'bg-white/30'
+                    }`}
+                    aria-label={`Testimonial ${index + 1}`}
+                  />
+                ))}
               </div>
             </div>
           </div>
         </section>
+      )}
 
-      {/* Categories Section */}
-      <section className="orso-section bg-white" data-testid="categories-section">
+      {/* Blog / Tendances Section */}
+      <section className="orso-section bg-white" data-testid="blog-section">
         <div className="orso-container">
-          <div className="text-center mb-16">
-            <p className="orso-caption mb-4">{t('categories.title')}</p>
-            <h2 className="orso-h2 mb-4">{t('categories.subtitle')}</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {categories.map((category, index) => (
+          <h2 className="orso-h2 text-center mb-12">{t('blog.title')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {['lecci', 'pinarello', 'corse'].map((slug, index) => (
               <Link
-                key={category.id}
-                to={`/properties?category=${category.id}`}
-                className="group relative aspect-[4/5] overflow-hidden orso-card opacity-0 animate-fade-in-up"
+                key={slug}
+                to={`/conciergerie-cosy-casa-a-${slug}`}
+                className="group orso-card opacity-0 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
-                data-testid={`category-card-${category.id}`}
+                data-testid={`blog-card-${slug}`}
               >
-                <img
-                  src={siteImages[`home_category_${category.id}`] || category.image}
-                  alt={category.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="category-overlay absolute inset-0" />
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="font-serif text-2xl md:text-3xl text-white mb-2">
-                    {t(`categories.${category.id}`)}
+                <div className="aspect-[3/2] bg-[#f5f5f3] overflow-hidden">
+                  <img
+                    src={siteImages[`blog_${slug}`] || `https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=60&${slug}`}
+                    alt={t(`blog.${slug}.title`)}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6">
+                  <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Cosy Casa</p>
+                  <h3 className="font-serif text-xl text-[#2e2e2e] mb-3 group-hover:underline underline-offset-4">
+                    {t(`blog.${slug}.title`)}
                   </h3>
-                  <p className="text-white/80 text-sm">
-                    {t(`categories.${category.id}_desc`)}
+                  <p className="text-sm text-gray-600 font-light leading-relaxed">
+                    {t(`blog.${slug}.excerpt`)}
                   </p>
                 </div>
               </Link>
@@ -344,162 +268,15 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Concept Section - Full Width Text */}
-      <section className="orso-section bg-orso-surface" data-testid="concept-section">
-        <div className="orso-container">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="orso-caption mb-6">{t('concept.tagline')}</p>
-            <h2 className="orso-h2 mb-12">{t('concept.title')}</h2>
-            
-            <div className="space-y-8 mb-16">
-              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
-                {t('concept.p1')}
-              </p>
-              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
-                {t('concept.p2')}
-              </p>
-              <p className="text-lg md:text-xl font-light leading-relaxed text-gray-700">
-                {t('concept.p3')}
-              </p>
-            </div>
-
-            {/* Values - Horizontal Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-200">
-              {['quality', 'discretion', 'authenticity'].map((value) => (
-                <div key={value} className="text-center">
-                  <div className="w-12 h-12 flex items-center justify-center border border-[#2e2e2e] mx-auto mb-4">
-                    <Check className="w-5 h-5" strokeWidth={1.5} />
-                  </div>
-                  <h4 className="font-serif text-xl text-[#2e2e2e] mb-2">
-                    {t(`concept.${value}`)}
-                  </h4>
-                  <p className="text-gray-600 text-sm">
-                    {t(`concept.${value}_desc`)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section - Cards Layout */}
-      <section className="orso-section bg-white" data-testid="services-section">
-        <div className="orso-container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Intendance Card */}
-            <div className="p-8 md:p-12 bg-orso-surface">
-              <div className="w-10 h-px bg-[#2e2e2e] mb-6" />
-              <h3 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-4">
-                {t('services.intendance.title')}
-              </h3>
-              <p className="text-gray-600 font-light mb-8 leading-relaxed">
-                {t('services.intendance.subtitle')}
-              </p>
-              <ul className="space-y-3 mb-8">
-                {(t('services.intendance.services', { returnObjects: true }) || []).map((service, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <span className="text-[#2e2e2e] mt-1">—</span>
-                    <span className="font-light">{service}</span>
-                  </li>
-                ))}
-              </ul>
-              {servicesPdfUrl ? (
-                <a href={servicesPdfUrl} target="_blank" rel="noopener noreferrer">
-                  <Button className="orso-btn-secondary" data-testid="intendance-pdf-btn">
-                    <FileText className="mr-2 h-4 w-4" strokeWidth={1.5} />
-                    {t('services.learnMore')}
-                  </Button>
-                </a>
-              ) : (
-                <Link to="/contact">
-                  <Button className="orso-btn-secondary">
-                    {t('services.learnMore')}
-                  </Button>
-                </Link>
-              )}
-            </div>
-
-            {/* Experiences Card */}
-            <div className="p-8 md:p-12 bg-[#2e2e2e] text-white">
-              <div className="w-10 h-px bg-white/40 mb-6" />
-              <h3 className="font-serif text-2xl md:text-3xl text-white mb-4">
-                {t('services.experiences.title')}
-              </h3>
-              <p className="text-white/80 font-light mb-8 leading-relaxed">
-                {t('services.experiences.subtitle')}
-              </p>
-              <ul className="space-y-3 mb-8">
-                {(t('services.experiences.services', { returnObjects: true }) || []).map((service, i) => (
-                  <li key={i} className="flex items-start gap-3 text-white/80">
-                    <span className="text-white mt-1">—</span>
-                    <span className="font-light">{service}</span>
-                  </li>
-                ))}
-              </ul>
-              {servicesPdfUrl ? (
-                <a href={servicesPdfUrl} target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-4 rounded-full uppercase tracking-widest text-xs font-medium" data-testid="experiences-pdf-btn">
-                    <FileText className="mr-2 h-4 w-4" strokeWidth={1.5} />
-                    {t('services.learnMore')}
-                  </Button>
-                </a>
-              ) : (
-                <Link to="/contact">
-                  <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-8 py-4 rounded-full uppercase tracking-widest text-xs font-medium">
-                    {t('services.learnMore')}
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Custom Requests Section */}
-      <section className="bg-orso-surface py-16 md:py-20">
-        <div className="orso-container">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="w-12 h-px bg-[#2e2e2e] mx-auto mb-8" />
-            <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-6">
-              {t('services.custom.title')}
-            </h2>
-            <p className="text-gray-600 text-base font-light leading-relaxed mb-8">
-              {t('services.custom.subtitle')}
-            </p>
-            <Link to="/contact">
-              <Button className="orso-btn-primary">
-                {t('services.custom.cta')}
-                <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section
-        className="relative py-32 md:py-48"
-        data-testid="cta-section"
-      >
-        <div className="absolute inset-0">
-          <img
-            src={siteImages.home_cta}
-            alt="Lifestyle"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-        <div className="relative z-10 orso-container text-center text-white">
-          <h2 className="orso-h2 text-white mb-6 max-w-3xl mx-auto">
-            L'art de voyager selon vous
+      <section className="bg-[#f5f5f3] py-20 md:py-28" data-testid="cta-section">
+        <div className="orso-container text-center">
+          <div className="w-12 h-px bg-[#2e2e2e] mx-auto mb-8" />
+          <h2 className="font-serif text-3xl md:text-4xl text-[#2e2e2e] mb-6">
+            {t('hero.cta')}
           </h2>
-          <p className="text-lg text-white/90 max-w-xl mx-auto mb-10">
-            Savourez la liberté d'improviser et l'art de déléguer en toute
-            sérénité.
-          </p>
           <Link to="/contact">
-            <Button className="orso-btn-primary bg-white text-[#2e2e2e] hover:bg-white/90">
+            <Button className="orso-btn-primary" data-testid="final-cta">
               {t('nav.contact')}
               <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
             </Button>

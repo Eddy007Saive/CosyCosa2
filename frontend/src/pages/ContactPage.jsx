@@ -78,7 +78,7 @@ const ContactPage = () => {
           <div className="relative h-[40vh] lg:h-auto lg:min-h-screen">
             <img
               src={contactImage}
-              alt="Contact ORSO RS"
+              alt="Contact Cosy Casa"
               className="w-full h-full object-cover"
               data-testid="contact-image"
             />
@@ -102,19 +102,19 @@ const ContactPage = () => {
               <div className="flex flex-wrap gap-6 mb-10 text-sm">
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">Adresse</p>
-                  <p className="text-[#2e2e2e]">Sainte Lucie de Porto Vecchio</p>
+                  <p className="text-[#2e2e2e]">Porto-Vecchio</p>
                   <p className="text-gray-600">Corse du Sud, France</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">Téléphone</p>
-                  <a href="tel:+33615875470" className="text-[#2e2e2e] hover:underline">
-                    +33 6 15 87 54 70
+                  <a href="tel:+33615876470" className="text-[#2e2e2e] hover:underline">
+                    +33 6 15 87 64 70
                   </a>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">Email</p>
-                  <a href="mailto:contact@orso-rs.com" className="text-[#2e2e2e] hover:underline">
-                    contact@orso-rs.com
+                  <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] hover:underline">
+                    contact@cosycasa.fr
                   </a>
                 </div>
               </div>

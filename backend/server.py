@@ -55,11 +55,11 @@ ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'orso2024')
 # Brevo Configuration
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
 BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', 'contact@gt-bnb.com')
-BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'ORSO Rental Selection')
-CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'hello@conciergerie-cosycasa.fr')
+BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Cosy Casa')
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'contact@cosycasa.fr')
 
 # Create the main app
-app = FastAPI(title="ORSO RS API", version="1.0.0")
+app = FastAPI(title="Cosy Casa API", version="1.0.0")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")

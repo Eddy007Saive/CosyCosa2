@@ -634,7 +634,7 @@ const AdminPage = () => {
       <div className="min-h-screen bg-orso-surface flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-white p-8 border border-gray-100">
           <div className="text-center mb-8">
-            <h1 className="font-serif text-3xl mb-2">ORSO RS</h1>
+            <h1 className="font-serif text-3xl mb-2">Cosy Casa</h1>
             <p className="text-gray-500 text-sm uppercase tracking-widest">Administration</p>
           </div>
           
@@ -692,7 +692,7 @@ const AdminPage = () => {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="font-serif text-2xl">ORSO RS</h1>
+            <h1 className="font-serif text-2xl">Cosy Casa</h1>
             <p className="text-xs uppercase tracking-widest text-gray-500">Administration</p>
           </div>
           

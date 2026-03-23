@@ -194,7 +194,7 @@ const PropertyCard = ({ property, index, language }) => {
 
   return (
     <Link
-      to={`/properties/${property.id}`}
+      to={`/locations-vacances-cosy-casa/${property.id}`}
       className="group orso-card opacity-0 animate-fade-in-up"
       style={{ animationDelay: `${index * 100}ms` }}
       data-testid={`property-card-${property.id}`}

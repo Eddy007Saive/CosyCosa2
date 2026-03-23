@@ -18,18 +18,14 @@ const Navbar = () => {
 
   const languages = ['FR', 'EN', 'ES', 'IT'];
 
-  // Pages with dark hero backgrounds that need light text
-  const darkHeroPages = ['/proprietaire', '/contact'];
+  const darkHeroPages = ['/conciergerie', '/contact'];
   const hasDarkHero = darkHeroPages.includes(location.pathname);
-  
-  // Use light text when on dark hero pages AND not scrolled
   const useLightText = hasDarkHero && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -40,9 +36,8 @@ const Navbar = () => {
 
   const navLinks = [
     { href: '/', label: t('nav.home') },
-    { href: '/properties', label: t('nav.properties') },
-    { href: '/esprit', label: t('nav.esprit') },
-    { href: '/proprietaire', label: t('nav.proprietaire') },
+    { href: '/locations-vacances-cosy-casa', label: t('nav.properties') },
+    { href: '/conciergerie', label: t('nav.conciergerie') },
     { href: '/contact', label: t('nav.contact') },
   ];
 
@@ -55,7 +50,7 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'glass-header border-b border-gray-100'
+          ? 'glass-header border-b border-gray-100 bg-white/90 backdrop-blur-md'
           : 'bg-transparent'
       }`}
       data-testid="navbar"
@@ -68,23 +63,11 @@ const Navbar = () => {
             className="flex items-center"
             data-testid="navbar-logo"
           >
-            <div className={`flex flex-col items-center ${useLightText ? 'text-white' : 'text-[#2e2e2e]'}`}>
-              {/* Top vertical line */}
-              <div className={`w-px h-4 ${useLightText ? 'bg-white/40' : 'bg-[#2e2e2e]/30'}`} />
-              
-              {/* Logo Text */}
-              <div className="text-center my-1">
-                <h1 className="text-lg md:text-xl tracking-[0.3em] font-light">
-                  O R S O
-                </h1>
-                <p className={`text-[8px] tracking-[0.2em] ${useLightText ? 'text-white/60' : 'text-[#2e2e2e]/60'} uppercase`}>
-                  Rental Selection
-                </p>
-              </div>
-              
-              {/* Bottom vertical line */}
-              <div className={`w-px h-4 ${useLightText ? 'bg-white/40' : 'bg-[#2e2e2e]/30'}`} />
-            </div>
+            <img 
+              src="/cosycasa-logo.png" 
+              alt="Cosy Casa Conciergerie" 
+              className={`h-14 md:h-16 w-auto transition-all duration-300 ${useLightText ? 'brightness-0 invert' : ''}`}
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -107,7 +90,6 @@ const Navbar = () => {
 
           {/* Language Switcher + CTA */}
           <div className="hidden lg:flex items-center gap-6">
-            {/* Language Switcher */}
             <div className={`lang-switch flex items-center gap-2 text-xs uppercase tracking-widest ${useLightText ? 'text-white' : 'text-[#2e2e2e]'}`}>
               {languages.map((lang, index) => (
                 <span key={lang} className="flex items-center">
@@ -129,8 +111,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Book CTA */}
-            <Link to="/properties">
+            <Link to="/locations-vacances-cosy-casa">
               <Button
                 className={useLightText ? "bg-white text-[#2e2e2e] hover:bg-white/90 px-6 py-2 rounded-full uppercase tracking-widest text-xs font-medium" : "orso-btn-primary"}
                 data-testid="nav-book-btn"
@@ -159,25 +140,19 @@ const Navbar = () => {
                 className="w-full sm:w-[400px] bg-white border-l border-gray-100"
               >
                 <div className="flex flex-col h-full">
-                  {/* Header */}
                   <div className="flex items-center justify-between py-4 border-b border-gray-100">
                     <img 
-                      src="/orso-logo.png" 
-                      alt="ORSO Rental Selection" 
-                      className="h-8 w-auto"
+                      src="/cosycasa-logo.png" 
+                      alt="Cosy Casa" 
+                      className="h-10 w-auto"
                     />
                     <SheetClose asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Close menu"
-                      >
+                      <Button variant="ghost" size="icon" aria-label="Close menu">
                         <X className="h-5 w-5" strokeWidth={1.5} />
                       </Button>
                     </SheetClose>
                   </div>
 
-                  {/* Navigation Links */}
                   <nav className="flex-1 py-8">
                     <ul className="space-y-6">
                       {navLinks.map((link) => (
@@ -186,9 +161,7 @@ const Navbar = () => {
                             <Link
                               to={link.href}
                               className={`block font-serif text-3xl transition-opacity ${
-                                isActive(link.href)
-                                  ? 'opacity-100'
-                                  : 'opacity-60 hover:opacity-100'
+                                isActive(link.href) ? 'opacity-100' : 'opacity-60 hover:opacity-100'
                               }`}
                               data-testid={`mobile-nav-${link.href.slice(1) || 'home'}`}
                             >
@@ -200,7 +173,6 @@ const Navbar = () => {
                     </ul>
                   </nav>
 
-                  {/* Language Switcher */}
                   <div className="py-6 border-t border-gray-100">
                     <div className="flex items-center gap-4">
                       {languages.map((lang) => (
@@ -220,14 +192,10 @@ const Navbar = () => {
                     </div>
                   </div>
 
-                  {/* CTA */}
                   <div className="py-6">
                     <SheetClose asChild>
-                      <Link to="/properties" className="block">
-                        <Button
-                          className="orso-btn-primary w-full"
-                          data-testid="mobile-book-btn"
-                        >
+                      <Link to="/locations-vacances-cosy-casa" className="block">
+                        <Button className="orso-btn-primary w-full" data-testid="mobile-book-btn">
                           {t('nav.book')}
                         </Button>
                       </Link>

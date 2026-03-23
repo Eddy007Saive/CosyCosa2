@@ -377,7 +377,7 @@ const PropertyDetailPage = () => {
     return (
       <div className="pt-24 md:pt-32 orso-container text-center py-20">
         <p className="orso-body">Propriété non trouvée</p>
-        <Link to="/properties">
+        <Link to="/locations-vacances-cosy-casa">
           <Button className="orso-btn-secondary mt-8">{t('common.back')}</Button>
         </Link>
       </div>
