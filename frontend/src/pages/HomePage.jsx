@@ -68,7 +68,7 @@ const HomePage = () => {
           <p className="text-lg md:text-xl font-light text-white/90 mb-10 tracking-wide">
             {t('hero.subtitle')}
           </p>
-          <Link to="/contact">
+          <Link to="/contact-conciergerie-cosy-casa">
             <Button
               className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-5 rounded-full uppercase tracking-widest text-xs font-medium"
               data-testid="hero-cta"
@@ -275,7 +275,7 @@ const HomePage = () => {
           <h2 className="font-serif text-3xl md:text-4xl text-[#2e2e2e] mb-6">
             {t('hero.cta')}
           </h2>
-          <Link to="/contact">
+          <Link to="/contact-conciergerie-cosy-casa">
             <Button className="orso-btn-primary" data-testid="final-cta">
               {t('nav.contact')}
               <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />

@@ -168,7 +168,7 @@ const BlogPage = ({ slug }) => {
               {t('conciergerie.cta')}
             </h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
+              <Link to="/contact-conciergerie-cosy-casa">
                 <Button className="orso-btn-primary" data-testid="blog-contact-cta">
                   {t('nav.contact')}
                   <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />

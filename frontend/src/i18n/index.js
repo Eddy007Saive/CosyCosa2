@@ -181,16 +181,10 @@ const resources = {
         tagline: "CONTACT",
         title: "Nous contacter",
         subtitle: "Notre équipe est à votre disposition pour répondre à toutes vos questions.",
-        form: {
-          name: "Votre nom",
-          email: "Votre email",
-          phone: "Téléphone (optionnel)",
-          subject: "Sujet",
-          message: "Votre message",
-          send: "Envoyer",
-          success: "Message envoyé avec succès!",
-          error: "Une erreur est survenue. Veuillez réessayer."
-        },
+        writeUs: "Écrivez-nous",
+        callUs: "Appelez-nous",
+        mapTagline: "NOTRE SECTEUR",
+        mapTitle: "Notre secteur géographique",
         info: {
           title: "Informations",
           address: "Porto-Vecchio, Corse du Sud",
@@ -394,16 +388,10 @@ const resources = {
         tagline: "CONTACT",
         title: "Contact us",
         subtitle: "Our team is at your disposal to answer all your questions.",
-        form: {
-          name: "Your name",
-          email: "Your email",
-          phone: "Phone (optional)",
-          subject: "Subject",
-          message: "Your message",
-          send: "Send",
-          success: "Message sent successfully!",
-          error: "An error occurred. Please try again."
-        },
+        writeUs: "Write to us",
+        callUs: "Call us",
+        mapTagline: "OUR AREA",
+        mapTitle: "Our geographic area",
         info: {
           title: "Information",
           address: "Porto-Vecchio, Southern Corsica",
@@ -496,7 +484,7 @@ const resources = {
         advantages: { title: "Sus ventajas con Cosy Casa", time: { title: "Ahorre tiempo y dinero", desc: "Maximizamos sus ingresos con tarifas dinámicas." }, simple: { title: "Servicio simplificado", desc: "Gestión completa de A a Z." }, engagement: { title: "Compromiso y responsabilidad", desc: "Mantenimiento impecable de su propiedad." } },
         cta: "Pedir cita"
       },
-      contact: { tagline: "CONTACTO", title: "Contáctenos", subtitle: "Nuestro equipo está a su disposición.", form: { name: "Su nombre", email: "Su email", phone: "Teléfono (opcional)", subject: "Asunto", message: "Su mensaje", send: "Enviar", success: "¡Mensaje enviado!", error: "Error. Inténtelo de nuevo." }, info: { title: "Información", address: "Porto-Vecchio, Córcega del Sur", email: "contact@cosycasa.fr" } },
+      contact: { tagline: "CONTACTO", title: "Contáctenos", subtitle: "Nuestro equipo está a su disposición.", writeUs: "Escríbanos", callUs: "Llámenos", mapTagline: "NUESTRO SECTOR", mapTitle: "Nuestro sector geográfico", info: { title: "Información", address: "Porto-Vecchio, Córcega del Sur", email: "contact@cosycasa.fr" } },
       footer: { tagline: "Conserjería en Córcega del Sur – Servicios premium.", quickLinks: "Enlaces", contact: "Contacto", legal: "Aviso Legal", privacy: "Privacidad", rights: "Todos los derechos reservados" },
       common: { loading: "Cargando...", error: "Error", back: "Volver", close: "Cerrar", save: "Guardar", cancel: "Cancelar" }
     }
@@ -568,7 +556,7 @@ const resources = {
         advantages: { title: "I vostri vantaggi con Cosy Casa", time: { title: "Risparmio di tempo e denaro", desc: "Massimizziamo i vostri ricavi con tariffe dinamiche." }, simple: { title: "Servizio semplificato", desc: "Gestione completa dalla A alla Z." }, engagement: { title: "Impegno e responsabilità", desc: "Manutenzione impeccabile della proprietà." } },
         cta: "Prenota un appuntamento"
       },
-      contact: { tagline: "CONTATTO", title: "Contattaci", subtitle: "Il nostro team è a vostra disposizione.", form: { name: "Il vostro nome", email: "La vostra email", phone: "Telefono (opzionale)", subject: "Oggetto", message: "Il vostro messaggio", send: "Invia", success: "Messaggio inviato!", error: "Errore. Riprova." }, info: { title: "Informazioni", address: "Porto-Vecchio, Corsica del Sud", email: "contact@cosycasa.fr" } },
+      contact: { tagline: "CONTATTO", title: "Contattaci", subtitle: "Il nostro team è a vostra disposizione.", writeUs: "Scrivici", callUs: "Chiamaci", mapTagline: "IL NOSTRO SETTORE", mapTitle: "Il nostro settore geografico", info: { title: "Informazioni", address: "Porto-Vecchio, Corsica del Sud", email: "contact@cosycasa.fr" } },
       footer: { tagline: "Concierge in Corsica del Sud – Servizi premium.", quickLinks: "Link Rapidi", contact: "Contatto", legal: "Note Legali", privacy: "Privacy", rights: "Tutti i diritti riservati" },
       common: { loading: "Caricamento...", error: "Errore", back: "Indietro", close: "Chiudi", save: "Salva", cancel: "Annulla" }
     }

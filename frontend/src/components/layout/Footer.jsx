@@ -77,7 +77,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/contact"
+                  to="/contact-conciergerie-cosy-casa"
                   className="text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="footer-link-contact"
                 >

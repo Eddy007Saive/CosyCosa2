@@ -106,7 +106,7 @@ const ConciergeriePage = () => {
           <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">
             {t('conciergerie.cta')}
           </h2>
-          <Link to="/contact">
+          <Link to="/contact-conciergerie-cosy-casa">
             <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-5 rounded-full uppercase tracking-widest text-xs font-medium" data-testid="conciergerie-cta-btn">
               {t('nav.contact')}
               <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />

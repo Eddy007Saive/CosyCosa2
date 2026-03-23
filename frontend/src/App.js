@@ -63,7 +63,7 @@ function App() {
                     <Route path="/conciergerie-cosy-casa-a-lecci" element={<BlogPage slug="lecci" />} />
                     <Route path="/conciergerie-cosy-casa-a-pinarello" element={<BlogPage slug="pinarello" />} />
                     <Route path="/conciergerie-cosy-casa-a-corse" element={<BlogPage slug="corse" />} />
-                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/contact-conciergerie-cosy-casa" element={<ContactPage />} />
                     <Route path="/legal" element={<LegalPage />} />
                     <Route path="/privacy" element={<PrivacyPage />} />
                   </Routes>

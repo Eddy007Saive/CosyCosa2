@@ -38,7 +38,7 @@ const Navbar = () => {
     { href: '/', label: t('nav.home') },
     { href: '/locations-vacances-cosy-casa', label: t('nav.properties') },
     { href: '/conciergerie', label: t('nav.conciergerie') },
-    { href: '/contact', label: t('nav.contact') },
+    { href: '/contact-conciergerie-cosy-casa', label: t('nav.contact') },
   ];
 
   const isActive = (path) => {
