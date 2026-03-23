@@ -12,6 +12,7 @@ import PropertiesPage from "@/pages/PropertiesPage";
 import PropertyDetailPage from "@/pages/PropertyDetailPage";
 import ContactPage from "@/pages/ContactPage";
 import ConciergeriePage from "@/pages/ConciergeriePage";
+import ProprietairesPage from "@/pages/ProprietairesPage";
 import BlogPage from "@/pages/BlogPage";
 import LegalPage from "@/pages/LegalPage";
 import PrivacyPage from "@/pages/PrivacyPage";
@@ -60,6 +61,7 @@ function App() {
                     <Route path="/locations-vacances-cosy-casa" element={<PropertiesPage />} />
                     <Route path="/locations-vacances-cosy-casa/:id" element={<PropertyDetailPage />} />
                     <Route path="/conciergerie" element={<ConciergeriePage />} />
+                    <Route path="/conciergerie-pour-proprietaires-corse" element={<ProprietairesPage />} />
                     <Route path="/conciergerie-cosy-casa-a-lecci" element={<BlogPage slug="lecci" />} />
                     <Route path="/conciergerie-cosy-casa-a-pinarello" element={<BlogPage slug="pinarello" />} />
                     <Route path="/conciergerie-cosy-casa-a-corse" element={<BlogPage slug="corse" />} />

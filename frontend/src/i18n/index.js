@@ -7,6 +7,10 @@ const resources = {
     translation: {
       nav: {
         home: "Accueil",
+        services: "Nos services",
+        servicesOwner: "Vous êtes propriétaire",
+        servicesTraveler: "Vous êtes voyageur",
+        sectors: "Secteurs",
         properties: "Nos Locations",
         conciergerie: "Conciergerie",
         contact: "Contact",
@@ -177,6 +181,31 @@ const resources = {
         },
         cta: "Prendre rendez-vous"
       },
+      proprietaires: {
+        hero: {
+          tagline: "CONCIERGERIE",
+          title: "Conciergerie pour propriétaires",
+          subtitle: "Cosy Casa gère votre bien locatif en Corse du Sud : ménage, accueil voyageurs, tarification dynamique et bien plus."
+        },
+        servicesTagline: "NOS SERVICES",
+        servicesTitle: "Nos services",
+        tarif: {
+          title: "Un tarif unique et sans surprise",
+          desc: "TTC de revenus générés — Frais de ménage et blanchisserie à la charge du voyageur",
+          noHidden: "Pas de frais cachés",
+          noCommitment: "Pas d'engagement",
+          monthlyPayment: "Paiement chaque fin de mois"
+        },
+        espace: {
+          title: "Un Espace propriétaire dédié",
+          desc: "Accès (web + smartphone) à votre interface propriétaire comprenant :",
+          feature1: "Accès en temps réel aux plannings de réservations",
+          feature2: "Consultation de vos informations financières",
+          feature3: "Votre logement disponible quand vous le souhaitez (bloquer des dates de façon autonome)",
+          feature4: "Messagerie directe avec Cosy Casa (assistance 7/7 jours)"
+        },
+        cta: "Prendre rendez-vous"
+      },
       contact: {
         tagline: "CONTACT",
         title: "Nous contacter",
@@ -214,6 +243,10 @@ const resources = {
     translation: {
       nav: {
         home: "Home",
+        services: "Our services",
+        servicesOwner: "You are an owner",
+        servicesTraveler: "You are a traveler",
+        sectors: "Sectors",
         properties: "Rentals",
         conciergerie: "Concierge",
         contact: "Contact",
@@ -384,6 +417,13 @@ const resources = {
         },
         cta: "Book an appointment"
       },
+      proprietaires: {
+        hero: { tagline: "CONCIERGE", title: "Concierge for property owners", subtitle: "Cosy Casa manages your rental property in Southern Corsica: cleaning, guest welcome, dynamic pricing and more." },
+        servicesTagline: "OUR SERVICES", servicesTitle: "Our services",
+        tarif: { title: "A single, no-surprise rate", desc: "Including tax on generated revenue — Cleaning and laundry fees charged to the traveler", noHidden: "No hidden fees", noCommitment: "No commitment", monthlyPayment: "Monthly payment" },
+        espace: { title: "A dedicated owner space", desc: "Access (web + smartphone) to your owner interface including:", feature1: "Real-time access to booking schedules", feature2: "View your financial information", feature3: "Your property available when you want (block dates independently)", feature4: "Direct messaging with Cosy Casa (7/7 support)" },
+        cta: "Book an appointment"
+      },
       contact: {
         tagline: "CONTACT",
         title: "Contact us",
@@ -421,6 +461,10 @@ const resources = {
     translation: {
       nav: {
         home: "Inicio",
+        services: "Nuestros servicios",
+        servicesOwner: "Soy propietario",
+        servicesTraveler: "Soy viajero",
+        sectors: "Sectores",
         properties: "Alquileres",
         conciergerie: "Conserjería",
         contact: "Contacto",
@@ -484,6 +528,13 @@ const resources = {
         advantages: { title: "Sus ventajas con Cosy Casa", time: { title: "Ahorre tiempo y dinero", desc: "Maximizamos sus ingresos con tarifas dinámicas." }, simple: { title: "Servicio simplificado", desc: "Gestión completa de A a Z." }, engagement: { title: "Compromiso y responsabilidad", desc: "Mantenimiento impecable de su propiedad." } },
         cta: "Pedir cita"
       },
+      proprietaires: {
+        hero: { tagline: "CONSERJERÍA", title: "Conserjería para propietarios", subtitle: "Cosy Casa gestiona su propiedad en Córcega del Sur." },
+        servicesTagline: "NUESTROS SERVICIOS", servicesTitle: "Nuestros servicios",
+        tarif: { title: "Una tarifa única y sin sorpresas", desc: "IVA incluido sobre los ingresos — Gastos de limpieza a cargo del viajero", noHidden: "Sin gastos ocultos", noCommitment: "Sin compromiso", monthlyPayment: "Pago mensual" },
+        espace: { title: "Un espacio propietario dedicado", desc: "Acceso a su interfaz propietario:", feature1: "Acceso en tiempo real a reservas", feature2: "Consultar información financiera", feature3: "Su alojamiento disponible cuando quiera", feature4: "Mensajería directa con Cosy Casa (7/7)" },
+        cta: "Pedir cita"
+      },
       contact: { tagline: "CONTACTO", title: "Contáctenos", subtitle: "Nuestro equipo está a su disposición.", writeUs: "Escríbanos", callUs: "Llámenos", mapTagline: "NUESTRO SECTOR", mapTitle: "Nuestro sector geográfico", info: { title: "Información", address: "Porto-Vecchio, Córcega del Sur", email: "contact@cosycasa.fr" } },
       footer: { tagline: "Conserjería en Córcega del Sur – Servicios premium.", quickLinks: "Enlaces", contact: "Contacto", legal: "Aviso Legal", privacy: "Privacidad", rights: "Todos los derechos reservados" },
       common: { loading: "Cargando...", error: "Error", back: "Volver", close: "Cerrar", save: "Guardar", cancel: "Cancelar" }
@@ -493,6 +544,10 @@ const resources = {
     translation: {
       nav: {
         home: "Home",
+        services: "I nostri servizi",
+        servicesOwner: "Sei proprietario",
+        servicesTraveler: "Sei viaggiatore",
+        sectors: "Settori",
         properties: "Affitti",
         conciergerie: "Concierge",
         contact: "Contatto",
@@ -554,6 +609,13 @@ const resources = {
         intro2: "Con il nostro concierge premium, qualità e serenità garantite.",
         offers: { title: "Le nostre offerte", evaluation: { title: "Valutazione del progetto", desc: "Studio approfondito della proprietà e del mercato." }, team: { title: "Team dinamico e reattivo", desc: "Team appassionato e esperto in gestione locativa." }, network: { title: "Rete di partner", desc: "Fornitori locali selezionati con cura." }, quality: { title: "Garanzia di qualità", desc: "Anni di esperienza nel concierge premium." } },
         advantages: { title: "I vostri vantaggi con Cosy Casa", time: { title: "Risparmio di tempo e denaro", desc: "Massimizziamo i vostri ricavi con tariffe dinamiche." }, simple: { title: "Servizio semplificato", desc: "Gestione completa dalla A alla Z." }, engagement: { title: "Impegno e responsabilità", desc: "Manutenzione impeccabile della proprietà." } },
+        cta: "Prenota un appuntamento"
+      },
+      proprietaires: {
+        hero: { tagline: "CONCIERGE", title: "Concierge per proprietari", subtitle: "Cosy Casa gestisce la vostra proprietà in Corsica del Sud." },
+        servicesTagline: "I NOSTRI SERVIZI", servicesTitle: "I nostri servizi",
+        tarif: { title: "Una tariffa unica e senza sorprese", desc: "IVA inclusa sui ricavi — Pulizia a carico del viaggiatore", noHidden: "Nessun costo nascosto", noCommitment: "Nessun impegno", monthlyPayment: "Pagamento mensile" },
+        espace: { title: "Uno spazio proprietario dedicato", desc: "Accesso alla vostra interfaccia proprietario:", feature1: "Accesso in tempo reale alle prenotazioni", feature2: "Consultare le informazioni finanziarie", feature3: "Il vostro alloggio disponibile quando volete", feature4: "Messaggistica diretta con Cosy Casa (7/7)" },
         cta: "Prenota un appuntamento"
       },
       contact: { tagline: "CONTATTO", title: "Contattaci", subtitle: "Il nostro team è a vostra disposizione.", writeUs: "Scrivici", callUs: "Chiamaci", mapTagline: "IL NOSTRO SETTORE", mapTitle: "Il nostro settore geografico", info: { title: "Informazioni", address: "Porto-Vecchio, Corsica del Sud", email: "contact@cosycasa.fr" } },

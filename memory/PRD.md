@@ -50,8 +50,9 @@ https://cosycasa.fr/
 | `/` | Homepage |
 | `/locations-vacances-cosy-casa` | Listing propriétés |
 | `/locations-vacances-cosy-casa/:id` | Détail propriété |
-| `/conciergerie` | Page Conciergerie |
-| `/contact` | Contact |
+| `/conciergerie-pour-proprietaires-corse` | Page Propriétaires (services détaillés) |
+| `/conciergerie` | Page Conciergerie générale |
+| `/contact-conciergerie-cosy-casa` | Contact |
 | `/conciergerie-cosy-casa-a-lecci` | Article SEO Lecci |
 | `/conciergerie-cosy-casa-a-pinarello` | Article SEO Pinarello |
 | `/conciergerie-cosy-casa-a-corse` | Article SEO Corse |
