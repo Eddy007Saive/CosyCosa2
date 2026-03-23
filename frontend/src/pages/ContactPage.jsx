@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Phone, Mail, MapPin, Calendar, Send, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSiteImages } from '@/lib/api';
-import { ContactSEO } from '@/components/SEO';
+import useSEO from '@/hooks/useSEO';
 
 const ContactPage = () => {
   const { t, i18n } = useTranslation();
@@ -23,9 +23,14 @@ const ContactPage = () => {
     loadImage();
   }, []);
 
+  useSEO({
+    title: 'Contact – Conciergerie Cosy Casa en Corse du Sud',
+    description: 'Contactez Cosy Casa, votre conciergerie en Corse du Sud. Gestion locative, accueil voyageurs. Porto-Vecchio, Lecci, Pinarello.',
+    path: '/contact-conciergerie-cosy-casa'
+  });
+
   return (
     <div className="pt-20" data-testid="contact-page">
-      <ContactSEO lang={i18n.language} />
 
       {/* Hero Section - Image + Contact Info */}
       <section className="min-h-[80vh] bg-white">

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, MapPin, ClipboardCheck, Users, Network, Award, Clock, Settings, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import useSEO from '@/hooks/useSEO';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -39,6 +40,15 @@ const SectorPage = () => {
     fetchSector();
   }, [slug]);
 
+  // Dynamic SEO from DB - must be before any returns
+  const cityName = sector ? (getLangField(sector, 'city', lang) || slug) : slug;
+  useSEO({
+    title: sector ? `Conciergerie ${cityName} – Cosy Casa` : 'Cosy Casa',
+    description: sector?.meta_description_fr || `Conciergerie Cosy Casa à ${cityName} – Gestion locative premium en Corse du Sud.`,
+    path: `/${slug}`,
+    image: sector?.hero_image || undefined
+  });
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-24">
@@ -60,7 +70,6 @@ const SectorPage = () => {
     );
   }
 
-  const cityName = getLangField(sector, 'city', lang);
   const offers = sector.offers || [];
   const advantages = sector.advantages || [];
 

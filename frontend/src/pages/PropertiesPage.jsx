@@ -5,7 +5,7 @@ import { MapPin, Users, Bed, Bath, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProperties, getCategories } from '@/lib/api';
-import { PropertiesSEO } from '@/components/SEO';
+import useSEO from '@/hooks/useSEO';
 
 const PropertiesPage = () => {
   const { t, i18n } = useTranslation();
@@ -60,6 +60,12 @@ const PropertiesPage = () => {
     loadData();
   }, [activeCategory]);
 
+  useSEO({
+    title: 'Locations vacances – Cosy Casa | Hébergements en Corse du Sud',
+    description: 'Découvrez nos locations de vacances en Corse du Sud. Villas, appartements avec vue mer, plage à pieds. Réservez directement avec Cosy Casa.',
+    path: '/locations-vacances-cosy-casa'
+  });
+
   const handleCategoryChange = (categoryId) => {
     setActiveCategory(categoryId);
     if (categoryId === 'all') {
@@ -77,11 +83,6 @@ const PropertiesPage = () => {
 
   return (
     <div className="pt-24 md:pt-32" data-testid="properties-page">
-      {/* SEO */}
-      <PropertiesSEO 
-        category={activeCategory !== 'all' ? activeCategory : null} 
-        lang={i18n.language} 
-      />
       
       {/* Header */}
       <section className="orso-container py-12 md:py-20">

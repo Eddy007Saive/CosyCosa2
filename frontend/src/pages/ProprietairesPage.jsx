@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Search, CalendarCheck, Users, Wrench, Shield, Paintbrush, CheckCircle, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import useSEO from '@/hooks/useSEO';
 
 const SERVICES = [
   {
@@ -105,6 +106,12 @@ const ProprietairesPage = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const titles = SERVICE_TITLES[lang] || SERVICE_TITLES.fr;
+
+  useSEO({
+    title: 'Conciergerie pour propriétaires Corse – Cosy Casa',
+    description: 'Conciergerie pour propriétaires en Corse du Sud. Cosy Casa gère votre bien locatif : ménage, accueil voyageurs, tarification dynamique. 22% TTC.',
+    path: '/conciergerie-pour-proprietaires-corse'
+  });
 
   return (
     <div data-testid="proprietaires-page">

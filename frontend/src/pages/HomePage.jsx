@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRight, Search, Home, CalendarCheck, Users, Wrench, Shield, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSiteImages } from '@/lib/api';
+import useSEO from '@/hooks/useSEO';
 
 const DEFAULT_IMAGES = {
   home_hero: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80",
@@ -22,6 +23,12 @@ const HomePage = () => {
   const { t, i18n } = useTranslation();
   const [siteImages, setSiteImages] = useState(DEFAULT_IMAGES);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  useSEO({
+    title: 'Cosy Casa | Conciergerie en Corse du Sud - Gestion Locative Porto-Vecchio, Lecci, Pinarello',
+    description: 'Cosy Casa, votre conciergerie en Corse du Sud. Expert en location courte durée : gestion locative, accueil voyageurs, entretien. Porto-Vecchio, Lecci, Pinarello.',
+    path: '/'
+  });
 
   useEffect(() => {
     const loadSiteImages = async () => {

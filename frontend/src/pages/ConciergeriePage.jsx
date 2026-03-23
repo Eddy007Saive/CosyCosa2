@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ClipboardCheck, Users, Network, Award, Clock, Settings, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import useSEO from '@/hooks/useSEO';
 
 const OFFERS = [
   { key: 'evaluation', icon: ClipboardCheck },
@@ -18,6 +19,12 @@ const ADVANTAGES = [
 
 const ConciergeriePage = () => {
   const { t } = useTranslation();
+
+  useSEO({
+    title: 'Conciergerie Corse – Cosy Casa | Gestion locative en Corse du Sud',
+    description: 'Conciergerie Corse du Sud – Cosy Casa gère vos locations saisonnières : accueil voyageurs, ménage, tarification dynamique et gestion complète.',
+    path: '/conciergerie'
+  });
 
   return (
     <div data-testid="conciergerie-page">
