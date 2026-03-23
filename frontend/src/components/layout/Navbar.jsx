@@ -10,6 +10,8 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 
+const API_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
@@ -17,6 +19,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileDropdown, setMobileDropdown] = useState(null);
+  const [sectors, setSectors] = useState([]);
   const dropdownRef = useRef(null);
 
   const languages = ['FR', 'EN', 'ES', 'IT'];
@@ -29,6 +32,21 @@ const Navbar = () => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/sectors`);
+        if (res.ok) {
+          const data = await res.json();
+          setSectors(data);
+        }
+      } catch (err) {
+        console.error('Error fetching sectors:', err);
+      }
+    };
+    fetchSectors();
   }, []);
 
   useEffect(() => {
@@ -50,6 +68,18 @@ const Navbar = () => {
     i18n.changeLanguage(lang.toLowerCase());
   };
 
+  const lang = i18n.language;
+  const getLangField = (obj, field) => {
+    const map = { fr: '_fr', en: '_en', es: '_es', it: '_it' };
+    const suffix = map[lang] || '_fr';
+    return obj[`${field}${suffix}`] || obj[`${field}_fr`] || '';
+  };
+
+  const sectorItems = sectors.map(s => ({
+    href: `/${s.slug}`,
+    label: getLangField(s, 'city')
+  }));
+
   const navItems = [
     { type: 'link', href: '/', label: t('nav.home') },
     {
@@ -61,16 +91,12 @@ const Navbar = () => {
         { href: '/locations-vacances-cosy-casa', label: t('nav.servicesTraveler') },
       ]
     },
-    {
+    ...(sectorItems.length > 0 ? [{
       type: 'dropdown',
       label: t('nav.sectors'),
       key: 'sectors',
-      items: [
-        { href: '/conciergerie-cosy-casa-a-lecci', label: 'Lecci' },
-        { href: '/conciergerie-cosy-casa-a-pinarello', label: 'Pinarello' },
-        { href: '/conciergerie-cosy-casa-a-corse', label: 'Corse' },
-      ]
-    },
+      items: sectorItems
+    }] : []),
     { type: 'link', href: '/conciergerie', label: t('nav.conciergerie') },
     { type: 'link', href: '/contact-conciergerie-cosy-casa', label: t('nav.contact') },
   ];

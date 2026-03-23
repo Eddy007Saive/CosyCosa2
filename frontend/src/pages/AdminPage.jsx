@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -199,6 +200,19 @@ const AdminPage = () => {
   const [uploadingKey, setUploadingKey] = useState(null);
   const [dragOverKey, setDragOverKey] = useState(null);
   
+  // Sectors state
+  const [sectors, setSectors] = useState([]);
+  const [loadingSectors, setLoadingSectors] = useState(false);
+  const [showSectorModal, setShowSectorModal] = useState(false);
+  const [editingSector, setEditingSector] = useState(null);
+  const [sectorForm, setSectorForm] = useState({
+    slug: '', city_fr: '', city_en: '', city_es: '', city_it: '',
+    meta_description_fr: '', meta_description_en: '',
+    intro_fr: '', intro_en: '', intro_es: '', intro_it: '',
+    intro2_fr: '', intro2_en: '', intro2_es: '', intro2_it: '',
+    offers: [], advantages: [], hero_image: '', is_active: true, order: 0
+  });
+  
   // Form state
   const [propertyForm, setPropertyForm] = useState({
     name: '',
@@ -240,8 +254,118 @@ const AdminPage = () => {
       loadProperties();
       loadSiteImages();
       loadServicesPdf();
+      loadSectors();
     }
   }, [isAuthenticated]);
+
+  const loadSectors = async () => {
+    setLoadingSectors(true);
+    try {
+      const res = await fetch(`${API_URL}/sectors?include_hidden=true`);
+      if (res.ok) {
+        const data = await res.json();
+        setSectors(data);
+      }
+    } catch (error) {
+      console.error('Failed to load sectors:', error);
+    } finally {
+      setLoadingSectors(false);
+    }
+  };
+
+  const saveSector = async () => {
+    try {
+      const url = editingSector ? `${API_URL}/sectors/${editingSector.id}` : `${API_URL}/sectors`;
+      const method = editingSector ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sectorForm)
+      });
+      if (res.ok) {
+        toast.success(editingSector ? 'Secteur mis à jour' : 'Secteur créé');
+        setShowSectorModal(false);
+        setEditingSector(null);
+        loadSectors();
+      } else {
+        const err = await res.json();
+        toast.error(err.detail || 'Erreur');
+      }
+    } catch (error) {
+      toast.error('Erreur lors de la sauvegarde');
+    }
+  };
+
+  const deleteSector = async (sectorId) => {
+    if (!window.confirm('Supprimer ce secteur ?')) return;
+    try {
+      const res = await fetch(`${API_URL}/sectors/${sectorId}`, { method: 'DELETE' });
+      if (res.ok) {
+        toast.success('Secteur supprimé');
+        loadSectors();
+      }
+    } catch (error) {
+      toast.error('Erreur lors de la suppression');
+    }
+  };
+
+  const toggleSectorActive = async (sector) => {
+    try {
+      const updated = { ...sector, is_active: !sector.is_active };
+      delete updated.id;
+      delete updated.created_at;
+      delete updated.updated_at;
+      const res = await fetch(`${API_URL}/sectors/${sector.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated)
+      });
+      if (res.ok) {
+        toast.success(sector.is_active ? 'Secteur masqué' : 'Secteur affiché');
+        loadSectors();
+      }
+    } catch (error) {
+      toast.error('Erreur');
+    }
+  };
+
+  const openSectorModal = (sector = null) => {
+    if (sector) {
+      setEditingSector(sector);
+      setSectorForm({
+        slug: sector.slug || '', city_fr: sector.city_fr || '', city_en: sector.city_en || '',
+        city_es: sector.city_es || '', city_it: sector.city_it || '',
+        meta_description_fr: sector.meta_description_fr || '', meta_description_en: sector.meta_description_en || '',
+        intro_fr: sector.intro_fr || '', intro_en: sector.intro_en || '',
+        intro_es: sector.intro_es || '', intro_it: sector.intro_it || '',
+        intro2_fr: sector.intro2_fr || '', intro2_en: sector.intro2_en || '',
+        intro2_es: sector.intro2_es || '', intro2_it: sector.intro2_it || '',
+        offers: sector.offers || [], advantages: sector.advantages || [],
+        hero_image: sector.hero_image || '', is_active: sector.is_active ?? true, order: sector.order || 0
+      });
+    } else {
+      setEditingSector(null);
+      setSectorForm({
+        slug: '', city_fr: '', city_en: '', city_es: '', city_it: '',
+        meta_description_fr: '', meta_description_en: '',
+        intro_fr: '', intro_en: '', intro_es: '', intro_it: '',
+        intro2_fr: '', intro2_en: '', intro2_es: '', intro2_it: '',
+        offers: [
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' },
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' },
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' },
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' }
+        ],
+        advantages: [
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' },
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' },
+          { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' }
+        ],
+        hero_image: '', is_active: true, order: sectors.length
+      });
+    }
+    setShowSectorModal(true);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -786,6 +910,18 @@ const AdminPage = () => {
               <FileText className="w-4 h-4 inline mr-2" />
               PDF Services
             </button>
+            <button
+              onClick={() => setActiveTab('sectors')}
+              className={`py-4 text-sm uppercase tracking-widest border-b-2 transition-colors ${
+                activeTab === 'sectors'
+                  ? 'border-[#2e2e2e] text-[#2e2e2e]'
+                  : 'border-transparent text-gray-400 hover:text-gray-600'
+              }`}
+              data-testid="tab-sectors"
+            >
+              <MapPin className="w-4 h-4 inline mr-2" />
+              Secteurs
+            </button>
           </nav>
         </div>
       </div>
@@ -1232,7 +1368,218 @@ const AdminPage = () => {
             </div>
           </div>
         )}
+
+        {/* Sectors Tab */}
+        {activeTab === 'sectors' && (
+          <div className="space-y-6" data-testid="sectors-tab">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-serif text-2xl text-[#2e2e2e]">Secteurs géographiques</h2>
+                <p className="text-gray-600 mt-1">Gérez les pages SEO par secteur (apparaissent dans le menu "Secteurs")</p>
+              </div>
+              <Button onClick={() => openSectorModal()} className="orso-btn-primary" data-testid="add-sector-btn">
+                <Plus className="w-4 h-4 mr-2" /> Nouveau secteur
+              </Button>
+            </div>
+
+            {loadingSectors ? (
+              <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-gray-400" /></div>
+            ) : (
+              <div className="bg-white border border-gray-100 overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Ordre</TableHead>
+                      <TableHead>Ville</TableHead>
+                      <TableHead>Slug (URL)</TableHead>
+                      <TableHead>Statut</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sectors.map((sector) => (
+                      <TableRow key={sector.id}>
+                        <TableCell className="font-mono text-sm">{sector.order}</TableCell>
+                        <TableCell className="font-medium">{sector.city_fr}</TableCell>
+                        <TableCell className="text-sm text-gray-500 font-mono">/{sector.slug}</TableCell>
+                        <TableCell>
+                          <Badge variant={sector.is_active ? "default" : "secondary"} className={sector.is_active ? "bg-green-100 text-green-800" : ""}>
+                            {sector.is_active ? 'Actif' : 'Masqué'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              variant="ghost" size="sm"
+                              onClick={() => toggleSectorActive(sector)}
+                              data-testid={`toggle-sector-${sector.slug}`}
+                            >
+                              {sector.is_active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </Button>
+                            <Button
+                              variant="ghost" size="sm"
+                              onClick={() => openSectorModal(sector)}
+                              data-testid={`edit-sector-${sector.slug}`}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost" size="sm"
+                              onClick={() => deleteSector(sector.id)}
+                              className="text-red-500 hover:text-red-700"
+                              data-testid={`delete-sector-${sector.slug}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {sectors.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-8 text-gray-400">
+                          Aucun secteur. Cliquez sur "Nouveau secteur" pour en créer un.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </div>
+        )}
       </main>
+
+      {/* Sector Modal */}
+      <Dialog open={showSectorModal} onOpenChange={setShowSectorModal}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl">
+              {editingSector ? `Modifier : ${editingSector.city_fr}` : 'Nouveau secteur'}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {/* Basic Info */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Slug (URL) *</Label>
+                <Input
+                  value={sectorForm.slug}
+                  onChange={(e) => setSectorForm({ ...sectorForm, slug: e.target.value })}
+                  placeholder="conciergerie-porto-vecchio"
+                  disabled={!!editingSector}
+                  data-testid="sector-slug-input"
+                />
+                <p className="text-xs text-gray-400 mt-1">cosycasa.fr/{sectorForm.slug || '...'}</p>
+              </div>
+              <div>
+                <Label>Ordre d'affichage</Label>
+                <Input
+                  type="number"
+                  value={sectorForm.order}
+                  onChange={(e) => setSectorForm({ ...sectorForm, order: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+            </div>
+
+            {/* City Names */}
+            <div>
+              <Label className="text-sm font-medium mb-2 block">Nom de la ville</Label>
+              <div className="grid grid-cols-4 gap-3">
+                <Input value={sectorForm.city_fr} onChange={(e) => setSectorForm({ ...sectorForm, city_fr: e.target.value })} placeholder="FR: Porto-Vecchio" data-testid="sector-city-fr" />
+                <Input value={sectorForm.city_en} onChange={(e) => setSectorForm({ ...sectorForm, city_en: e.target.value })} placeholder="EN" />
+                <Input value={sectorForm.city_es} onChange={(e) => setSectorForm({ ...sectorForm, city_es: e.target.value })} placeholder="ES" />
+                <Input value={sectorForm.city_it} onChange={(e) => setSectorForm({ ...sectorForm, city_it: e.target.value })} placeholder="IT" />
+              </div>
+            </div>
+
+            {/* Hero Image */}
+            <div>
+              <Label>Image Hero (URL)</Label>
+              <Input value={sectorForm.hero_image} onChange={(e) => setSectorForm({ ...sectorForm, hero_image: e.target.value })} placeholder="https://..." />
+            </div>
+
+            {/* Meta Description */}
+            <div>
+              <Label>Meta Description (SEO)</Label>
+              <Textarea value={sectorForm.meta_description_fr} onChange={(e) => setSectorForm({ ...sectorForm, meta_description_fr: e.target.value })} placeholder="Description FR pour Google..." rows={2} />
+            </div>
+
+            {/* Intros */}
+            <div>
+              <Label className="text-sm font-medium mb-2 block">Introduction (FR)</Label>
+              <Textarea value={sectorForm.intro_fr} onChange={(e) => setSectorForm({ ...sectorForm, intro_fr: e.target.value })} placeholder="Paragraphe d'introduction..." rows={3} data-testid="sector-intro-fr" />
+            </div>
+            <div>
+              <Label className="text-sm font-medium mb-2 block">Introduction 2 (FR)</Label>
+              <Textarea value={sectorForm.intro2_fr} onChange={(e) => setSectorForm({ ...sectorForm, intro2_fr: e.target.value })} placeholder="Second paragraphe..." rows={3} />
+            </div>
+
+            {/* Offers */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <Label className="text-sm font-medium">Offres ({sectorForm.offers.length})</Label>
+                <Button variant="outline" size="sm" onClick={() => setSectorForm({ ...sectorForm, offers: [...sectorForm.offers, { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' }] })}>
+                  <Plus className="w-3 h-3 mr-1" /> Ajouter
+                </Button>
+              </div>
+              <div className="space-y-4">
+                {sectorForm.offers.map((offer, idx) => (
+                  <div key={idx} className="border border-gray-200 p-4 rounded space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs uppercase tracking-widest text-gray-400">Offre {idx + 1}</span>
+                      <Button variant="ghost" size="sm" className="text-red-400 h-6" onClick={() => setSectorForm({ ...sectorForm, offers: sectorForm.offers.filter((_, i) => i !== idx) })}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                    <Input value={offer.title_fr} onChange={(e) => { const offers = [...sectorForm.offers]; offers[idx] = { ...offers[idx], title_fr: e.target.value }; setSectorForm({ ...sectorForm, offers }); }} placeholder="Titre FR" />
+                    <Textarea value={offer.desc_fr} onChange={(e) => { const offers = [...sectorForm.offers]; offers[idx] = { ...offers[idx], desc_fr: e.target.value }; setSectorForm({ ...sectorForm, offers }); }} placeholder="Description FR" rows={2} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Advantages */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <Label className="text-sm font-medium">Avantages ({sectorForm.advantages.length})</Label>
+                <Button variant="outline" size="sm" onClick={() => setSectorForm({ ...sectorForm, advantages: [...sectorForm.advantages, { title_fr: '', title_en: '', title_es: '', title_it: '', desc_fr: '', desc_en: '', desc_es: '', desc_it: '' }] })}>
+                  <Plus className="w-3 h-3 mr-1" /> Ajouter
+                </Button>
+              </div>
+              <div className="space-y-4">
+                {sectorForm.advantages.map((adv, idx) => (
+                  <div key={idx} className="border border-gray-200 p-4 rounded space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs uppercase tracking-widest text-gray-400">Avantage {idx + 1}</span>
+                      <Button variant="ghost" size="sm" className="text-red-400 h-6" onClick={() => setSectorForm({ ...sectorForm, advantages: sectorForm.advantages.filter((_, i) => i !== idx) })}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                    <Input value={adv.title_fr} onChange={(e) => { const advantages = [...sectorForm.advantages]; advantages[idx] = { ...advantages[idx], title_fr: e.target.value }; setSectorForm({ ...sectorForm, advantages }); }} placeholder="Titre FR" />
+                    <Textarea value={adv.desc_fr} onChange={(e) => { const advantages = [...sectorForm.advantages]; advantages[idx] = { ...advantages[idx], desc_fr: e.target.value }; setSectorForm({ ...sectorForm, advantages }); }} placeholder="Description FR" rows={2} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Active toggle */}
+            <div className="flex items-center gap-3">
+              <Switch checked={sectorForm.is_active} onCheckedChange={(checked) => setSectorForm({ ...sectorForm, is_active: checked })} />
+              <Label>Secteur visible sur le site</Label>
+            </div>
+
+            {/* Save */}
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button variant="outline" onClick={() => setShowSectorModal(false)}>Annuler</Button>
+              <Button onClick={saveSector} className="orso-btn-primary" data-testid="save-sector-btn">
+                <Save className="w-4 h-4 mr-2" /> {editingSector ? 'Mettre à jour' : 'Créer'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Property Modal */}
       <Dialog open={showPropertyModal} onOpenChange={setShowPropertyModal}>

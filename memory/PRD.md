@@ -98,6 +98,10 @@ https://cosycasa.fr/
 - [x] Pages légales (Mentions légales + Confidentialité)
 - [x] Tests passés 100% (backend + frontend)
 
+- [x] Secteurs dynamiques gérés depuis l'admin (CRUD complet)
+- [x] Navbar dropdown "Secteurs" chargé dynamiquement depuis l'API
+- [x] 4 secteurs pré-remplis : Porto-Vecchio, Lecci, Pinarello, Corse du Sud
+
 ## Backlog / Prochaines tâches
 - [ ] **P1** : Activer les propriétés CosyCasa dans l'admin (actuellement toutes cachées)
 - [ ] **P1** : Intégrer Calendly (en attente du lien client)
