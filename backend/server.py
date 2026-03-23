@@ -976,6 +976,39 @@ async def seed_blog_posts():
     return {"message": f"Seeded {len(posts)} blog posts"}
 
 
+# --- Blog Comments ---
+class CommentCreate(BaseModel):
+    post_slug: str
+    author_name: str
+    author_email: str
+    author_website: str = ""
+    content: str
+
+@api_router.get("/blog/{slug}/comments")
+async def get_blog_comments(slug: str):
+    """Get approved comments for a blog post"""
+    comments = await db.blog_comments.find(
+        {"post_slug": slug, "is_approved": True},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    return comments
+
+@api_router.post("/blog/{slug}/comments")
+async def create_blog_comment(slug: str, comment: CommentCreate):
+    """Submit a comment on a blog post"""
+    post = await db.blog_posts.find_one({"slug": slug})
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    comment_data = comment.model_dump()
+    comment_data["id"] = str(uuid.uuid4())
+    comment_data["post_slug"] = slug
+    comment_data["is_approved"] = True  # Auto-approve for now
+    comment_data["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.blog_comments.insert_one(comment_data)
+    del comment_data["_id"]
+    return comment_data
+
+
 # --- Properties ---
 @api_router.get("/properties")
 async def get_properties(
