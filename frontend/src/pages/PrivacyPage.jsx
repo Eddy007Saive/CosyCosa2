@@ -16,17 +16,17 @@ const PrivacyPage = () => {
             <section>
               <h2 className="orso-h3 mb-4">1. Introduction</h2>
               <p className="orso-body">
-                ORSO RENTAL SELECTION (« ORSO RS », « nous ») s'engage à protéger la vie privée des utilisateurs de son site web orso-rs.com. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD).
+                Cosy Casa Conciergerie s'engage à protéger la vie privée des utilisateurs de son site web cosycasa.fr. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD).
               </p>
             </section>
 
             <section>
               <h2 className="orso-h3 mb-4">2. Responsable du traitement</h2>
               <p className="orso-body">
-                <strong>ORSO RENTAL SELECTION</strong><br />
+                <strong>Cosy Casa Conciergerie</strong><br />
                 Porto-Vecchio, Corse du Sud (20137), France<br />
-                Email : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a><br />
-                Téléphone : <a href="tel:+33615875470" className="text-[#2e2e2e] underline">+33 6 15 87 54 70</a>
+                Email : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a><br />
+                Téléphone : <a href="tel:+33615876470" className="text-[#2e2e2e] underline">+33 6 15 87 64 70</a>
               </p>
             </section>
 
@@ -110,7 +110,7 @@ const PrivacyPage = () => {
                 <li><strong>Droit de limitation</strong> : limiter le traitement de vos données</li>
               </ul>
               <p className="orso-body mt-4">
-                Pour exercer ces droits, contactez-nous à : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a>
+                Pour exercer ces droits, contactez-nous à : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a>
               </p>
             </section>
 
@@ -143,7 +143,7 @@ const PrivacyPage = () => {
             </section>
 
             <p className="orso-caption mt-12 text-gray-500">
-              Dernière mise à jour : Février 2026
+              Dernière mise à jour : Mars 2026
             </p>
           </div>
         </div>

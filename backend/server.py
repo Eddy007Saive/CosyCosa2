@@ -198,7 +198,7 @@ async def upload_image(file: UploadFile = File(...)):
         import io
         result = cloudinary.uploader.upload(
             io.BytesIO(content),
-            folder="orso-rs",
+            folder="cosycasa",
             resource_type="auto"
         )
         
@@ -685,7 +685,7 @@ beds24_service = Beds24Service()
 
 @api_router.get("/")
 async def root():
-    return {"message": "ORSO RS API", "version": "1.0.0"}
+    return {"message": "Cosy Casa API", "version": "1.0.0"}
 
 @api_router.get("/health")
 async def health_check():
@@ -1802,7 +1802,7 @@ async def send_booking_confirmation(email: str, name: str, property_name: str, c
     
     try:
         resend.Emails.send({
-            "from": "ORSO RS <noreply@orso-rs.com>",
+            "from": "Cosy Casa <noreply@cosycasa.fr>",
             "to": [email],
             "subject": f"Confirmation de réservation - {property_name}",
             "html": f"""
@@ -1813,7 +1813,7 @@ async def send_booking_confirmation(email: str, name: str, property_name: str, c
                 <p><strong>Dates:</strong> {check_in} au {check_out}</p>
                 <p>Notre équipe vous contactera prochainement avec plus de détails.</p>
                 <p>À bientôt en Corse!</p>
-                <p>L'équipe ORSO RS</p>
+                <p>L'équipe Cosy Casa</p>
             </div>
             """
         })
@@ -1835,10 +1835,10 @@ async def send_contact_notification(name: str, email: str, subject: str, message
         
         # Build the email
         send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-            to=[{"email": CONTACT_EMAIL, "name": "ORSO RS"}],
+            to=[{"email": CONTACT_EMAIL, "name": "Cosy Casa"}],
             sender={"email": BREVO_SENDER_EMAIL, "name": BREVO_SENDER_NAME},
             reply_to={"email": email, "name": name},
-            subject=f"[ORSO RS] Nouveau message: {subject}",
+            subject=f"[Cosy Casa] Nouveau message: {subject}",
             html_content=f"""
             <div style="font-family: 'Manrope', sans-serif; max-width: 600px; margin: 0 auto;">
                 <h1 style="color: #2e2e2e;">Nouveau message de contact</h1>

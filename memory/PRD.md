@@ -1,156 +1,111 @@
-# ORSO RS - Product Requirements Document
+# Cosy Casa - Product Requirements Document
 
-## Original Problem Statement
-Site internet pour une conciergerie locative en Corse appelée ORSO RS. Minimaliste, élégant. Couleurs: #2e2e2e (gris foncé presque noir) & blanc. Moteur de réservation connecté à Beds24 API (pas d'iframe). Trois catégories de logements: VUE MER / PLAGE A PIEDS / PIEDS DANS L'EAU. Site multilingue FR/EN/ES/IT.
+## Projet
+Site web pour **Cosy Casa**, conciergerie locative en Corse du Sud (Porto-Vecchio, Lecci, Pinarello).
 
-## User Personas
-1. **Voyageurs haut de gamme** - Recherchent des locations de vacances premium en Corse du Sud
-2. **Propriétaires** - Souhaitent confier leur bien à une conciergerie de luxe
-3. **Administrateur** - Gère les propriétés et le contenu du site
+## URL du site d'origine
+https://cosycasa.fr/
 
-## What's Been Implemented (Feb 19, 2026)
+## Design
+- **Palette** : Gris foncé `#2e2e2e` + Blanc
+- **Typographie** : `Cormorant Garamond` (serif élégant)
+- **Style** : Minimaliste et élégant, template hérité d'ORSO RS
 
-### ✅ INTÉGRATION BEDS24 COMPLÈTE
-- **Synchronisation automatique** toutes les heures (APScheduler)
-- **Toutes les données récupérées de Beds24 :**
-  - Équipements/Amenities (via featureCodes) - 8 équipements affichés par propriété
-  - Min/Max stay
-  - Caution (security deposit)
-  - Frais de ménage (cleaning fee)
-  - Horaires check-in/check-out
-  - Prix dynamiques en temps réel
-  - Disponibilités via calendrier
-- **Flux de réservation avec paiement Stripe direct (P0 RÉSOLU):**
-  - Backend crée réservation dans Beds24 via API
-  - Génère URL de paiement Stripe direct (`bookpay.php`)
-  - L'utilisateur est redirigé directement vers la page de paiement Stripe
-  - **Contourne le formulaire de réservation Beds24** (demande utilisateur critique)
+## Architecture
+```
+/app/
+├── backend/
+│   ├── .env (Beds24, Cloudinary, Brevo, MongoDB)
+│   └── server.py (FastAPI monolithique)
+├── frontend/
+│   ├── public/
+│   │   ├── cosycasa-logo.png
+│   │   └── index.html (SEO complet CosyCasa)
+│   └── src/
+│       ├── App.js (routes CosyCasa)
+│       ├── index.css (styles globaux)
+│       ├── components/
+│       │   ├── layout/ (Navbar.jsx, Footer.jsx)
+│       │   ├── ui/ (shadcn components)
+│       │   └── SEO.jsx (stubs - react-helmet désactivé)
+│       ├── pages/
+│       │   ├── HomePage.jsx (hero, bienvenue, propriétaires, voyageurs, témoignages, tendances)
+│       │   ├── ConciergeriePage.jsx (offres + avantages)
+│       │   ├── PropertiesPage.jsx (listing Beds24)
+│       │   ├── PropertyDetailPage.jsx (détail + calendrier réservation)
+│       │   ├── ContactPage.jsx (formulaire + infos)
+│       │   ├── BlogPage.jsx (3 articles SEO: Lecci, Pinarello, Corse)
+│       │   ├── AdminPage.jsx (backoffice)
+│       │   ├── LegalPage.jsx
+│       │   └── PrivacyPage.jsx
+│       ├── i18n/index.js (FR/EN/ES/IT)
+│       └── lib/api.js
+└── memory/
+    └── PRD.md
+```
 
-### ✅ Frontend (React)
-- **Homepage avec badge de confiance** (ajouté Feb 18):
-  - "Paiement 100% sécurisé" avec icône ✓
-  - "Service premium depuis 2011" avec étoile ★
-  - Multilingue FR/EN/ES/IT
-- Page Propriétés avec filtres par catégorie
-- **Page Détail Propriété COMPLÈTE :**
-  - Galerie d'images
-  - **Description avec texte de secours** si Beds24 vide (Feb 18)
-  - **Équipements/Amenities** (8 items par propriété)
-  - **Informations pratiques** :
-    - Horaires arrivée/départ
-    - Séjour minimum
-    - Caution
-    - Frais de ménage
-  - **Calendrier de disponibilité FONCTIONNEL** (testé et validé)
-  - Calcul de prix dynamique (ex: 900€ x 4 nuits = 3600€)
-  - **Bouton "Paiement sécurisé par Stripe"**
-  - **Modal de réservation avec redirection vers Stripe**
-- Page Services (ORSO Essentiel / Premium)
-- Page Contact avec formulaire + téléphone + Google Maps
-- **Pages Légales complètes** (AT OME - toutes infos SIRET, RCS, TVA)
-- Footer avec téléphone, email, GMB
-- Multilingue FR/EN/ES/IT
+## URLs (SEO préservé)
+| URL | Page |
+|-----|------|
+| `/` | Homepage |
+| `/locations-vacances-cosy-casa` | Listing propriétés |
+| `/locations-vacances-cosy-casa/:id` | Détail propriété |
+| `/conciergerie` | Page Conciergerie |
+| `/contact` | Contact |
+| `/conciergerie-cosy-casa-a-lecci` | Article SEO Lecci |
+| `/conciergerie-cosy-casa-a-pinarello` | Article SEO Pinarello |
+| `/conciergerie-cosy-casa-a-corse` | Article SEO Corse |
+| `/legal` | Mentions légales |
+| `/privacy` | Politique confidentialité |
+| `/admin` | Panneau admin |
 
-### ✅ Backend (FastAPI)
-- **21 propriétés** en base de données
-- **16 propriétés connectées Beds24**
-- **Sync complète avec toutes les données Beds24**
-- API REST complète
-- **Endpoint `/api/bookings` - Crée réservation dans Beds24 + retourne payment_url Stripe**
-- Endpoint `/properties/{id}/beds24-details` pour détails complets
+## Intégrations
+- **Beds24** : Propriétés, tarification dynamique, réservations (owner ID: 123322)
+- **Stripe** : Paiement (via Beds24)
+- **Brevo** : Emails transactionnels
+- **Cloudinary** : Hébergement d'images
 
-### ✅ Admin Panel (`/admin`)
-- Authentification sécurisée (ADMIN_PASSWORD en env var)
-- Gestion propriétés (activer/masquer)
-- Upload photos
-- Sync manuelle Beds24
-- Gestion images du site par page
-- Statut de sync automatique
+## Base de données
+- **MongoDB** : DB `cosycasa`
+- Collections : `properties`, `site_settings`, `categories`, `bookings`
 
-### ✅ SEO/GEO
-- robots.txt + sitemap.xml
-- Schema.org (Organization, LocalBusiness, FAQ...) dans index.html
-- Open Graph / Twitter Cards
-- Geo tags Corse du Sud
-- **Note:** SEO dynamique via react-helmet-async désactivé (provoque page blanche)
-- Le SEO statique dans index.html est très complet et suffisant
+## Admin
+- URL : `/admin`
+- Mot de passe : `orso2024`
+- Fonctionnalités : gestion propriétés (afficher/cacher, modifier), images du site, PDF services
 
-## Informations Légales (AT OME)
-- **SIRET :** 538 392 135 00033
-- **SIREN :** 538 392 135
-- **RCS :** Ajaccio 538 392 135
-- **TVA Intracommunautaire :** FR26538392135
-- **Capital :** 7 000,00 €
-- **Gérant :** Marc VOUILLARMET
-- **Adresse :** Pont de l'Oso, Lotissement Puretta, 20170 San-Gavino-di-Carbini
+## Contact
+- Email : contact@cosycasa.fr
+- Téléphone : +33 6 15 87 64 70
+- Instagram : @cosycasaconciergerie
+- Facebook : facebook.com/profile.php?id=61556104644895
 
-## Informations de Contact
-- **Téléphone :** +33 6 15 87 54 70
-- **Email :** hello@conciergerie-cosycasa.fr
-- **Google My Business :** https://share.google/AJqwlTVKrw5cqQIyD
+## Ce qui est implémenté (Mars 2026)
+- [x] Rebranding complet ORSO RS → Cosy Casa
+- [x] Logo CosyCasa intégré (Navbar + Footer)
+- [x] Homepage avec sections: Hero, Bienvenue, Propriétaires, Voyageurs, Témoignages, Tendances
+- [x] Page Conciergerie (offres + avantages)
+- [x] Page Propriétés (listing Beds24 + filtres catégories)
+- [x] Page Détail Propriété (calendrier réservation + devis)
+- [x] Page Contact (formulaire + infos CosyCasa)
+- [x] 3 pages blog SEO (Lecci, Pinarello, Corse)
+- [x] Multilingue FR/EN/ES/IT
+- [x] SEO complet (meta tags, structured data, breadcrumbs, FAQ)
+- [x] Admin backoffice (gestion propriétés + images)
+- [x] Sync Beds24 automatique (17 propriétés)
+- [x] Upload images Cloudinary
+- [x] Pages légales (Mentions légales + Confidentialité)
+- [x] Tests passés 100% (backend + frontend)
 
-## Technical Stack
-- **Backend:** FastAPI, MongoDB, Motor, APScheduler, sib-api-v3-sdk (Brevo)
-- **Frontend:** React, TailwindCSS, Shadcn/UI
-- **Integrations:** Beds24 API V2 (complet), Stripe (via Beds24 bookpay.php), Brevo (emails)
-- **i18n:** react-i18next
+## Backlog / Prochaines tâches
+- [ ] **P1** : Activer les propriétés CosyCasa dans l'admin (actuellement toutes cachées)
+- [ ] **P1** : Intégrer Calendly (en attente du lien client)
+- [ ] **P2** : Intégrer les "Upsells" (Extras) de Beds24
+- [ ] **P2** : Section témoignages dynamique (éditable depuis l'admin)
+- [ ] **P2** : Webhook Beds24 pour mise à jour statut réservations
+- [ ] **P3** : Résoudre le bug SEO react-helmet-async (page blanche)
+- [ ] **P3** : Refactoring server.py en modules
 
-## Admin Credentials
-- URL: /admin
-- Mot de passe: Variable d'environnement ADMIN_PASSWORD
-
-## Data Flow - Réservation (MIS À JOUR)
-1. User sélectionne dates sur le calendrier
-2. API appelle Beds24 pour prix + disponibilité
-3. User clique "BOOK NOW"
-4. Modal s'ouvre avec récapitulatif
-5. User remplit formulaire (nom, email, téléphone)
-6. Clic "RÉSERVER MAINTENANT - PAIEMENT SÉCURISÉ"
-7. **Backend crée réservation dans Beds24 API**
-8. **Backend retourne URL de paiement Stripe direct**
-9. **Redirection vers page Stripe pour paiement** (contourne formulaire Beds24)
-
-## Issues Résolues (Session Feb 18, 2026)
-- ✅ **Bug calendrier désactivé (P0)** - Confirmé comme fonctionnel après tests
-- ⚠️ **SEO dynamique (P1)** - Maintenu désactivé car provoque bug page blanche. SEO statique suffisant.
-
-## Mises à jour récentes (Dec 2025)
-
-### ✅ Nouvelle page "Propriétaires" (/proprietaire)
-- Page dédiée aux propriétaires de villas souhaitant confier leur bien
-- Hero section avec image de fond et CTA "Contactez-nous"
-- Section "Intendance locative" avec liste des services (création annonce, gestion planning, accueil voyageurs, etc.)
-- Section "Intendance propriété" avec services à la carte (contrôles réguliers, coordination prestataires, etc.)
-- Section CTA finale "Parlons de votre villa"
-- Traductions complètes FR/EN/ES/IT
-- Lien ajouté dans la navigation principale
-
-### ✅ Refonte section Services (Page d'accueil)
-- Section services redessinée : deux cartes côte à côte sans images
-- Boutons "EN SAVOIR PLUS" configurables pour ouvrir un PDF
-- Nouvel onglet "PDF Services" dans le panneau admin pour configurer l'URL du PDF
-- Si aucun PDF n'est configuré, les boutons redirigent vers la page contact
-
-### ✅ Backend - Nouveau endpoint
-- `GET /api/settings/services-pdf` - Récupère l'URL du PDF des services
-- `PUT /api/settings/services-pdf?url=...` - Met à jour l'URL du PDF
-- Support upload de fichiers PDF ajouté
-
-## Remaining Tasks (Backlog)
-### P1 - Prochain
-- [ ] **Upsells/Extras Beds24** - L'utilisateur veut afficher les extras. Les propriétés actuelles n'ont pas d'upsellItems configurés dans Beds24.
-
-### P2 - Future
-- [ ] Ajouter section "Témoignages clients"
-- [x] ~~Intégrer liens réseaux sociaux (Instagram/Facebook)~~ - FAIT
-- [x] ~~Configurer emails du formulaire de contact~~ - FAIT via Brevo (Feb 19, 2026)
-
-### P3 - Backlog
-- [ ] Carte SVG pour localiser les propriétés
-- [ ] Blog / Actualités
-
-## Notes Importantes
-- Les nouvelles propriétés Beds24 sont **masquées par défaut** - l'admin doit les activer
-- Le paiement Stripe est géré via URL directe Beds24 `bookpay.php` avec paramètres g=st (Stripe only) et pc=100 (100% paiement)
-- Le token Beds24 a une durée de vie de 24h, le backend le rafraîchit automatiquement
-- **L'API Beds24 `/properties` retourne parfois erreur 500** - monitoring recommandé
+## Problèmes connus
+- **SEO dynamique** : `react-helmet-async` provoque un bug de page blanche (contourné avec meta tags statiques dans index.html)
+- **Propriétés cachées** : Toutes les 17 propriétés Beds24 sont `is_active: false` par défaut (nouveau DB). L'admin doit les activer manuellement.
