@@ -137,7 +137,7 @@ const BlogDetailPage = () => {
 
       {/* Content */}
       <section className="orso-section">
-        <div className="orso-container max-w-3xl mx-auto">
+        <div className="orso-container max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-10">
             <span className="orso-caption">{post.author || 'Cosycasa'}</span>
             {post.created_at && (
@@ -159,7 +159,7 @@ const BlogDetailPage = () => {
 
       {/* Comments Section */}
       <section className="orso-section bg-[#f5f5f3]" data-testid="blog-comments-section">
-        <div className="orso-container max-w-3xl mx-auto">
+        <div className="orso-container max-w-5xl mx-auto">
           {/* Existing Comments */}
           {comments.length > 0 && (
             <div className="mb-16">

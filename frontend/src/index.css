@@ -196,27 +196,27 @@ html.lenis {
 /* Blog content prose */
 .blog-content h2 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.75rem;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  color: #2e2e2e;
+}
+
+.blog-content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
   font-weight: 500;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   color: #2e2e2e;
 }
 
-.blog-content h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.35rem;
-  font-weight: 500;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  color: #2e2e2e;
-}
-
 .blog-content p {
-  font-size: 1.05rem;
-  line-height: 1.85;
+  font-size: 1.15rem;
+  line-height: 1.9;
   color: #555;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   font-weight: 300;
 }
 
@@ -237,12 +237,12 @@ html.lenis {
 
 .blog-content ul, .blog-content ol {
   padding-left: 1.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .blog-content li {
-  font-size: 1.05rem;
-  line-height: 1.85;
+  font-size: 1.15rem;
+  line-height: 1.9;
   color: #555;
   margin-bottom: 0.5rem;
   font-weight: 300;
