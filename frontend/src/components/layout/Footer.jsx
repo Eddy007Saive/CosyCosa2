@@ -15,15 +15,18 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 md:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link to="/" className="inline-block mb-6">
+            <Link to="/" className="inline-block mb-8">
               <img 
                 src="/cosycasa-logo.png" 
                 alt="Cosy Casa" 
-                className="h-24 w-auto brightness-0 invert"
+                className="h-32 md:h-36 w-auto brightness-0 invert"
               />
             </Link>
-            <p className="text-white/70 text-base leading-relaxed max-w-md mb-6">
-              {t('footer.tagline')}
+            <p className="text-white/70 text-base leading-relaxed max-w-md mb-3">
+              Cosy Casa vous propose ses services pour déléguer en toute sérénité et maximiser vos performances !
+            </p>
+            <p className="text-white/90 text-sm italic tracking-wide">
+              Valoriser. Accueillir. Enchanter.
             </p>
             
             {/* Social Links */}
