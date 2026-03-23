@@ -77,29 +77,22 @@ const SectorPage = () => {
     <div data-testid={`sector-page-${slug}`}>
       {/* Hero */}
       <section
-        className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-36"
+        className="relative min-h-[65vh] flex items-center justify-center bg-cover bg-center pt-36"
         style={{ backgroundImage: sector.hero_image ? `url(${sector.hero_image})` : undefined, backgroundColor: '#2e2e2e' }}
       >
-        {sector.hero_image && <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />}
-        <div className="relative z-10 orso-container pb-12">
-          <div className="flex items-center gap-2 text-white/70 text-sm mb-4">
-            <MapPin className="w-4 h-4" strokeWidth={1.5} />
-            <span>{cityName}, Corse du Sud</span>
-          </div>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white" data-testid="sector-title">
+        {sector.hero_image && <div className="absolute inset-0 bg-black/50" />}
+        {!sector.hero_image && <div className="absolute inset-0 bg-[#2e2e2e]" />}
+        <div className="relative z-10 orso-container text-center text-white max-w-4xl mx-auto px-6">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-6xl mb-8" data-testid="sector-title">
             Conciergerie à {cityName}
           </h1>
-        </div>
-      </section>
-
-      {/* Intro */}
-      <section className="orso-section bg-white">
-        <div className="orso-container max-w-3xl mx-auto text-center">
-          <p className="text-lg font-light leading-relaxed text-gray-700 mb-6">
-            {getLangField(sector, 'intro', lang)}
-          </p>
+          {getLangField(sector, 'intro', lang) && (
+            <p className="text-base md:text-lg font-light leading-relaxed text-white/85 mb-4">
+              {getLangField(sector, 'intro', lang)}
+            </p>
+          )}
           {getLangField(sector, 'intro2', lang) && (
-            <p className="text-lg font-light leading-relaxed text-gray-600">
+            <p className="text-base md:text-lg font-light leading-relaxed text-white/75">
               {getLangField(sector, 'intro2', lang)}
             </p>
           )}
