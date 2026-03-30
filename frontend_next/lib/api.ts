@@ -56,4 +56,35 @@ export const submitContact = (data: Record<string, unknown>) =>
 export const adminLogin = (password: string) =>
   api.post("/admin/login", { password }).then((r) => r.data);
 
+export const getAdminProperties = () =>
+  api.get("/properties", { params: { include_hidden: true } }).then((r) => r.data);
+
+export const getSyncStatus = () =>
+  api.get("/sync/status").then((r) => r.data);
+
+export const syncBeds24 = () =>
+  api.post("/sync/beds24").then((r) => r.data);
+
+export const updateSiteImages = (images: Record<string, string>) =>
+  api.put("/settings/images", images).then((r) => r.data);
+
+export const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await api.post("/upload/image", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  const data = response.data;
+  if (data.url && data.url.startsWith("/api/")) {
+    data.url = `${process.env.NEXT_PUBLIC_BACKEND_URL}${data.url}`;
+  }
+  return data;
+};
+
+export const getServicesPdf = () =>
+  api.get("/settings/services-pdf").then((r) => r.data);
+
+export const updateServicesPdf = (url: string) =>
+  api.put("/settings/services-pdf", null, { params: { url } }).then((r) => r.data);
+
 export default api;

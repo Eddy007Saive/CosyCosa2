@@ -4,8 +4,6 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import I18nProvider from './_providers/I18nProvider';
 import LenisProvider from './_providers/LenisProvider';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
@@ -47,11 +45,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <I18nProvider>
           <LenisProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
+            {children}
             <Toaster richColors position="top-right" />
           </LenisProvider>
         </I18nProvider>
