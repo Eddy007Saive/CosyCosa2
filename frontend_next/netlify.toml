@@ -1,7 +1,8 @@
 [build]
   base = "frontend_next"
   command = "npm run build"
-  publish = "frontend_next/out"
+  publish = "out"
+
 
 [[redirects]]
   from = "/*"
