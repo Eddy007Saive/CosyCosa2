@@ -1,19 +1,12 @@
 [build]
-  base    = "frontend_next"
-  command = "yarn build"
+  command = "npm run  build"
   publish = ".next"
-
-[build.environment]
-  NODE_VERSION = "20"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Redirects — toutes les routes vers Next.js
 [[redirects]]
-  from   = "/*"
-  to     = "/.netlify/functions/___netlify-handler"
+  from = "/api/*"
+  to = "https://cosycosa2-production.up.railway.app/api/:splat"
   status = 200
-
-# Variables d'environnement (à renseigner dans le dashboard Netlify)
-# NEXT_PUBLIC_BACKEND_URL = "https://ton-api.com"
+  force = true
