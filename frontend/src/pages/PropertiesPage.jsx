@@ -4,14 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { MapPin, Users, Bed, Bath, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getProperties, getCategories } from '@/lib/api';
+import { getProperties } from '@/lib/api';
 import useSEO from '@/hooks/useSEO';
+
+const CAPACITY_CATEGORIES = [
+  { id: 'capacity_2_4',   min_guests: 1,  max_guests: 4  },
+  { id: 'capacity_6_8',   min_guests: 5,  max_guests: 8  },
+  { id: 'capacity_10plus', min_guests: 10, max_guests: undefined },
+];
 
 const PropertiesPage = () => {
   const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [properties, setProperties] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState(
     searchParams.get('category') || 'all'
@@ -21,38 +26,16 @@ const PropertiesPage = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const [propertiesData, categoriesData] = await Promise.all([
-          getProperties(activeCategory !== 'all' ? { category: activeCategory } : {}),
-          getCategories(),
-        ]);
-        // Use API data if available, otherwise use mock data
+        const cat = CAPACITY_CATEGORIES.find(c => c.id === activeCategory);
+        const params = cat
+          ? { min_guests: cat.min_guests, ...(cat.max_guests ? { max_guests: cat.max_guests } : {}) }
+          : {};
+        const propertiesData = await getProperties(params);
         const apiProperties = propertiesData.properties || [];
-        if (apiProperties.length > 0) {
-          setProperties(apiProperties);
-        } else {
-          // Filter mock data by category
-          const mockData = getMockProperties();
-          if (activeCategory !== 'all') {
-            setProperties(mockData.filter(p => p.category === activeCategory));
-          } else {
-            setProperties(mockData);
-          }
-        }
-        setCategories(categoriesData);
+        setProperties(apiProperties.length > 0 ? apiProperties : getMockProperties());
       } catch (error) {
         console.error('Failed to load data:', error);
-        // Set mock data for demo
-        const mockData = getMockProperties();
-        if (activeCategory !== 'all') {
-          setProperties(mockData.filter(p => p.category === activeCategory));
-        } else {
-          setProperties(mockData);
-        }
-        setCategories([
-          { id: 'vue_mer', name: 'Vue Mer' },
-          { id: 'plage_a_pieds', name: 'Plage à Pieds' },
-          { id: 'pieds_dans_eau', name: "Pieds dans l'Eau" },
-        ]);
+        setProperties(getMockProperties());
       } finally {
         setLoading(false);
       }
@@ -76,11 +59,6 @@ const PropertiesPage = () => {
     setSearchParams(searchParams);
   };
 
-  const getCategoryName = (categoryId) => {
-    if (categoryId === 'all') return t('properties.all');
-    return t(`categories.${categoryId}`) || categoryId;
-  };
-
   return (
     <div className="pt-40 md:pt-44" data-testid="properties-page">
       
@@ -102,18 +80,7 @@ const PropertiesPage = () => {
             <span className="text-xs uppercase tracking-widest text-gray-500 mr-4 flex-shrink-0">
               {t('properties.filter')}:
             </span>
-            <button
-              onClick={() => handleCategoryChange('all')}
-              className={`px-5 py-2 text-xs uppercase tracking-widest transition-colors flex-shrink-0 ${
-                activeCategory === 'all'
-                  ? 'bg-[#2e2e2e] text-white'
-                  : 'border border-gray-200 text-gray-600 hover:border-gray-400'
-              }`}
-              data-testid="filter-all"
-            >
-              {t('properties.all')}
-            </button>
-            {categories.map((cat) => (
+            {[{ id: 'all' }, ...CAPACITY_CATEGORIES].map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => handleCategoryChange(cat.id)}
@@ -124,7 +91,7 @@ const PropertiesPage = () => {
                 }`}
                 data-testid={`filter-${cat.id}`}
               >
-                {getCategoryName(cat.id)}
+                {cat.id === 'all' ? t('properties.all') : t(`categories.${cat.id}`)}
               </button>
             ))}
           </div>

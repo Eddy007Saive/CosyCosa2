@@ -7,32 +7,32 @@ const HERO_IMAGE = 'https://images.pexels.com/photos/11875385/pexels-photo-11875
 const PARTNERS = [
   {
     title: 'Balade en bateau avec Skipper',
-    description: "Partez à bord du Piena Luna avec Olivier et découvrez les criques secrètes du sud-est de la Corse. Entre baignade, snorkeling et instants de détente, savourez un déjeuner maison aux saveurs locales dans une atmosphère chaleureuse.",
-    image: 'https://images.pexels.com/photos/11875385/pexels-photo-11875385.jpeg?auto=compress&cs=tinysrgb&w=800',
-    link: 'https://www.levasionturquoise.com/',
+    description: "Embarquez à bord de l’Axopar 37 Sun Top \"Titidoudou\" et découvrez les plus beaux rivages du sud-est de la Corse dans un cadre privilégié. Entre escales dans des criques confidentielles, baignades dans des eaux cristallines et instants de détente à bord, chaque moment se vit avec douceur et élégance. Une expérience en mer raffinée, pensée pour savourer pleinement la beauté des lieux, en toute intimité.",
+    image: 'https://cosycasa.fr/wp-content/uploads/2025/06/levasion-turquoise-3.png',
+    link: 'https://www.kyrnos-marine.com/',
   },
   {
     title: 'Baignade à cheval / randonnées',
     description: "Découvrez la magie d'une baignade à cheval dans les eaux cristallines de Saint-Cyprien ou laissez-vous guider à travers les sentiers sauvages de Pinarello lors d'une randonnée équestre inoubliable.",
-    image: 'https://images.unsplash.com/photo-1629605923453-7cd4f2680c44?w=800&q=80',
+    image: 'https://cosycasa.fr/wp-content/uploads/2025/06/version_800_levasion-turquoise-3.png',
     link: 'https://www.country-horse.com/',
   },
   {
     title: 'Massages / Soins Esthétiques',
     description: "Plongez dans l'univers envoûtant d'Angélique, masseuse professionnelle passionnée depuis plus de 10 ans. Ses mains expertes et son savoir-faire vous transportent dans une parenthèse de bien-être absolu.",
-    image: 'https://images.pexels.com/photos/9335987/pexels-photo-9335987.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://cosycasa.fr/wp-content/uploads/2025/06/version_800_levasion-turquoise111111111.png',
     link: 'https://outoftimemassages.wixsite.com/massages-angelique',
   },
   {
     title: 'Visite, dégustation au Domaine de Torraccia',
     description: "Venez découvrir le Domaine de Torraccia, un vignoble familial niché entre mer et maquis, où traditions corses et vins bios se rencontrent le temps d'une visite ou d'une dégustation.",
-    image: 'https://images.pexels.com/photos/5697222/pexels-photo-5697222.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://cosycasa.fr/wp-content/uploads/2025/06/version_800_levasion-turquoise-1111111111114444444.jpeg',
     link: 'https://www.domaine-de-torraccia.com/',
   },
   {
     title: 'Simples et Divines Huiles Essentielles',
     description: "Venez découvrir Simples et Divines, producteurs d'huiles essentielles et de cosmétiques naturels au cœur du maquis corse, où chaque plante est cultivée, récoltée et transformée avec passion et savoir-faire artisanal.",
-    image: 'https://images.unsplash.com/photo-1669281393403-e1f3248dce2b?w=800&q=80',
+    image: 'https://cosycasa.fr/wp-content/uploads/2025/06/version_800_levasion-turquoise8888888.png',
     link: 'https://www.lessimples.com/fr/',
   },
   {

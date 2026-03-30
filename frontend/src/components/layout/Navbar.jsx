@@ -137,12 +137,12 @@ const Navbar = () => {
                   <span className="tracking-wide">+33 6 15 87 64 70</span>
                 </a>
                 <a
-                  href="mailto:contact@cosycasa.fr"
+                  href="mailto:hello@conciergerie-cosycasa.fr"
                   className="flex items-center gap-2.5 text-white/80 hover:text-white transition-colors text-sm"
                   data-testid="topbar-email"
                 >
                   <Mail className="w-3.5 h-3.5" strokeWidth={1.5} />
-                  <span className="tracking-wide">contact@cosycasa.fr</span>
+                  <span className="tracking-wide">hello@conciergerie-cosycasa.fr</span>
                 </a>
               </div>
 
@@ -215,9 +215,9 @@ const Navbar = () => {
                           <Phone className="w-3.5 h-3.5" strokeWidth={1.5} />
                           +33 6 15 87 64 70
                         </a>
-                        <a href="mailto:contact@cosycasa.fr" className="flex items-center gap-2 text-white/70 text-sm">
+                        <a href="mailto:hello@conciergerie-cosycasa.fr" className="flex items-center gap-2 text-white/70 text-sm">
                           <Mail className="w-3.5 h-3.5" strokeWidth={1.5} />
-                          contact@cosycasa.fr
+                          hello@conciergerie-cosycasa.fr
                         </a>
                       </div>
 

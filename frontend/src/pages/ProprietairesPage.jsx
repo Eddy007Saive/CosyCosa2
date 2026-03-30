@@ -197,7 +197,18 @@ const ProprietairesPage = () => {
             <div className="w-16 h-16 bg-[#2e2e2e] text-white flex items-center justify-center mx-auto mb-8">
               <Smartphone className="w-7 h-7" strokeWidth={1.5} />
             </div>
-            <h2 className="orso-h2 mb-8">{t('proprietaires.espace.title')}</h2>
+            <h2 className="orso-h2 mb-10">{t('proprietaires.espace.title')}</h2>
+
+            {/* Fluxia - Gestion administrative et financiere */}
+            <div className="bg-[#f5f5f3] border border-gray-100 p-8 text-left mb-10">
+              <h3 className="font-serif text-xl text-[#2e2e2e] mb-4">
+                {t('proprietaires.espace.fluxiaTitle')}
+              </h3>
+              <p className="text-sm font-light text-gray-600 leading-relaxed">
+                {t('proprietaires.espace.fluxiaDesc')}
+              </p>
+            </div>
+
             <p className="text-lg font-light text-gray-700 mb-8">
               {t('proprietaires.espace.desc')}
             </p>

@@ -84,11 +84,11 @@ const ContactPage = () => {
                   <div>
                     <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Email</p>
                     <a
-                      href="mailto:contact@cosycasa.fr"
+                      href="mailto:hello@conciergerie-cosycasa.fr"
                       className="font-serif text-xl text-[#2e2e2e] hover:underline"
                       data-testid="contact-email"
                     >
-                      contact@cosycasa.fr
+                      hello@conciergerie-cosycasa.fr
                     </a>
                   </div>
                 </div>
@@ -131,7 +131,7 @@ const ContactPage = () => {
               {/* CTA Buttons */}
               <div className="space-y-4">
                 <a
-                  href="mailto:contact@cosycasa.fr"
+                  href="mailto:hello@conciergerie-cosycasa.fr"
                   className="block"
                   data-testid="contact-write-btn"
                 >

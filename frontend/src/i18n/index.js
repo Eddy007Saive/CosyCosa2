@@ -28,8 +28,8 @@ const resources = {
       welcome: {
         tagline: "BIENVENUE",
         title: "Expert en Location Courte Durée",
-        p1: "Cosy Casa vous propose ses services pour déléguer en toute sérénité et maximiser vos performances !",
-        p2: "Fini les tracas opérationnels, place à la tranquillité d'esprit. Votre logement est entre de bonnes mains, pour offrir à vos voyageurs une expérience fluide et sans souci."
+        p1: "Cosy Casa vous propose ses services pour déléguer en toute sérénité et valoriser pleinement votre bien.",
+        p2: "Fini les tracas opérationnels, place à la tranquillité d’esprit. Votre logement est entre de bonnes mains, pour offrir à vos voyageurs une expérience fluide et sans souci"
       },
       owner: {
         tagline: "PROPRIÉTAIRES",
@@ -111,7 +111,10 @@ const resources = {
         plage_a_pieds: "Plage à Pieds",
         plage_a_pieds_desc: "Accédez aux plus belles plages en quelques pas",
         pieds_dans_eau: "Pieds dans l'Eau",
-        pieds_dans_eau_desc: "Le luxe ultime: la mer à vos pieds"
+        pieds_dans_eau_desc: "Le luxe ultime: la mer à vos pieds",
+        capacity_2_4: "2-4 personnes",
+        capacity_6_8: "6-8 personnes",
+        capacity_10plus: "+ 10 pers"
       },
       property: {
         description: "Description",
@@ -201,11 +204,13 @@ const resources = {
         },
         espace: {
           title: "Un Espace propriétaire dédié",
-          desc: "Accès (web + smartphone) à votre interface propriétaire comprenant :",
-          feature1: "Accès en temps réel aux plannings de réservations",
-          feature2: "Consultation de vos informations financières",
-          feature3: "Votre logement disponible quand vous le souhaitez (bloquer des dates de façon autonome)",
-          feature4: "Messagerie directe avec Cosy Casa (assistance 7/7 jours)"
+          fluxiaTitle: "Gestion administrative et financière",
+          fluxiaDesc: "Les flux financiers sont centralisés via un établissement spécialisé conforme à la loi Hoguet, garantissant transparence, traçabilité et reversement clair de vos loyers nets.",
+          desc: "Vous bénéficiez également d'un espace propriétaire dédié, accessible sur web et mobile, comprenant :",
+          feature1: "Le planning des réservations en temps réel",
+          feature2: "Le suivi financier",
+          feature3: "La possibilité de bloquer vos dates en toute autonomie",
+          feature4: "Une messagerie directe avec notre équipe (assistance 7j/7)"
         },
         cta: "Prendre rendez-vous"
       },
@@ -220,7 +225,7 @@ const resources = {
         info: {
           title: "Informations",
           address: "Porto-Vecchio, Corse du Sud",
-          email: "contact@cosycasa.fr"
+          email: "hello@conciergerie-cosycasa.fr"
         }
       },
       footer: {
@@ -350,7 +355,10 @@ const resources = {
         plage_a_pieds: "Beach Walking Distance",
         plage_a_pieds_desc: "Access the most beautiful beaches in just a few steps",
         pieds_dans_eau: "Waterfront",
-        pieds_dans_eau_desc: "The ultimate luxury: the sea at your feet"
+        pieds_dans_eau_desc: "The ultimate luxury: the sea at your feet",
+        capacity_2_4: "2-4 guests",
+        capacity_6_8: "6-8 guests",
+        capacity_10plus: "10+ guests"
       },
       property: {
         description: "Description",
@@ -427,7 +435,7 @@ const resources = {
         hero: { tagline: "CONCIERGE", title: "Concierge for property owners", subtitle: "Cosy Casa manages your rental property in Southern Corsica: cleaning, guest welcome, dynamic pricing and more." },
         servicesTagline: "OUR SERVICES", servicesTitle: "Our services",
         tarif: { title: "A single, no-surprise rate", desc: "Including tax on generated revenue — Cleaning and laundry fees charged to the traveler", noHidden: "No hidden fees", noCommitment: "No commitment", monthlyPayment: "Monthly payment" },
-        espace: { title: "A dedicated owner space", desc: "Access (web + smartphone) to your owner interface including:", feature1: "Real-time access to booking schedules", feature2: "View your financial information", feature3: "Your property available when you want (block dates independently)", feature4: "Direct messaging with Cosy Casa (7/7 support)" },
+        espace: { title: "A dedicated owner space", fluxiaTitle: "Administrative and financial management", fluxiaDesc: "Financial flows are centralized through a specialized institution compliant with the Hoguet law, guaranteeing transparency, traceability and clear remittance of your net rental income.", desc: "You also benefit from a dedicated owner space, accessible on web and mobile, including:", feature1: "Booking schedule in real time", feature2: "Financial monitoring", feature3: "Ability to block your dates independently", feature4: "Direct messaging with our team (7/7 support)" },
         cta: "Book an appointment"
       },
       contact: {
@@ -441,7 +449,7 @@ const resources = {
         info: {
           title: "Information",
           address: "Porto-Vecchio, Southern Corsica",
-          email: "contact@cosycasa.fr"
+          email: "hello@conciergerie-cosycasa.fr"
         }
       },
       footer: {
@@ -526,7 +534,7 @@ const resources = {
       },
       search: { title: "Encuentre su estancia ideal", checkIn: "Llegada", checkOut: "Salida", guests: "Huéspedes", guest: "huésped", guestsPlural: "huéspedes", search: "Buscar", selectDate: "Seleccionar" },
       properties: { title: "Nuestros Alquileres", subtitle: "Alojamientos disponibles en Córcega del Sur", filter: "Filtrar", all: "Todos", from: "Desde", perNight: "/ noche", beds: "habitaciones", baths: "baños", guests: "huéspedes máx", viewProperty: "Ver propiedad", contactUs: "Contáctenos", showcase: "Bajo petición" },
-      categories: { title: "Nuestra Selección", subtitle: "Nuestros alojamientos", vue_mer: "Vista al Mar", vue_mer_desc: "Panoramas sobre el Mediterráneo", plage_a_pieds: "Playa a Pie", plage_a_pieds_desc: "Las playas más bellas a pocos pasos", pieds_dans_eau: "Frente al Mar", pieds_dans_eau_desc: "El lujo supremo" },
+      categories: { title: "Nuestra Selección", subtitle: "Nuestros alojamientos", vue_mer: "Vista al Mar", vue_mer_desc: "Panoramas sobre el Mediterráneo", plage_a_pieds: "Playa a Pie", plage_a_pieds_desc: "Las playas más bellas a pocos pasos", pieds_dans_eau: "Frente al Mar", pieds_dans_eau_desc: "El lujo supremo", capacity_2_4: "2-4 personas", capacity_6_8: "6-8 personas", capacity_10plus: "+10 pers" },
       property: { description: "Descripción", amenities: "Equipamientos", location: "Ubicación", availability: "Disponibilidad", bookNow: "Reservar ahora", contactForInfo: "Contactar", priceFrom: "Desde", perNight: "/ noche", totalPrice: "Precio total", nights: "noches", night: "noche", selectDates: "Seleccione sus fechas", guests: "Número de huéspedes" },
       booking: { title: "Finalizar reserva", summary: "Resumen", yourInfo: "Su información", firstName: "Nombre", lastName: "Apellido", email: "Email", phone: "Teléfono", specialRequests: "Peticiones especiales", confirm: "Confirmar reserva", success: "¡Reserva confirmada!", successMsg: "Recibirá un email de confirmación." },
       conciergerie: {
@@ -541,10 +549,10 @@ const resources = {
         hero: { tagline: "CONSERJERÍA", title: "Conserjería para propietarios", subtitle: "Cosy Casa gestiona su propiedad en Córcega del Sur." },
         servicesTagline: "NUESTROS SERVICIOS", servicesTitle: "Nuestros servicios",
         tarif: { title: "Una tarifa única y sin sorpresas", desc: "IVA incluido sobre los ingresos — Gastos de limpieza a cargo del viajero", noHidden: "Sin gastos ocultos", noCommitment: "Sin compromiso", monthlyPayment: "Pago mensual" },
-        espace: { title: "Un espacio propietario dedicado", desc: "Acceso a su interfaz propietario:", feature1: "Acceso en tiempo real a reservas", feature2: "Consultar información financiera", feature3: "Su alojamiento disponible cuando quiera", feature4: "Mensajería directa con Cosy Casa (7/7)" },
+        espace: { title: "Un espacio propietario dedicado", fluxiaTitle: "Gestión administrativa y financiera", fluxiaDesc: "Los flujos financieros se centralizan a través de un establecimiento especializado conforme a la ley Hoguet, garantizando transparencia, trazabilidad y una devolución clara de sus alquileres netos.", desc: "También dispone de un espacio propietario dedicado, accesible en web y móvil, que incluye:", feature1: "El planning de reservas en tiempo real", feature2: "El seguimiento financiero", feature3: "La posibilidad de bloquear sus fechas de forma autónoma", feature4: "Mensajería directa con nuestro equipo (asistencia 7/7)" },
         cta: "Pedir cita"
       },
-      contact: { tagline: "CONTACTO", title: "Contáctenos", subtitle: "Nuestro equipo está a su disposición.", writeUs: "Escríbanos", callUs: "Llámenos", mapTagline: "NUESTRO SECTOR", mapTitle: "Nuestro sector geográfico", info: { title: "Información", address: "Porto-Vecchio, Córcega del Sur", email: "contact@cosycasa.fr" } },
+      contact: { tagline: "CONTACTO", title: "Contáctenos", subtitle: "Nuestro equipo está a su disposición.", writeUs: "Escríbanos", callUs: "Llámenos", mapTagline: "NUESTRO SECTOR", mapTitle: "Nuestro sector geográfico", info: { title: "Información", address: "Porto-Vecchio, Córcega del Sur", email: "hello@conciergerie-cosycasa.fr" } },
       footer: { tagline: "Conserjería en Córcega del Sur – Servicios premium.", quickLinks: "Enlaces", contact: "Contacto", legal: "Aviso Legal", privacy: "Privacidad", rights: "Todos los derechos reservados" },
       common: { loading: "Cargando...", error: "Error", back: "Volver", close: "Cerrar", save: "Guardar", cancel: "Cancelar" }
     }
@@ -612,7 +620,7 @@ const resources = {
       },
       search: { title: "Trova il tuo soggiorno ideale", checkIn: "Check-in", checkOut: "Check-out", guests: "Ospiti", guest: "ospite", guestsPlural: "ospiti", search: "Cerca", selectDate: "Seleziona" },
       properties: { title: "I Nostri Affitti", subtitle: "Alloggi disponibili in Corsica del Sud", filter: "Filtra", all: "Tutti", from: "Da", perNight: "/ notte", beds: "camere", baths: "bagni", guests: "ospiti max", viewProperty: "Vedi proprietà", contactUs: "Contattaci", showcase: "Su richiesta" },
-      categories: { title: "La Nostra Selezione", subtitle: "I nostri alloggi", vue_mer: "Vista Mare", vue_mer_desc: "Panorami sul Mediterraneo", plage_a_pieds: "Spiaggia a Piedi", plage_a_pieds_desc: "Le spiagge più belle a pochi passi", pieds_dans_eau: "Sul Mare", pieds_dans_eau_desc: "Il lusso supremo" },
+      categories: { title: "La Nostra Selezione", subtitle: "I nostri alloggi", vue_mer: "Vista Mare", vue_mer_desc: "Panorami sul Mediterraneo", plage_a_pieds: "Spiaggia a Piedi", plage_a_pieds_desc: "Le spiagge più belle a pochi passi", pieds_dans_eau: "Sul Mare", pieds_dans_eau_desc: "Il lusso supremo", capacity_2_4: "2-4 persone", capacity_6_8: "6-8 persone", capacity_10plus: "+10 pers" },
       property: { description: "Descrizione", amenities: "Dotazioni", location: "Posizione", availability: "Disponibilità", bookNow: "Prenota ora", contactForInfo: "Contatta", priceFrom: "Da", perNight: "/ notte", totalPrice: "Prezzo totale", nights: "notti", night: "notte", selectDates: "Seleziona le date", guests: "Numero di ospiti" },
       booking: { title: "Completa la prenotazione", summary: "Riepilogo", yourInfo: "I tuoi dati", firstName: "Nome", lastName: "Cognome", email: "Email", phone: "Telefono", specialRequests: "Richieste speciali", confirm: "Conferma", success: "Prenotazione confermata!", successMsg: "Riceverai un'email a breve." },
       conciergerie: {
@@ -627,10 +635,10 @@ const resources = {
         hero: { tagline: "CONCIERGE", title: "Concierge per proprietari", subtitle: "Cosy Casa gestisce la vostra proprietà in Corsica del Sud." },
         servicesTagline: "I NOSTRI SERVIZI", servicesTitle: "I nostri servizi",
         tarif: { title: "Una tariffa unica e senza sorprese", desc: "IVA inclusa sui ricavi — Pulizia a carico del viaggiatore", noHidden: "Nessun costo nascosto", noCommitment: "Nessun impegno", monthlyPayment: "Pagamento mensile" },
-        espace: { title: "Uno spazio proprietario dedicato", desc: "Accesso alla vostra interfaccia proprietario:", feature1: "Accesso in tempo reale alle prenotazioni", feature2: "Consultare le informazioni finanziarie", feature3: "Il vostro alloggio disponibile quando volete", feature4: "Messaggistica diretta con Cosy Casa (7/7)" },
+        espace: { title: "Uno spazio proprietario dedicato", fluxiaTitle: "Gestione amministrativa e finanziaria", fluxiaDesc: "I flussi finanziari sono centralizzati tramite un istituto specializzato conforme alla legge Hoguet, garantendo trasparenza, tracciabilità e una chiara restituzione dei vostri affitti netti.", desc: "Beneficiate inoltre di uno spazio proprietario dedicato, accessibile su web e mobile, che comprende:", feature1: "Il planning delle prenotazioni in tempo reale", feature2: "Il monitoraggio finanziario", feature3: "La possibilità di bloccare le date in autonomia", feature4: "Messaggistica diretta con il nostro team (assistenza 7/7)" },
         cta: "Prenota un appuntamento"
       },
-      contact: { tagline: "CONTATTO", title: "Contattaci", subtitle: "Il nostro team è a vostra disposizione.", writeUs: "Scrivici", callUs: "Chiamaci", mapTagline: "IL NOSTRO SETTORE", mapTitle: "Il nostro settore geografico", info: { title: "Informazioni", address: "Porto-Vecchio, Corsica del Sud", email: "contact@cosycasa.fr" } },
+      contact: { tagline: "CONTATTO", title: "Contattaci", subtitle: "Il nostro team è a vostra disposizione.", writeUs: "Scrivici", callUs: "Chiamaci", mapTagline: "IL NOSTRO SETTORE", mapTitle: "Il nostro settore geografico", info: { title: "Informazioni", address: "Porto-Vecchio, Corsica del Sud", email: "hello@conciergerie-cosycasa.fr" } },
       footer: { tagline: "Concierge in Corsica del Sud – Servizi premium.", quickLinks: "Link Rapidi", contact: "Contatto", legal: "Note Legali", privacy: "Privacy", rights: "Tutti i diritti riservati" },
       common: { loading: "Caricamento...", error: "Errore", back: "Indietro", close: "Chiudi", save: "Salva", cancel: "Annulla" }
     }

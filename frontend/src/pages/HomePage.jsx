@@ -154,15 +154,15 @@ const HomePage = () => {
       {/* Traveler Section */}
       <section className="orso-section bg-white" data-testid="traveler-section">
         <div className="orso-container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="relative aspect-[4/3] overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+            <div className="relative min-h-[300px] lg:min-h-[400px] overflow-hidden">
               <img
                 src={siteImages.home_traveler}
                 alt="Voyageur"
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <div>
+            <div className="flex flex-col justify-center p-8 lg:p-12 xl:p-16">
               <p className="orso-caption mb-4">{t('traveler.tagline')}</p>
               <h2 className="orso-h2 mb-8">{t('traveler.title')}</h2>
               <p className="text-lg font-light text-gray-700 mb-4">

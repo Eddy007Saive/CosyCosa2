@@ -315,6 +315,8 @@ class BookingRequest(BaseModel):
     check_in: str
     check_out: str
     guests: int
+    num_adult: int = 1
+    num_child: int = 0
     guest_name: str
     guest_email: EmailStr
     guest_phone: str
@@ -330,6 +332,8 @@ class Booking(BaseModel):
     check_in: str
     check_out: str
     guests: int
+    num_adult: int = 1
+    num_child: int = 0
     guest_name: str
     guest_email: str
     guest_phone: str
@@ -1015,26 +1019,35 @@ async def get_properties(
     category: Optional[str] = None,
     city: Optional[str] = None,
     guests: Optional[int] = None,
+    min_guests: Optional[int] = None,
+    max_guests: Optional[int] = None,
     is_showcase: Optional[bool] = None,
     include_hidden: Optional[bool] = False
 ):
     """Get all properties with optional filters"""
     query = {}
-    
+
     # By default, only return active properties (for public site)
     # Admin can request all properties with include_hidden=true
     if not include_hidden:
         query["is_active"] = True
-    
+
     if category:
         query["category"] = category
     if city:
         query["city"] = {"$regex": city, "$options": "i"}
     if guests:
         query["max_guests"] = {"$gte": guests}
+    if min_guests is not None or max_guests is not None:
+        guests_filter = {}
+        if min_guests is not None:
+            guests_filter["$gte"] = min_guests
+        if max_guests is not None:
+            guests_filter["$lte"] = max_guests
+        query["max_guests"] = guests_filter
     if is_showcase is not None:
         query["is_showcase"] = is_showcase
-    
+
     properties = await db.properties.find(query, {"_id": 0}).to_list(100)
     return {"properties": properties, "total": len(properties)}
 
@@ -1343,6 +1356,8 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
         check_in=booking.check_in,
         check_out=booking.check_out,
         guests=booking.guests,
+        num_adult=booking.num_adult,
+        num_child=booking.num_child,
         guest_name=booking.guest_name,
         guest_email=booking.guest_email,
         guest_phone=booking.guest_phone,
@@ -1384,7 +1399,8 @@ async def create_booking(booking: BookingRequest, background_tasks: BackgroundTa
         'roomid': beds24_room_id,
         'checkin': booking.check_in,
         'checkout': booking.check_out,
-        'numadult': booking.guests,
+        'numadult': booking.num_adult,
+        'numchild': booking.num_child,
         'firstname': first_name,
         'lastname': last_name,
         'email': booking.guest_email,

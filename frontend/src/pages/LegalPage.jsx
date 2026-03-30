@@ -19,7 +19,7 @@ const LegalPage = () => {
                 Le site <strong>cosycasa.fr</strong> est édité par :<br /><br />
                 <strong>Cosy Casa Conciergerie</strong><br />
                 Porto-Vecchio, Corse du Sud, France<br /><br />
-                Email : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a><br />
+                Email : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a><br />
                 Téléphone : <a href="tel:+33615876470" className="text-[#2e2e2e] underline">+33 6 15 87 64 70</a>
               </p>
             </section>
@@ -53,7 +53,7 @@ const LegalPage = () => {
             <section>
               <h2 className="orso-h3 mb-4">5. Données personnelles</h2>
               <p className="orso-body">
-                Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ce droit, contactez-nous à : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a>
+                Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ce droit, contactez-nous à : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a>
               </p>
               <p className="orso-body mt-4">
                 Pour plus d'informations, consultez notre <a href="/privacy" className="text-[#2e2e2e] underline">Politique de Confidentialité</a>.

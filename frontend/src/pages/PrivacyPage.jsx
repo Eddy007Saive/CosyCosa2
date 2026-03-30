@@ -25,7 +25,7 @@ const PrivacyPage = () => {
               <p className="orso-body">
                 <strong>Cosy Casa Conciergerie</strong><br />
                 Porto-Vecchio, Corse du Sud (20137), France<br />
-                Email : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a><br />
+                Email : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a><br />
                 Téléphone : <a href="tel:+33615876470" className="text-[#2e2e2e] underline">+33 6 15 87 64 70</a>
               </p>
             </section>
@@ -110,7 +110,7 @@ const PrivacyPage = () => {
                 <li><strong>Droit de limitation</strong> : limiter le traitement de vos données</li>
               </ul>
               <p className="orso-body mt-4">
-                Pour exercer ces droits, contactez-nous à : <a href="mailto:contact@cosycasa.fr" className="text-[#2e2e2e] underline">contact@cosycasa.fr</a>
+                Pour exercer ces droits, contactez-nous à : <a href="mailto:hello@conciergerie-cosycasa.fr" className="text-[#2e2e2e] underline">hello@conciergerie-cosycasa.fr</a>
               </p>
             </section>
 
