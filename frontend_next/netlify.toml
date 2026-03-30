@@ -1,10 +1,12 @@
 [build]
-  base = "frontend_next"
-  command = "npm run build"
-  publish = "out"
+  command = "npm run  build"
+  publish = ".next"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "https://cosycosa2-production.up.railway.app/api/:splat"
   status = 200
+  force = true
