@@ -1,6 +1,7 @@
 [build]
-  publish = "build"
-  command = "CI=false yarn build"
+  base = "frontend_next"
+  command = "npm run build"
+  publish = "frontend_next/out"
 
 [[redirects]]
   from = "/*"
