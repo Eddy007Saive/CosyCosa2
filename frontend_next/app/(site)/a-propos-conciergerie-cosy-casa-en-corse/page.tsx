@@ -1,11 +1,16 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Facebook, Instagram, Leaf, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSiteImages } from '@/lib/api';
 
-const HERO_IMAGE = 'https://images.unsplash.com/photo-1733067760534-956cbad26218?w=1920&q=80';
+const DEFAULT_IMAGES = {
+  esprit_hero:  'https://images.unsplash.com/photo-1733067760534-956cbad26218?w=1920&q=80',
+  esprit_julie: '',
+};
 
 const VALUES = [
   {
@@ -41,13 +46,22 @@ const ECO_ENGAGEMENTS = [
 
 export default function AboutPage() {
   const { t } = useTranslation();
+  const [images, setImages] = useState(DEFAULT_IMAGES);
+
+  useEffect(() => {
+    getSiteImages()
+      .then((data: any) => {
+        if (data?.images) setImages({ ...DEFAULT_IMAGES, ...data.images });
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div>
       {/* Hero */}
       <section
         className="relative min-h-[55vh] flex items-center justify-center bg-cover bg-center pt-36"
-        style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+        style={{ backgroundImage: `url(${images.esprit_hero})` }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white">
@@ -66,16 +80,18 @@ export default function AboutPage() {
       <section className="orso-section">
         <div className="orso-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="relative">
-              <div className="aspect-[3/4] bg-[#f5f5f3] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80"
-                  alt="Julie - Fondatrice de Cosy Casa"
-                  className="w-full h-full object-cover grayscale-[30%]"
-                />
+            {images.esprit_julie && (
+              <div className="relative">
+                <div className="aspect-[3/4] bg-[#f5f5f3] overflow-hidden">
+                  <img
+                    src={images.esprit_julie}
+                    alt="Julie - Fondatrice de Cosy Casa"
+                    className="w-full h-full object-cover grayscale-[30%]"
+                  />
+                </div>
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 border border-[#8fa87a]/30 hidden lg:block" />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 border border-[#8fa87a]/30 hidden lg:block" />
-            </div>
+            )}
 
             <div>
               <p className="orso-caption mb-4">Fondatrice de Cosy Casa</p>

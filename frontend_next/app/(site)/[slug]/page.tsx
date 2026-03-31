@@ -124,57 +124,61 @@ export default function SlugPage({ params }: { params: Promise<{ slug: string }>
   const { i18n, t } = useTranslation();
   const lang = i18n.language;
 
-  // Check if this is a blog page (conciergerie-cosy-casa-a-*)
-  const blogSlug = slug.startsWith('conciergerie-cosy-casa-a-')
-    ? slug.replace('conciergerie-cosy-casa-a-', '')
-    : null;
-  const blogData = blogSlug ? BLOG_DATA[blogSlug] : null;
-
   const [sector, setSector] = useState<any>(null);
-  const [loading, setLoading] = useState(!blogData);
+  const [blogPost, setBlogPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (blogData) return; // Static blog page, no API needed
-    getSector(slug)
-      .then((data: any) => setSector(data))
-      .catch(() => setSector(null))
-      .finally(() => setLoading(false));
-  }, [slug, blogData]);
+    // Try blog post first, then sector
+    getBlogPost(slug)
+      .then((data: any) => {
+        if (data && data.slug) { setBlogPost(data); setLoading(false); }
+        else throw new Error('not a blog');
+      })
+      .catch(() => {
+        getSector(slug)
+          .then((data: any) => setSector(data))
+          .catch(() => setSector(null))
+          .finally(() => setLoading(false));
+      });
+  }, [slug]);
 
-  // Render blog page
-  if (blogData) {
+  // Render blog post from API
+  if (blogPost) {
     return (
       <div>
-        <section
-          className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-36"
-          style={{ backgroundImage: `url(${blogData.heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
-          <div className="relative z-10 orso-container pb-12">
-            <div className="flex items-center gap-2 text-white/70 text-sm mb-4">
-              <MapPin className="w-4 h-4" strokeWidth={1.5} />
-              <span>{blogData.locationLabel}</span>
+        {blogPost.hero_image && (
+          <section
+            className="relative min-h-[50vh] flex items-end bg-cover bg-center pt-36"
+            style={{ backgroundImage: `url(${blogPost.hero_image})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+            <div className="relative z-10 orso-container pb-12">
+              <p className="text-white/60 text-xs uppercase tracking-widest mb-3">{blogPost.author}</p>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white">{blogPost.title}</h1>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white">
-              {t(`blog.${blogSlug}.title`)}
-            </h1>
-          </div>
-        </section>
+          </section>
+        )}
+        {!blogPost.hero_image && (
+          <section className="pt-40 pb-12 bg-[#2e2e2e]">
+            <div className="orso-container">
+              <p className="text-white/60 text-xs uppercase tracking-widest mb-3">{blogPost.author}</p>
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white">{blogPost.title}</h1>
+            </div>
+          </section>
+        )}
 
         <article className="orso-section bg-white">
           <div className="orso-container max-w-3xl mx-auto">
-            {blogData.sections.map((section, index) => (
-              <div key={section.key} className={index > 0 ? 'mt-12' : ''}>
-                {getLangContent(section as any, 'title', lang) && (
-                  <h2 className="font-serif text-2xl md:text-3xl text-[#2e2e2e] mb-6">
-                    {getLangContent(section as any, 'title', lang)}
-                  </h2>
-                )}
-                <p className="text-lg font-light leading-relaxed text-gray-700">
-                  {getLangContent(section as any, 'content', lang)}
-                </p>
-              </div>
-            ))}
+            {blogPost.excerpt && (
+              <p className="text-xl font-light text-gray-600 mb-10 pb-10 border-b border-gray-100 leading-relaxed">
+                {blogPost.excerpt}
+              </p>
+            )}
+            <div
+              className="prose prose-lg max-w-none font-light text-gray-700 leading-relaxed [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:text-[#2e2e2e] [&_h2]:mt-10 [&_h2]:mb-5 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:text-[#2e2e2e] [&_h3]:mt-8 [&_h3]:mb-4 [&_p]:mb-5 [&_ul]:space-y-2 [&_li]:ml-4"
+              dangerouslySetInnerHTML={{ __html: blogPost.content || '' }}
+            />
             <div className="mt-16 pt-12 border-t border-gray-200 text-center">
               <h3 className="font-serif text-2xl text-[#2e2e2e] mb-6">{t('conciergerie.cta')}</h3>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

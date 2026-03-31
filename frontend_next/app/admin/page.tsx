@@ -54,10 +54,10 @@ const SITE_IMAGE_PAGES: Record<string, { label: string; images: Record<string, {
     },
   },
   esprit: {
-    label: 'Esprit',
+    label: 'À propos',
     images: {
+      esprit_hero:  { label: 'Image Hero (À propos)', description: "Grande image de fond en haut de la page À propos" },
       esprit_julie: { label: 'Photo Julie', description: 'Grande photo de Julie (format portrait, noir et blanc recommandé)' },
-      esprit_bastien: { label: 'Photo Bastien', description: 'Petite photo de Bastien (format portrait, noir et blanc recommandé)' },
     },
   },
   proprietaire: {
