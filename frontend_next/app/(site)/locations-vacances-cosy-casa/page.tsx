@@ -9,10 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProperties } from '@/lib/api';
 
-const CAPACITY_CATEGORIES = [
-  { id: 'capacity_2_4', min_guests: 1, max_guests: 4 },
-  { id: 'capacity_6_8', min_guests: 5, max_guests: 8 },
-  { id: 'capacity_10plus', min_guests: 10, max_guests: undefined },
+const BEDROOM_FILTERS = [
+  { id: 'bedrooms_1_2', label: '1 – 2 chambres', min: 1, max: 2 },
+  { id: 'bedrooms_3_4', label: '3 – 4 chambres', min: 3, max: 4 },
+  { id: 'bedrooms_5plus', label: '5+ chambres',   min: 5, max: undefined },
 ];
 
 const DEFAULT_IMAGES = [
@@ -42,27 +42,31 @@ function PropertiesContent() {
   const { t, i18n } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'all');
+  const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || 'all');
 
   useEffect(() => {
     setLoading(true);
-    const cat = CAPACITY_CATEGORIES.find((c) => c.id === activeCategory);
-    const params = cat
-      ? { min_guests: cat.min_guests, ...(cat.max_guests ? { max_guests: cat.max_guests } : {}) }
-      : {};
-    getProperties(params)
-      .then((data: any) => setProperties(data?.properties || []))
-      .catch(() => setProperties([]))
+    getProperties()
+      .then((data: any) => setAllProperties(data?.properties || []))
+      .catch(() => setAllProperties([]))
       .finally(() => setLoading(false));
-  }, [activeCategory]);
+  }, []);
 
-  const handleCategoryChange = (categoryId: string) => {
-    setActiveCategory(categoryId);
+  const properties = (() => {
+    const f = BEDROOM_FILTERS.find((f) => f.id === activeFilter);
+    if (!f) return allProperties;
+    return allProperties.filter((p) =>
+      p.bedrooms >= f.min && (f.max === undefined || p.bedrooms <= f.max)
+    );
+  })();
+
+  const handleFilterChange = (filterId: string) => {
+    setActiveFilter(filterId);
     const params = new URLSearchParams(searchParams.toString());
-    if (categoryId === 'all') params.delete('category');
-    else params.set('category', categoryId);
+    if (filterId === 'all') params.delete('filter');
+    else params.set('filter', filterId);
     router.replace(`/locations-vacances-cosy-casa?${params.toString()}`);
   };
 
@@ -81,19 +85,19 @@ function PropertiesContent() {
         <div className="orso-container">
           <div className="flex items-center gap-2 py-4 overflow-x-auto">
             <span className="text-xs uppercase tracking-widest text-gray-500 mr-4 flex-shrink-0">
-              {t('properties.filter')}:
+              Chambres :
             </span>
-            {[{ id: 'all' }, ...CAPACITY_CATEGORIES].map((cat) => (
+            {[{ id: 'all', label: 'Toutes' }, ...BEDROOM_FILTERS].map((f) => (
               <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
+                key={f.id}
+                onClick={() => handleFilterChange(f.id)}
                 className={`px-5 py-2 text-xs uppercase tracking-widest transition-colors flex-shrink-0 ${
-                  activeCategory === cat.id
+                  activeFilter === f.id
                     ? 'bg-[#2e2e2e] text-white'
                     : 'border border-gray-200 text-gray-600 hover:border-gray-400'
                 }`}
               >
-                {cat.id === 'all' ? t('properties.all') : t(`categories.${cat.id}`)}
+                {f.label}
               </button>
             ))}
           </div>

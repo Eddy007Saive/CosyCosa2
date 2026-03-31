@@ -122,7 +122,7 @@ export default function ContactPage() {
           </div>
           <div className="aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden border border-gray-100">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96000!2d9.2!3d41.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d9752c5a50b5a7%3A0x408ab2ae4baa960!2sPorto-Vecchio!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr"
+              src="https://maps.google.com/maps?cid=2810222767910148051&output=embed&hl=fr"
               width="100%"
               height="100%"
               style={{ border: 0 }}
