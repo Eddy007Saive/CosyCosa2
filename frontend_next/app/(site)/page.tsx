@@ -40,13 +40,10 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center pt-36">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
+        <img
+          src="/hero.gif"
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          src="/hero.mp4"
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto opacity-0 animate-fade-in" style={{ animationDelay: '200ms' }}>
