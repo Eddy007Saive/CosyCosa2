@@ -2,19 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getBlogPosts } from '@/lib/api';
+import { getBlogPosts, getSiteImages } from '@/lib/api';
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const DEFAULT_BLOG_HERO = 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1920&q=80';
 
 export default function BlogListPage() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [blogHero, setBlogHero] = useState(DEFAULT_BLOG_HERO);
 
   useEffect(() => {
     getBlogPosts()
       .then((data: any) => setPosts(Array.isArray(data) ? data : []))
       .catch(() => setPosts([]))
       .finally(() => setLoading(false));
+    getSiteImages()
+      .then((data: any) => { if (data?.images?.blog_hero) setBlogHero(data.images.blog_hero); })
+      .catch(() => {});
   }, []);
 
   return (
@@ -22,7 +26,7 @@ export default function BlogListPage() {
       {/* Hero */}
       <section
         className="relative min-h-[55vh] flex items-center justify-center bg-cover bg-center pt-36"
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1920&q=80)' }}
+        style={{ backgroundImage: `url(${blogHero})` }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white">

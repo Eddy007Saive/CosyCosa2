@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Search, CalendarCheck, Users, Wrench, Shield, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
@@ -24,6 +24,14 @@ export default function HomePage() {
   const { t } = useTranslation();
   const [siteImages, setSiteImages] = useState<Record<string, string>>(DEFAULT_IMAGES);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     getSiteImages()
@@ -40,11 +48,15 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center pt-36">
-        <img
-          src="/hero.gif"
-          alt=""
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        >
+          <source src="https://res.cloudinary.com/dy9gp5pim/video/upload/v1775121112/Online_Converter_-_Convert_Image_Video_Audio_Document_Files_2_mbzw2c.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto opacity-0 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <p className="text-xs uppercase tracking-[0.3em] text-white/70 mb-6">{t('hero.tagline')}</p>

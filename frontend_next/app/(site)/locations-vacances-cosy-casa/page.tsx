@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { MapPin, Users, Bed, Bath, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getProperties } from '@/lib/api';
+import { getProperties, getSiteImages } from '@/lib/api';
 
 const BEDROOM_FILTERS = [
   { id: 'bedrooms_1_2', label: '1 – 2 chambres', min: 1, max: 2 },
@@ -45,6 +45,7 @@ function PropertiesContent() {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState(searchParams.get('filter') || 'all');
+  const [heroImage, setHeroImage] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -52,6 +53,9 @@ function PropertiesContent() {
       .then((data: any) => setAllProperties(data?.properties || []))
       .catch(() => setAllProperties([]))
       .finally(() => setLoading(false));
+    getSiteImages()
+      .then((data: any) => { if (data?.images?.locations_hero) setHeroImage(data.images.locations_hero); })
+      .catch(() => {});
   }, []);
 
   const properties = (() => {
@@ -71,14 +75,30 @@ function PropertiesContent() {
   };
 
   return (
-    <div className="pt-40 md:pt-44">
-      <section className="orso-container py-12 md:py-20">
-        <div className="max-w-3xl">
-          <p className="orso-caption mb-4">{t('properties.title')}</p>
-          <h1 className="orso-h1 mb-6">{t('properties.title')}</h1>
-          <p className="orso-body">{t('properties.subtitle')}</p>
-        </div>
-      </section>
+    <div>
+      {/* Hero */}
+      {heroImage && (
+        <section className="relative min-h-[50vh] flex items-center justify-center bg-[#2e2e2e] pt-36"
+          style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative z-10 text-center text-white px-6 max-w-3xl mx-auto">
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight mb-4">{t('properties.title')}</h1>
+            <p className="text-lg font-light text-white/80">{t('properties.subtitle')}</p>
+          </div>
+        </section>
+      )}
+
+      <div className={heroImage ? '' : 'pt-40 md:pt-44'}>
+      {!heroImage && (
+        <section className="orso-container py-12 md:py-20">
+          <div className="max-w-3xl">
+            <p className="orso-caption mb-4">{t('properties.title')}</p>
+            <h1 className="orso-h1 mb-6">{t('properties.title')}</h1>
+            <p className="orso-body">{t('properties.subtitle')}</p>
+          </div>
+        </section>
+      )}
 
       {/* Filters */}
       <section className="border-y border-gray-100 sticky top-20 md:top-24 bg-white z-30">
@@ -130,6 +150,7 @@ function PropertiesContent() {
           )}
         </div>
       </section>
+      </div>
     </div>
   );
 }

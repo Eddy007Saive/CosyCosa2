@@ -1,56 +1,74 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import { getSiteImages } from '@/lib/api';
 
-const HERO_IMAGE = 'https://images.pexels.com/photos/11875385/pexels-photo-11875385.jpeg?auto=compress&cs=tinysrgb&w=1920';
+const DEFAULT_HERO = 'https://images.pexels.com/photos/11875385/pexels-photo-11875385.jpeg?auto=compress&cs=tinysrgb&w=1920';
 
 const PARTNERS = [
   {
     title: 'Balade en bateau avec Skipper',
     description: "Embarquez à bord de l'Axopar 37 Sun Top \"Titidoudou\" et découvrez les plus beaux rivages du sud-est de la Corse dans un cadre privilégié. Entre escales dans des criques confidentielles, baignades dans des eaux cristallines et instants de détente à bord, chaque moment se vit avec douceur et élégance. Une expérience en mer raffinée, pensée pour savourer pleinement la beauté des lieux, en toute intimité.",
-    image: '/partenaires/kyrnos-marine.png',
+    defaultImage: '/partenaires/kyrnos-marine.png',
+    imageKey: 'partner_kyrnos',
     link: 'https://www.kyrnos-marine.com/',
   },
   {
     title: 'Baignade à cheval / randonnées',
     description: "Découvrez la magie d'une baignade à cheval dans les eaux cristallines de Saint-Cyprien ou laissez-vous guider à travers les sentiers sauvages de Pinarello lors d'une randonnée équestre inoubliable.",
-    image: '/partenaires/country-horse.png',
+    defaultImage: '/partenaires/country-horse.png',
+    imageKey: 'partner_country_horse',
     link: 'https://www.country-horse.com/',
   },
   {
     title: 'Massages / Soins Esthétiques',
     description: "Plongez dans l'univers envoûtant d'Angélique, masseuse professionnelle passionnée depuis plus de 10 ans. Ses mains expertes et son savoir-faire vous transportent dans une parenthèse de bien-être absolu.",
-    image: '/partenaires/massages-angelique.png',
+    defaultImage: '/partenaires/massages-angelique.png',
+    imageKey: 'partner_angelique',
     link: 'https://outoftimemassages.wixsite.com/massages-angelique',
   },
   {
     title: 'Visite, dégustation au Domaine de Torraccia',
     description: "Venez découvrir le Domaine de Torraccia, un vignoble familial niché entre mer et maquis, où traditions corses et vins bios se rencontrent le temps d'une visite ou d'une dégustation.",
-    image: '/partenaires/torraccia.jpeg',
+    defaultImage: '/partenaires/torraccia.jpeg',
+    imageKey: 'partner_torraccia',
     link: 'https://www.domaine-de-torraccia.com/',
   },
   {
     title: 'Simples et Divines Huiles Essentielles',
     description: "Venez découvrir Simples et Divines, producteurs d'huiles essentielles et de cosmétiques naturels au cœur du maquis corse, où chaque plante est cultivée, récoltée et transformée avec passion et savoir-faire artisanal.",
-    image: '/partenaires/simples-divines.png',
+    defaultImage: '/partenaires/simples-divines.png',
+    imageKey: 'partner_simples',
     link: 'https://www.lessimples.com/fr/',
   },
   {
     title: 'Rando Palmée à Bonifacio',
     description: "Partez à la découverte des fonds marins de Bonifacio lors d'une randonnée palmée exceptionnelle. Entre falaises calcaires et eaux cristallines, vivez une expérience unique au cœur de la réserve naturelle.",
-    image: 'https://images.unsplash.com/photo-1758626221307-8b02e7540ad7?w=800&q=80',
+    defaultImage: 'https://images.unsplash.com/photo-1758626221307-8b02e7540ad7?w=800&q=80',
+    imageKey: 'partner_rando',
     link: 'tel:+33670897062',
   },
 ];
 
 export default function PartnersPage() {
+  const [images, setImages] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    getSiteImages()
+      .then((data: any) => { if (data?.images) setImages(data.images); })
+      .catch(() => {});
+  }, []);
+
+  const heroImage = images.partenaires_hero || DEFAULT_HERO;
+
   return (
     <div>
       {/* Hero */}
       <section
         className="relative min-h-[55vh] flex items-center justify-center bg-cover bg-center pt-36"
-        style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+        style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white">
@@ -80,7 +98,7 @@ export default function PartnersPage() {
                   <div className={`overflow-hidden ${isReversed ? 'lg:order-2' : ''}`}>
                     <div className="aspect-[4/3] overflow-hidden">
                       <img
-                        src={partner.image}
+                        src={images[partner.imageKey] || partner.defaultImage}
                         alt={partner.title}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                         loading="lazy"

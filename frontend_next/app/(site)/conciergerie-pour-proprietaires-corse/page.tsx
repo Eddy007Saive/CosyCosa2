@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Search, CalendarCheck, Users, Wrench, Shield, Paintbrush, CheckCircle, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSiteImages } from '@/lib/api';
 
 const SERVICES = [
   {
@@ -94,11 +96,22 @@ export default function ProprietairesPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const titles = SERVICE_TITLES[lang] || SERVICE_TITLES.fr;
+  const [heroImage, setHeroImage] = useState('');
+
+  useEffect(() => {
+    getSiteImages()
+      .then((data: any) => { if (data?.images?.proprietaire_hero) setHeroImage(data.images.proprietaire_hero); })
+      .catch(() => {});
+  }, []);
 
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center justify-center bg-[#2e2e2e] pt-36">
+      <section
+        className="relative min-h-[50vh] flex items-center justify-center bg-[#2e2e2e] pt-36"
+        style={heroImage ? { backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+      >
+        {heroImage && <div className="absolute inset-0 bg-black/50" />}
         <div className="relative z-10 text-center text-white px-6 max-w-3xl mx-auto">
           <p className="text-xs uppercase tracking-[0.3em] text-white/60 mb-6">{t('proprietaires.hero.tagline')}</p>
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">{t('proprietaires.hero.title')}</h1>

@@ -29,49 +29,57 @@ const SITE_IMAGE_PAGES: Record<string, { label: string; images: Record<string, {
   home: {
     label: 'Accueil',
     images: {
-      home_hero: { label: "Image d'accueil (Hero)", description: "Grande image de fond sur la page d'accueil" },
-      home_category_vue_mer: { label: 'Catégorie Vue Mer', description: 'Image de la catégorie Vue Mer' },
-      home_category_plage_a_pieds: { label: 'Catégorie Plage à Pieds', description: 'Image de la catégorie Plage à Pieds' },
-      home_category_pieds_dans_eau: { label: "Catégorie Pieds dans l'Eau", description: "Image de la catégorie Pieds dans l'Eau" },
-      home_concept: { label: 'Image Notre Concept', description: "Photo d'intérieur pour la section concept" },
-      home_cta: { label: 'Fond section CTA', description: "Image de fond pour l'appel à l'action" },
+      home_hero: { label: "Image Hero", description: "Grande image de fond sur la page d'accueil (remplace le GIF animé si renseignée)" },
+      home_traveler: { label: 'Photo section Voyageurs', description: 'Photo à côté de la section "Partez à la découverte de nos propriétés"' },
     },
   },
-  services: {
-    label: 'Services',
+  conciergerie: {
+    label: 'Conciergerie',
     images: {
-      services_hero: { label: 'Image Hero Services', description: 'Grande image en haut de la page Services' },
-      services_lifestyle: { label: 'Image Lifestyle', description: 'Photo lifestyle sur le côté droit' },
-      services_intendance: { label: 'Image Intendance', description: 'Photo pour la section Intendance & Services' },
-      services_experiences: { label: 'Image Expériences', description: 'Photo pour la section Expériences & Loisirs' },
+      conciergerie_hero: { label: 'Image Hero Conciergerie', description: 'Grande image de fond en haut de la page Conciergerie' },
+    },
+  },
+  proprietaires: {
+    label: 'Pour les Propriétaires',
+    images: {
+      proprietaire_hero: { label: 'Image Hero', description: 'Grande image de fond en haut de la page Pour les Propriétaires' },
+    },
+  },
+  locations: {
+    label: 'Locations de vacances',
+    images: {
+      locations_hero: { label: 'Image Hero', description: 'Grande image de fond en haut de la page Locations de vacances' },
     },
   },
   contact: {
     label: 'Contact',
     images: {
-      contact_hero: { label: 'Image Hero Contact', description: 'Grande image de fond page Contact' },
-      contact_page: { label: 'Image principale Contact', description: 'Photo à gauche du formulaire de contact' },
+      contact_page: { label: 'Photo Contact', description: 'Photo à gauche du formulaire de contact' },
     },
   },
-  esprit: {
+  apropos: {
     label: 'À propos',
     images: {
-      esprit_hero:  { label: 'Image Hero (À propos)', description: "Grande image de fond en haut de la page À propos" },
+      esprit_hero:  { label: 'Image Hero', description: "Grande image de fond en haut de la page À propos" },
       esprit_julie: { label: 'Photo Julie', description: 'Grande photo de Julie (format portrait, noir et blanc recommandé)' },
     },
   },
-  proprietaire: {
-    label: 'Propriétaires',
+  blog: {
+    label: 'Blog',
     images: {
-      proprietaire_hero: { label: 'Image Hero', description: 'Grande image de fond en haut de la page (villa de luxe recommandée)' },
-      proprietaire_locative: { label: 'Image Intendance Locative', description: 'Photo pour la section intendance locative (format carré)' },
-      proprietaire_propriete: { label: 'Image Intendance Propriété', description: 'Photo pour la section intendance propriété (format carré)' },
+      blog_hero: { label: 'Image Hero Blog', description: "Grande image de fond en haut de la page Blog" },
     },
   },
-  properties: {
-    label: 'Propriétés',
+  partenaires: {
+    label: 'Partenaires',
     images: {
-      properties_hero: { label: 'Image Hero Propriétés', description: 'Grande image en haut de la page Propriétés' },
+      partenaires_hero: { label: 'Image Hero Partenaires', description: "Grande image de fond en haut de la page Partenaires" },
+      partner_kyrnos: { label: 'Kyrnos Marine', description: 'Balade en bateau avec Skipper' },
+      partner_country_horse: { label: 'Country Horse', description: 'Baignade à cheval / randonnées' },
+      partner_angelique: { label: 'Massages Angélique', description: 'Massages / Soins Esthétiques' },
+      partner_torraccia: { label: 'Domaine de Torraccia', description: 'Visite, dégustation au Domaine de Torraccia' },
+      partner_simples: { label: 'Simples et Divines', description: 'Huiles Essentielles' },
+      partner_rando: { label: 'Rando Palmée Bonifacio', description: 'Randonnée palmée à Bonifacio' },
     },
   },
 };
