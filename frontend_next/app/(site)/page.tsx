@@ -53,6 +53,7 @@ export default function HomePage() {
           autoPlay
           loop
           playsInline
+          poster="/hero.gif"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="https://res.cloudinary.com/dy9gp5pim/video/upload/v1775121112/Online_Converter_-_Convert_Image_Video_Audio_Document_Files_2_mbzw2c.mp4" type="video/mp4" />
