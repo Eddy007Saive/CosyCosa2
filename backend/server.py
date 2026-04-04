@@ -1077,7 +1077,8 @@ async def create_property(property_data: PropertyCreate):
 async def update_property(property_id: str, updates: Dict[str, Any]):
     """Update a property"""
     updates["updated_at"] = datetime.now(timezone.utc).isoformat()
-    
+    updates["custom_fields"] = True
+
     result = await db.properties.update_one(
         {"id": property_id},
         {"$set": updates}
@@ -1639,7 +1640,7 @@ async def update_property_images(property_id: str, images: List[str]):
     """Update property images"""
     result = await db.properties.update_one(
         {"$or": [{"id": property_id}, {"beds24_id": property_id}]},
-        {"$set": {"images": images, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        {"$set": {"images": images, "custom_fields": True, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
     
     if result.modified_count == 0:
@@ -1650,13 +1651,13 @@ async def update_property_images(property_id: str, images: List[str]):
 @api_router.put("/properties/{property_id}/category")
 async def update_property_category(property_id: str, category: str):
     """Update property category"""
-    valid_categories = ["vue_mer", "plage_a_pieds", "pieds_dans_eau"]
+    valid_categories = ["bedrooms_1_2", "bedrooms_3_4", "bedrooms_5plus"]
     if category not in valid_categories:
         raise HTTPException(status_code=400, detail=f"Invalid category. Must be one of: {valid_categories}")
-    
+
     result = await db.properties.update_one(
         {"$or": [{"id": property_id}, {"beds24_id": property_id}]},
-        {"$set": {"category": category, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        {"$set": {"category": category, "custom_fields": True, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
     
     if result.modified_count == 0:
@@ -2326,14 +2327,21 @@ async def auto_sync_beds24():
                 synced += 1
                 logger.info(f"  ➕ New property: {prop_name} (hidden)")
             else:
-                # Preserve certain fields from existing
+                # Always preserve admin-managed fields
                 property_data["id"] = existing.get("id", f"beds24-{beds24_id}")
                 property_data["is_active"] = existing.get("is_active", False)
                 property_data["is_showcase"] = existing.get("is_showcase", False)
-                property_data["category"] = existing.get("category", "vue_mer")
+                property_data["category"] = existing.get("category", "bedrooms_1_2")
                 property_data["images"] = existing.get("images", [])
                 property_data["created_at"] = existing.get("created_at", datetime.now(timezone.utc).isoformat())
-                
+                property_data["custom_fields"] = existing.get("custom_fields", False)
+
+                # If admin has manually edited this property, preserve all editorial fields
+                if existing.get("custom_fields"):
+                    for field in ["name", "description", "city"]:
+                        if field in existing:
+                            property_data[field] = existing[field]
+
                 await db.properties.update_one({"beds24_id": beds24_id}, {"$set": property_data})
                 updated += 1
         
