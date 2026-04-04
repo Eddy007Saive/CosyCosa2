@@ -178,7 +178,7 @@ export default function AdminPage() {
   const [sectorForm, setSectorForm] = useState(EMPTY_SECTOR);
 
   const [propertyForm, setPropertyForm] = useState({
-    name: '', beds24_id: '', city: '', category: 'vue_mer',
+    name: '', beds24_id: '', city: '', category: 'bedrooms_1_2',
     max_guests: 4, bedrooms: 2, bathrooms: 1, price_from: '',
     description_fr: '', is_showcase: false, is_active: true,
   });
@@ -501,7 +501,7 @@ export default function AdminPage() {
             <Button size="sm" className="bg-[#2e2e2e] text-white hover:bg-black"
               onClick={() => {
                 setEditingProperty(null);
-                setPropertyForm({ name: '', beds24_id: '', city: '', category: 'vue_mer', max_guests: 4, bedrooms: 2, bathrooms: 1, price_from: '', description_fr: '', is_showcase: false, is_active: true });
+                setPropertyForm({ name: '', beds24_id: '', city: '', category: 'bedrooms_1_2', max_guests: 4, bedrooms: 2, bathrooms: 1, price_from: '', description_fr: '', is_showcase: false, is_active: true });
                 setShowPropertyModal(true);
               }}>
               <Plus className="w-4 h-4 mr-2" />Nouvelle propriété
@@ -625,11 +625,11 @@ export default function AdminPage() {
                       <TableCell className={!property.is_active ? 'opacity-60' : ''}>{property.city}</TableCell>
                       <TableCell>
                         <Select value={property.category} onValueChange={(value) => updateCategory(property, value)}>
-                          <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="w-[150px] h-8 text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="vue_mer">Vue Mer</SelectItem>
-                            <SelectItem value="plage_a_pieds">Plage à Pieds</SelectItem>
-                            <SelectItem value="pieds_dans_eau">Pieds dans l&apos;Eau</SelectItem>
+                            <SelectItem value="bedrooms_1_2">1 – 2 chambres</SelectItem>
+                            <SelectItem value="bedrooms_3_4">3 – 4 chambres</SelectItem>
+                            <SelectItem value="bedrooms_5plus">5+ chambres</SelectItem>
                           </SelectContent>
                         </Select>
                       </TableCell>
@@ -991,9 +991,9 @@ export default function AdminPage() {
                 <Select value={propertyForm.category} onValueChange={(value) => setPropertyForm({ ...propertyForm, category: value })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="vue_mer">Vue Mer</SelectItem>
-                    <SelectItem value="plage_a_pieds">Plage à Pieds</SelectItem>
-                    <SelectItem value="pieds_dans_eau">Pieds dans l&apos;Eau</SelectItem>
+                    <SelectItem value="bedrooms_1_2">1 – 2 chambres</SelectItem>
+                    <SelectItem value="bedrooms_3_4">3 – 4 chambres</SelectItem>
+                    <SelectItem value="bedrooms_5plus">5+ chambres</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
