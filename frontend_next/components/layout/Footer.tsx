@@ -59,7 +59,7 @@ export default function Footer() {
                 { href: '/', label: 'Accueil' },
                 { href: '/locations-vacances-cosy-casa', label: 'Nos secteurs' },
                 { href: '/a-propos-conciergerie-cosy-casa-en-corse', label: 'A propos' },
-                { href: '/partenaires-conciergerie-corse', label: 'Partenaires' },
+                { href: '/partenaires-conciergerie-corse', label: 'Carnet' },
                 { href: '/blog-conciergerie-corse', label: 'Blog' },
                 { href: '/contact-conciergerie-cosy-casa', label: 'Contact' },
               ].map((link) => (

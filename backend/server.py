@@ -980,6 +980,50 @@ async def seed_blog_posts():
     return {"message": f"Seeded {len(posts)} blog posts"}
 
 
+# --- Partners (Carnet) ---
+class PartnerCreate(BaseModel):
+    title: str
+    description: str = ""
+    image: str = ""
+    link: str = ""
+    order: int = 0
+
+@api_router.get("/partners")
+async def get_partners():
+    """Get all partners ordered by order field"""
+    partners = await db.partners.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return partners
+
+@api_router.post("/partners")
+async def create_partner(partner: PartnerCreate):
+    """Create a new partner"""
+    partner_data = partner.model_dump()
+    partner_data["id"] = str(uuid.uuid4())
+    partner_data["created_at"] = datetime.now(timezone.utc).isoformat()
+    partner_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.partners.insert_one(partner_data)
+    del partner_data["_id"]
+    return partner_data
+
+@api_router.put("/partners/{partner_id}")
+async def update_partner(partner_id: str, partner: PartnerCreate):
+    """Update a partner"""
+    update_data = partner.model_dump()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await db.partners.update_one({"id": partner_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    return {"success": True}
+
+@api_router.delete("/partners/{partner_id}")
+async def delete_partner(partner_id: str):
+    """Delete a partner"""
+    result = await db.partners.delete_one({"id": partner_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Partner not found")
+    return {"success": True}
+
+
 # --- Blog Comments ---
 class CommentCreate(BaseModel):
     post_slug: str

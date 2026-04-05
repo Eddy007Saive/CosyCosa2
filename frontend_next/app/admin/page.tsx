@@ -20,6 +20,7 @@ import {
   getSiteImages, updateSiteImages, uploadImage,
   getAdminProperties, getSyncStatus, syncBeds24,
   adminLogin, getServicesPdf, updateServicesPdf,
+  getPartners, createPartner, updatePartner, deletePartner,
 } from '@/lib/api';
 import BlogTab from '@/components/admin/BlogTab';
 
@@ -177,6 +178,13 @@ export default function AdminPage() {
   const [editingSector, setEditingSector] = useState<Sector | null>(null);
   const [sectorForm, setSectorForm] = useState(EMPTY_SECTOR);
 
+  const [partners, setPartners] = useState<any[]>([]);
+  const [loadingPartners, setLoadingPartners] = useState(false);
+  const [showPartnerModal, setShowPartnerModal] = useState(false);
+  const [editingPartner, setEditingPartner] = useState<any | null>(null);
+  const [partnerForm, setPartnerForm] = useState({ title: '', description: '', image: '', link: '', order: 0 });
+  const [uploadingPartnerImage, setUploadingPartnerImage] = useState(false);
+
   const [propertyForm, setPropertyForm] = useState({
     name: '', beds24_id: '', city: '', category: 'bedrooms_1_2',
     max_guests: 4, bedrooms: 2, bathrooms: 1, price_from: '',
@@ -195,6 +203,7 @@ export default function AdminPage() {
       loadSiteImages();
       loadServicesPdf();
       loadSectors();
+      loadPartners();
       loadSyncStatus();
       const interval = setInterval(loadSyncStatus, 60000);
       return () => clearInterval(interval);
@@ -204,6 +213,35 @@ export default function AdminPage() {
 
   const loadSyncStatus = async () => {
     try { setSyncStatus(await getSyncStatus()); } catch { /* silent */ }
+  };
+
+  const loadPartners = async () => {
+    setLoadingPartners(true);
+    try { setPartners(await getPartners() as any[]); }
+    catch { toast.error('Erreur chargement partenaires'); }
+    finally { setLoadingPartners(false); }
+  };
+
+  const savePartner = async () => {
+    try {
+      if (editingPartner) {
+        await updatePartner(editingPartner.id, partnerForm);
+        toast.success('Partenaire modifié');
+      } else {
+        await createPartner({ ...partnerForm, order: partners.length });
+        toast.success('Partenaire ajouté');
+      }
+      setShowPartnerModal(false);
+      setEditingPartner(null);
+      setPartnerForm({ title: '', description: '', image: '', link: '', order: 0 });
+      loadPartners();
+    } catch { toast.error('Erreur sauvegarde'); }
+  };
+
+  const deletePartnerHandler = async (id: string) => {
+    if (!confirm('Supprimer ce partenaire ?')) return;
+    try { await deletePartner(id); toast.success('Supprimé'); loadPartners(); }
+    catch { toast.error('Erreur suppression'); }
   };
 
   const loadProperties = async () => {
@@ -521,6 +559,7 @@ export default function AdminPage() {
               { key: 'pdf-services', label: 'PDF Services', icon: FileText },
               { key: 'sectors', label: 'Secteurs', icon: MapPin },
               { key: 'blog', label: 'Blog', icon: BookOpen },
+              { key: 'carnet', label: 'Carnet', icon: Plus },
             ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
@@ -859,7 +898,100 @@ export default function AdminPage() {
 
         {/* ——— Blog Tab ——— */}
         {activeTab === 'blog' && <BlogTab />}
+
+        {/* ——— Onglet Carnet ——— */}
+        {activeTab === 'carnet' && (
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-serif text-2xl">Carnet de partenaires</h2>
+              <Button onClick={() => { setEditingPartner(null); setPartnerForm({ title: '', description: '', image: '', link: '', order: partners.length }); setShowPartnerModal(true); }}>
+                <Plus className="w-4 h-4 mr-2" />Nouveau partenaire
+              </Button>
+            </div>
+            {loadingPartners ? (
+              <div className="text-center py-12 text-gray-400">Chargement...</div>
+            ) : partners.length === 0 ? (
+              <div className="text-center py-12 text-gray-400">Aucun partenaire. Cliquez sur "Nouveau partenaire" pour commencer.</div>
+            ) : (
+              <div className="space-y-4">
+                {partners.map((partner) => (
+                  <div key={partner.id} className="bg-white border border-gray-100 p-4 flex items-center gap-4">
+                    {partner.image && <img src={partner.image} alt={partner.title} className="w-16 h-16 object-cover flex-shrink-0" />}
+                    {!partner.image && <div className="w-16 h-16 bg-gray-100 flex-shrink-0" />}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-[#2e2e2e]">{partner.title}</p>
+                      <p className="text-sm text-gray-500 truncate">{partner.description}</p>
+                      {partner.link && <p className="text-xs text-gray-400 truncate">{partner.link}</p>}
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Button variant="ghost" size="sm" onClick={() => {
+                        setEditingPartner(partner);
+                        setPartnerForm({ title: partner.title, description: partner.description, image: partner.image, link: partner.link, order: partner.order });
+                        setShowPartnerModal(true);
+                      }}><Edit className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="sm" className="text-red-500" onClick={() => deletePartnerHandler(partner.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </main>
+
+      {/* ——— Partner Modal ——— */}
+      <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl">
+              {editingPartner ? 'Modifier le partenaire' : 'Nouveau partenaire'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label>Nom *</Label>
+              <Input value={partnerForm.title} onChange={(e) => setPartnerForm({ ...partnerForm, title: e.target.value })} placeholder="Kyrnos Marine" />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea rows={3} value={partnerForm.description} onChange={(e) => setPartnerForm({ ...partnerForm, description: e.target.value })} placeholder="Description du partenaire..." />
+            </div>
+            <div>
+              <Label>Image</Label>
+              <div className="flex gap-2 items-center">
+                <Input value={partnerForm.image} onChange={(e) => setPartnerForm({ ...partnerForm, image: e.target.value })} placeholder="https://... ou /partenaires/..." className="flex-1" />
+                <label className="cursor-pointer">
+                  <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                    const file = e.target.files?.[0]; if (!file) return;
+                    setUploadingPartnerImage(true);
+                    try { const res = await uploadImage(file) as any; setPartnerForm((f) => ({ ...f, image: res.url })); toast.success('Image uploadée'); }
+                    catch { toast.error('Erreur upload'); }
+                    finally { setUploadingPartnerImage(false); }
+                  }} />
+                  <Button type="button" variant="outline" size="sm" disabled={uploadingPartnerImage} asChild>
+                    <span>{uploadingPartnerImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}</span>
+                  </Button>
+                </label>
+              </div>
+              {partnerForm.image && <img src={partnerForm.image} alt="" className="mt-2 h-24 object-cover" />}
+            </div>
+            <div>
+              <Label>Lien (URL ou tel:+33...)</Label>
+              <Input value={partnerForm.link} onChange={(e) => setPartnerForm({ ...partnerForm, link: e.target.value })} placeholder="https://www.partenaire.com" />
+            </div>
+            <div>
+              <Label>Ordre d'affichage</Label>
+              <Input type="number" value={partnerForm.order} onChange={(e) => setPartnerForm({ ...partnerForm, order: parseInt(e.target.value) || 0 })} />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setShowPartnerModal(false)}>Annuler</Button>
+            <Button onClick={savePartner} disabled={!partnerForm.title}><Save className="w-4 h-4 mr-2" />Enregistrer</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* ——— Sector Modal ——— */}
       <Dialog open={showSectorModal} onOpenChange={setShowSectorModal}>

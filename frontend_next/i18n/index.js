@@ -14,7 +14,7 @@ const resources = {
         properties: "Nos Locations",
         conciergerie: "Conciergerie",
         about: "À propos",
-        partners: "Partenaires",
+        partners: "Carnet",
         blog: "Blog",
         contact: "Contact",
         book: "Réserver"

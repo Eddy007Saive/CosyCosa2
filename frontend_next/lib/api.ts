@@ -87,4 +87,16 @@ export const getServicesPdf = () =>
 export const updateServicesPdf = (url: string) =>
   api.put("/settings/services-pdf", null, { params: { url } }).then((r) => r.data);
 
+export const getPartners = () =>
+  api.get("/partners").then((r) => r.data);
+
+export const createPartner = (data: Record<string, unknown>) =>
+  api.post("/partners", data).then((r) => r.data);
+
+export const updatePartner = (id: string, data: Record<string, unknown>) =>
+  api.put(`/partners/${id}`, data).then((r) => r.data);
+
+export const deletePartner = (id: string) =>
+  api.delete(`/partners/${id}`).then((r) => r.data);
+
 export default api;
