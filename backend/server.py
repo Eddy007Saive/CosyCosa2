@@ -582,7 +582,7 @@ class Beds24Service:
                     "departure": to_date
                 }
                 if occupancy:
-                    params["numAdult"] = str(occupancy)
+                    params["numAdults"] = str(occupancy)
                     
                 response = await client.get(
                     f"{self.base_url}/inventory/rooms/offers",
@@ -1295,12 +1295,13 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
         if offers.get("data"):
             offer_data = offers.get("data", [])
             if isinstance(offer_data, list) and len(offer_data) > 0:
-                offer = offer_data[0]
+                room_offer = offer_data[0]
+                # Structure Beds24: data[0].offers[0].price
+                offers_list = room_offer.get("offers", [])
+                total_price = offers_list[0].get("price", 0) if offers_list else 0
             else:
-                offer = offer_data
-            
-            total_price = offer.get("price", 0) if isinstance(offer, dict) else 0
-            
+                total_price = 0
+
             if total_price > 0:
                 return PriceQuote(
                     available=True,
@@ -1308,7 +1309,6 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                     currency=property_data.get("currency", "EUR"),
                     nights=nights,
                     price_per_night=total_price / nights if nights > 0 else 0,
-                    breakdown=offer.get("breakdown", []) if isinstance(offer, dict) else []
                 )
         
         # Try to get prices from calendar with BeyondPricing
@@ -1333,7 +1333,10 @@ async def get_price_quote(property_id: str, check: AvailabilityCheck):
                         if from_date and to_date:
                             range_start = datetime.strptime(from_date, "%Y-%m-%d")
                             range_end = datetime.strptime(to_date, "%Y-%m-%d")
-                            days_in_range = (range_end - range_start).days
+                            # "to" est inclusif dans Beds24 → +1 jour
+                            # on cap au checkout car ce jour ne compte pas comme nuit
+                            effective_end = min(range_end + timedelta(days=1), to_dt)
+                            days_in_range = (effective_end - range_start).days
                             if days_in_range <= 0:
                                 days_in_range = 1
                             total_price += day_price * days_in_range

@@ -16,12 +16,11 @@ import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { format, addMonths, differenceInDays, parseISO, eachDayOfInterval } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
-import { getProperty, getPriceQuote, createBooking, submitContact, getPropertyAvailability } from '@/lib/api';
+import { getProperty, getPriceQuote, submitContact, getPropertyAvailability } from '@/lib/api';
 
 const locales: Record<string, any> = { fr, en: enUS, es, it };
 
@@ -45,12 +44,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const [numChild, setNumChild] = useState(0);
   const [priceQuote, setPriceQuote] = useState<any>(null);
   const [loadingPrice, setLoadingPrice] = useState(false);
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [blockedDates, setBlockedDates] = useState<Date[]>([]);
   const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [availabilityError, setAvailabilityError] = useState<string | null>(null);
-  const [bookingForm, setBookingForm] = useState({ firstName: '', lastName: '', email: '', phone: '', specialRequests: '' });
-  const [submitting, setSubmitting] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [submittingContact, setSubmittingContact] = useState(false);
 
@@ -106,80 +102,32 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       .finally(() => setLoadingPrice(false));
   }, [checkIn, checkOut, numAdult, numChild, property]);
 
+  const handleBookOnBeds24 = () => {
+    if (!property.beds24_id || !property.beds24_room_id || !checkIn || !checkOut || !priceQuote?.available) return;
+    const params = new URLSearchParams({
+      propid: property.beds24_id,
+      roomid: property.beds24_room_id,
+      page: 'book3',
+      checkin: format(checkIn, 'EEE d MMMM yyyy', { locale }),
+      checkin_hide: format(checkIn, 'yyyy-M-d'),
+      checkout: format(checkOut, 'EEE d MMMM yyyy', { locale }),
+      checkout_hide: format(checkOut, 'yyyy-M-d'),
+      numnight: String(priceQuote.nights),
+      numadult: String(numAdult),
+      numchild: String(numChild),
+      [`br1-${property.beds24_room_id}`]: 'Réserver',
+      g: 'st',
+      pc: '100',
+    });
+    window.open(`https://beds24.com/booking2.php?${params.toString()}`, '_blank');
+  };
+
   const isDateBlocked = (date: Date) =>
     blockedDates.some((d) => format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
 
   const hasBlockedDatesInRange = (start: Date, end: Date) =>
     eachDayOfInterval({ start, end }).some(isDateBlocked);
 
-  const handleBookOnBeds24 = async () => {
-    if (!property.beds24_id) { toast.error('Propriété non disponible à la réservation en ligne'); return; }
-    if (!bookingForm.firstName || !bookingForm.lastName || !bookingForm.email) { toast.error('Veuillez remplir tous les champs obligatoires'); return; }
-    try {
-      setSubmitting(true);
-      const result = await createBooking({
-        property_id: property.id,
-        room_id: property.beds24_room_id,
-        check_in: format(checkIn!, 'yyyy-MM-dd'),
-        check_out: format(checkOut!, 'yyyy-MM-dd'),
-        guests: numAdult + numChild,
-        num_adult: numAdult,
-        num_child: numChild,
-        guest_name: `${bookingForm.firstName} ${bookingForm.lastName}`,
-        guest_email: bookingForm.email,
-        guest_phone: bookingForm.phone || '',
-        special_requests: bookingForm.specialRequests || '',
-        total_price: priceQuote?.total_price || 0,
-        currency: priceQuote?.currency || 'EUR',
-      }) as any;
-      if (result.success && result.payment_url) {
-        toast.success('Redirection vers le paiement sécurisé...');
-        window.location.href = result.payment_url;
-      } else if (result.success) {
-        toast.success('Réservation créée ! Vous recevrez un email avec les instructions de paiement.');
-        setShowBookingModal(false);
-      } else {
-        toast.error('Erreur lors de la création de la réservation');
-      }
-    } catch (error: any) {
-      toast.error(error?.response?.data?.detail || 'Erreur lors de la réservation');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleBookingSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!priceQuote?.available) return;
-    if (property.beds24_id) { await handleBookOnBeds24(); return; }
-    setSubmitting(true);
-    try {
-      const result = await createBooking({
-        property_id: property.id,
-        check_in: format(checkIn!, 'yyyy-MM-dd'),
-        check_out: format(checkOut!, 'yyyy-MM-dd'),
-        guests: numAdult + numChild,
-        num_adult: numAdult,
-        num_child: numChild,
-        guest_name: `${bookingForm.firstName} ${bookingForm.lastName}`,
-        guest_email: bookingForm.email,
-        guest_phone: bookingForm.phone,
-        special_requests: bookingForm.specialRequests,
-        total_price: priceQuote.total_price,
-        currency: priceQuote.currency,
-      }) as any;
-      if (result.success) {
-        toast.success(t('booking.success'));
-        setShowBookingModal(false);
-        setBookingForm({ firstName: '', lastName: '', email: '', phone: '', specialRequests: '' });
-        setCheckIn(undefined); setCheckOut(undefined); setPriceQuote(null);
-      }
-    } catch {
-      toast.error(t('common.error'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -582,7 +530,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                     <Button
                       className="orso-btn-primary w-full"
                       disabled={!priceQuote?.available || loadingPrice}
-                      onClick={() => setShowBookingModal(true)}
+                      onClick={handleBookOnBeds24}
                     >
                       {loadingPrice ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                       {priceQuote?.min_stay_error ? `Minimum ${priceQuote.min_stay} nuits` : priceQuote?.available === false ? 'Non disponible' : t('property.bookNow')}
@@ -601,54 +549,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         </div>
       </section>
 
-      {/* Booking Modal */}
-      <Dialog open={showBookingModal} onOpenChange={setShowBookingModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('booking.title')}</DialogTitle>
-          </DialogHeader>
-          <div className="py-4 border-b border-gray-100">
-            <h4 className="orso-caption mb-2">{t('booking.summary')}</h4>
-            <p className="font-serif text-lg">{property.name}</p>
-            {checkIn && checkOut && (
-              <p className="text-gray-600">
-                {format(checkIn, 'd MMM yyyy', { locale })} - {format(checkOut, 'd MMM yyyy', { locale })}
-              </p>
-            )}
-            <p className="text-gray-600 text-sm">{numAdult} adulte{numAdult > 1 ? 's' : ''}{numChild > 0 ? ` · ${numChild} enfant${numChild > 1 ? 's' : ''}` : ''}</p>
-            {priceQuote && <p className="font-medium mt-2">{t('property.totalPrice')}: {priceQuote.total_price}€</p>}
-          </div>
-          <form onSubmit={handleBookingSubmit} className="space-y-4 mt-4">
-            <h4 className="orso-caption">{t('booking.yourInfo')}</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="firstName">{t('booking.firstName')}</Label>
-                <Input id="firstName" value={bookingForm.firstName} onChange={(e) => setBookingForm({ ...bookingForm, firstName: e.target.value })} required />
-              </div>
-              <div>
-                <Label htmlFor="lastName">{t('booking.lastName')}</Label>
-                <Input id="lastName" value={bookingForm.lastName} onChange={(e) => setBookingForm({ ...bookingForm, lastName: e.target.value })} required />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" value={bookingForm.email} onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })} required />
-            </div>
-            <div>
-              <Label htmlFor="phone">{t('booking.phone')}</Label>
-              <Input id="phone" type="tel" value={bookingForm.phone} onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })} />
-            </div>
-            <div>
-              <Label htmlFor="specialRequests">{t('booking.specialRequests')}</Label>
-              <Textarea id="specialRequests" value={bookingForm.specialRequests} onChange={(e) => setBookingForm({ ...bookingForm, specialRequests: e.target.value })} rows={3} />
-            </div>
-            <Button type="submit" className="orso-btn-primary w-full" disabled={submitting}>
-              {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-              {t('booking.confirm')}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
