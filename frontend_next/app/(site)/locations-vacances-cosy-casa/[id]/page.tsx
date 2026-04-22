@@ -49,6 +49,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const [availabilityError, setAvailabilityError] = useState<string | null>(null);
   const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [submittingContact, setSubmittingContact] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -101,6 +103,45 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       }))
       .finally(() => setLoadingPrice(false));
   }, [checkIn, checkOut, numAdult, numChild, property]);
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? 0 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    const maxIndex = Math.max(0, (property?.images?.length || 2) - 2);
+    setCurrentImageIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
+
+  const openLightbox = (i: number) => {
+    setLightboxIndex(i);
+    setLightboxOpen(true);
+  };
+
+  const lightboxPrev = () => {
+    const total = property?.images?.length || 0;
+    setLightboxIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+  };
+
+  const lightboxNext = () => {
+    const total = property?.images?.length || 0;
+    setLightboxIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+  };
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      else if (e.key === 'ArrowLeft') lightboxPrev();
+      else if (e.key === 'ArrowRight') lightboxNext();
+    };
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [lightboxOpen, property]);
 
   const handleBookOnBeds24 = () => {
     if (!property.beds24_id || !property.beds24_room_id || !checkIn || !checkOut || !priceQuote?.available) return;
@@ -202,42 +243,48 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         </button>
       </div>
 
-      {/* Gallery */}
-      <section className="relative h-[50vh] md:h-[70vh] bg-gray-100">
-        <img
-          src={images[currentImageIndex]}
-          alt={`${property.name} - Location de luxe en Corse du Sud`}
-          className="w-full h-full object-cover"
-        />
-        {images.length > 1 && (
+      {/* Image Gallery - Carousel 2 images côte à côte */}
+      <section className="relative h-[50vh] md:h-[65vh] overflow-hidden">
+        <div
+          className="flex h-full transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentImageIndex * 50}%)` }}
+        >
+          {images.map((src: string, i: number) => (
+            <div key={i} className="flex-shrink-0 w-1/2 h-full">
+              <img
+                src={src}
+                alt={`${property.name} - image ${i + 1}`}
+                className="w-full h-full object-cover cursor-zoom-in"
+                onClick={() => openLightbox(i)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {images.length > 2 && (
           <>
             <button
-              onClick={() => setCurrentImageIndex((p) => p === 0 ? images.length - 1 : p - 1)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white flex items-center justify-center"
+              onClick={handlePrevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white flex items-center justify-center transition-colors z-20"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
             </button>
             <button
-              onClick={() => setCurrentImageIndex((p) => p === images.length - 1 ? 0 : p + 1)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white flex items-center justify-center"
+              onClick={handleNextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white flex items-center justify-center transition-colors z-20"
               aria-label="Next image"
             >
               <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
             </button>
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-              {images.map((_: any, i: number) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentImageIndex(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${i === currentImageIndex ? 'bg-white w-6' : 'bg-white/50'}`}
-                  aria-label={`Image ${i + 1}`}
-                />
-              ))}
+
+            <div className="absolute bottom-6 right-6 z-20 bg-black/40 text-white text-xs px-3 py-1 rounded-full">
+              {currentImageIndex + 1} – {Math.min(currentImageIndex + 2, images.length)} / {images.length}
             </div>
           </>
         )}
-        <div className="absolute top-6 left-6">
+
+        <div className="absolute top-6 left-6 z-20">
           <span className="px-4 py-2 bg-white text-xs uppercase tracking-widest">
             {t(`categories.${property.category}`)}
           </span>
@@ -548,6 +595,51 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
       </section>
+
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
+            className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-10"
+            aria-label="Fermer"
+          >
+            <X className="w-6 h-6" strokeWidth={1.5} />
+          </button>
+
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
+                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-10"
+                aria-label="Image précédente"
+              >
+                <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
+                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-10"
+                aria-label="Image suivante"
+              >
+                <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
+              </button>
+            </>
+          )}
+
+          <img
+            src={images[lightboxIndex]}
+            alt={`${property.name} - image ${lightboxIndex + 1}`}
+            className="max-w-[95vw] max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/40 text-white text-xs px-3 py-1 rounded-full">
+            {lightboxIndex + 1} / {images.length}
+          </div>
+        </div>
+      )}
 
     </div>
   );
