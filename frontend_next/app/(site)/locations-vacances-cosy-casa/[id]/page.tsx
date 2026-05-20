@@ -18,9 +18,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { format, addMonths, differenceInDays, parseISO, eachDayOfInterval } from 'date-fns';
+import { format, addDays, addMonths, differenceInDays, parseISO, eachDayOfInterval } from 'date-fns';
 import { fr, enUS, es, it } from 'date-fns/locale';
 import { getProperty, getPriceQuote, submitContact, getPropertyAvailability } from '@/lib/api';
+import { PropertyImage } from '@/components/PropertyImage';
+import { LightboxImage } from '@/components/LightboxImage';
 
 const locales: Record<string, any> = { fr, en: enUS, es, it };
 
@@ -166,8 +168,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const isDateBlocked = (date: Date) =>
     blockedDates.some((d) => format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
 
-  const hasBlockedDatesInRange = (start: Date, end: Date) =>
-    eachDayOfInterval({ start, end }).some(isDateBlocked);
+  const hasBlockedDatesInRange = (start: Date, end: Date) => {
+    const lastNight = addDays(end, -1);
+    if (lastNight < start) return false;
+    return eachDayOfInterval({ start, end: lastNight }).some(isDateBlocked);
+  };
 
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -251,10 +256,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         >
           {images.map((src: string, i: number) => (
             <div key={i} className="flex-shrink-0 w-1/2 h-full">
-              <img
+              <PropertyImage
                 src={src}
                 alt={`${property.name} - image ${i + 1}`}
-                className="w-full h-full object-cover cursor-zoom-in"
+                fill
+                sizes="(max-width: 768px) 50vw, 50vw"
+                priority={i < 2}
+                className="w-full h-full cursor-zoom-in"
                 onClick={() => openLightbox(i)}
               />
             </div>
@@ -628,10 +636,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
             </>
           )}
 
-          <img
+          <LightboxImage
             src={images[lightboxIndex]}
             alt={`${property.name} - image ${lightboxIndex + 1}`}
-            className="max-w-[95vw] max-h-[90vh] object-contain"
             onClick={(e) => e.stopPropagation()}
           />
 

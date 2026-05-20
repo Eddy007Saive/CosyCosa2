@@ -1949,6 +1949,7 @@ async def sync_beds24_properties():
         rooms = b24_prop.get("roomTypes", [])
         max_guests = 4
         bedrooms = 1
+        bathrooms = 1
         min_stay = None
         max_stay = None
         security_deposit = None
@@ -1987,7 +1988,15 @@ async def sync_beds24_properties():
             bedroom_count = sum(1 for f in raw_features if isinstance(f, list) and 'BEDROOM' in f)
             if bedroom_count > 0:
                 bedrooms = bedroom_count
-        
+
+            # Count bathrooms from feature codes (BATHROOM_FULL, BATHROOM_HALF, etc.)
+            bathroom_count = sum(
+                1 for f in raw_features
+                if isinstance(f, list) and any(isinstance(c, str) and 'BATHROOM' in c for c in f)
+            )
+            if bathroom_count > 0:
+                bathrooms = bathroom_count
+
         # Convert feature codes to readable amenities
         amenities = []
         for code in feature_codes_raw:
@@ -2049,7 +2058,7 @@ async def sync_beds24_properties():
             "images": [],  # Beds24 images need separate handling
             "max_guests": max_guests,
             "bedrooms": bedrooms,
-            "bathrooms": 1,
+            "bathrooms": bathrooms,
             "amenities": amenities,
             "feature_codes": feature_codes_raw,
             "price_from": price_from,
@@ -2257,6 +2266,7 @@ async def auto_sync_beds24():
             rooms = b24_prop.get("roomTypes", [])
             max_guests = 4
             bedrooms = 1
+            bathrooms = 1
             min_stay = None
             max_stay = None
             security_deposit = None
@@ -2291,7 +2301,15 @@ async def auto_sync_beds24():
                 bedroom_count = sum(1 for f in raw_features if isinstance(f, list) and 'BEDROOM' in f)
                 if bedroom_count > 0:
                     bedrooms = bedroom_count
-            
+
+                # Count bathrooms (BATHROOM_FULL, BATHROOM_HALF, etc.)
+                bathroom_count = sum(
+                    1 for f in raw_features
+                    if isinstance(f, list) and any(isinstance(c, str) and 'BATHROOM' in c for c in f)
+                )
+                if bathroom_count > 0:
+                    bathrooms = bathroom_count
+
             # Convert feature codes to readable amenities
             amenities = []
             for code in feature_codes_raw:
@@ -2337,7 +2355,7 @@ async def auto_sync_beds24():
                 "city": b24_prop.get("city", "") or "Corse du Sud",
                 "max_guests": max_guests,
                 "bedrooms": bedrooms,
-                "bathrooms": 1,
+                "bathrooms": bathrooms,
                 "amenities": amenities,
                 "feature_codes": feature_codes_raw,
                 "price_from": price_from,

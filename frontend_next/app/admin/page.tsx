@@ -5,6 +5,7 @@ import {
   Eye, EyeOff, Edit, Trash2, Plus, Image, RefreshCw, Save, X, Check,
   Lock, LogOut, Link as LinkIcon, LayoutDashboard, ImageIcon, FileText,
   MapPin, BookOpen, Upload, Loader2, Clock, CheckCircle2, AlertCircle,
+  ChevronUp, ChevronDown,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -1180,6 +1181,36 @@ export default function AdminPage() {
               <div key={index} className="space-y-2 border border-gray-100 p-3">
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-400 w-5 shrink-0">{index + 1}.</span>
+                  <div className="flex flex-col shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={index === 0}
+                      onClick={() => {
+                        const n = [...imageUrls];
+                        [n[index - 1], n[index]] = [n[index], n[index - 1]];
+                        setImageUrls(n);
+                      }}
+                      title="Monter"
+                      className="h-5 w-6 disabled:opacity-30"
+                    >
+                      <ChevronUp className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={index === imageUrls.length - 1}
+                      onClick={() => {
+                        const n = [...imageUrls];
+                        [n[index], n[index + 1]] = [n[index + 1], n[index]];
+                        setImageUrls(n);
+                      }}
+                      title="Descendre"
+                      className="h-5 w-6 disabled:opacity-30"
+                    >
+                      <ChevronDown className="w-3 h-3" />
+                    </Button>
+                  </div>
                   <Input
                     value={url}
                     onChange={(e) => { const n = [...imageUrls]; n[index] = e.target.value; setImageUrls(n); }}
