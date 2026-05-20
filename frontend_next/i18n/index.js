@@ -106,6 +106,12 @@ const resources = {
       categories: {
         title: "Notre Sélection",
         subtitle: "Nos logements en Corse du Sud",
+        bedrooms_1_2: "1-2 Chambres",
+        bedrooms_1_2_desc: "Idéal pour un couple ou une petite famille",
+        bedrooms_3_4: "3-4 Chambres",
+        bedrooms_3_4_desc: "Parfait pour les familles et groupes d'amis",
+        bedrooms_5plus: "5+ Chambres",
+        bedrooms_5plus_desc: "Pour les grands séjours en famille ou entre amis",
         vue_mer: "Vue Mer",
         vue_mer_desc: "Des panoramas à couper le souffle sur la Méditerranée",
         plage_a_pieds: "Plage à Pieds",
@@ -350,6 +356,12 @@ const resources = {
       categories: {
         title: "Our Selection",
         subtitle: "Our properties in Southern Corsica",
+        bedrooms_1_2: "1-2 Bedrooms",
+        bedrooms_1_2_desc: "Ideal for a couple or small family",
+        bedrooms_3_4: "3-4 Bedrooms",
+        bedrooms_3_4_desc: "Perfect for families and groups of friends",
+        bedrooms_5plus: "5+ Bedrooms",
+        bedrooms_5plus_desc: "For large family or group stays",
         vue_mer: "Sea View",
         vue_mer_desc: "Breathtaking panoramas over the Mediterranean",
         plage_a_pieds: "Beach Walking Distance",
@@ -534,7 +546,7 @@ const resources = {
       },
       search: { title: "Encuentre su estancia ideal", checkIn: "Llegada", checkOut: "Salida", guests: "Huéspedes", guest: "huésped", guestsPlural: "huéspedes", search: "Buscar", selectDate: "Seleccionar" },
       properties: { title: "Nuestros Alquileres", subtitle: "Alojamientos disponibles en Córcega del Sur", filter: "Filtrar", all: "Todos", from: "Desde", perNight: "/ noche", beds: "habitaciones", baths: "baños", guests: "huéspedes máx", viewProperty: "Ver propiedad", contactUs: "Contáctenos", showcase: "Bajo petición" },
-      categories: { title: "Nuestra Selección", subtitle: "Nuestros alojamientos", vue_mer: "Vista al Mar", vue_mer_desc: "Panoramas sobre el Mediterráneo", plage_a_pieds: "Playa a Pie", plage_a_pieds_desc: "Las playas más bellas a pocos pasos", pieds_dans_eau: "Frente al Mar", pieds_dans_eau_desc: "El lujo supremo", capacity_2_4: "2-4 personas", capacity_6_8: "6-8 personas", capacity_10plus: "+10 pers" },
+      categories: { title: "Nuestra Selección", subtitle: "Nuestros alojamientos", bedrooms_1_2: "1-2 Habitaciones", bedrooms_1_2_desc: "Ideal para una pareja o familia pequeña", bedrooms_3_4: "3-4 Habitaciones", bedrooms_3_4_desc: "Perfecto para familias y grupos", bedrooms_5plus: "5+ Habitaciones", bedrooms_5plus_desc: "Para grandes estancias familiares o entre amigos", vue_mer: "Vista al Mar", vue_mer_desc: "Panoramas sobre el Mediterráneo", plage_a_pieds: "Playa a Pie", plage_a_pieds_desc: "Las playas más bellas a pocos pasos", pieds_dans_eau: "Frente al Mar", pieds_dans_eau_desc: "El lujo supremo", capacity_2_4: "2-4 personas", capacity_6_8: "6-8 personas", capacity_10plus: "+10 pers" },
       property: { description: "Descripción", amenities: "Equipamientos", location: "Ubicación", availability: "Disponibilidad", bookNow: "Reservar ahora", contactForInfo: "Contactar", priceFrom: "Desde", perNight: "/ noche", totalPrice: "Precio total", nights: "noches", night: "noche", selectDates: "Seleccione sus fechas", guests: "Número de huéspedes" },
       booking: { title: "Finalizar reserva", summary: "Resumen", yourInfo: "Su información", firstName: "Nombre", lastName: "Apellido", email: "Email", phone: "Teléfono", specialRequests: "Peticiones especiales", confirm: "Confirmar reserva", success: "¡Reserva confirmada!", successMsg: "Recibirá un email de confirmación." },
       conciergerie: {
@@ -620,7 +632,7 @@ const resources = {
       },
       search: { title: "Trova il tuo soggiorno ideale", checkIn: "Check-in", checkOut: "Check-out", guests: "Ospiti", guest: "ospite", guestsPlural: "ospiti", search: "Cerca", selectDate: "Seleziona" },
       properties: { title: "I Nostri Affitti", subtitle: "Alloggi disponibili in Corsica del Sud", filter: "Filtra", all: "Tutti", from: "Da", perNight: "/ notte", beds: "camere", baths: "bagni", guests: "ospiti max", viewProperty: "Vedi proprietà", contactUs: "Contattaci", showcase: "Su richiesta" },
-      categories: { title: "La Nostra Selezione", subtitle: "I nostri alloggi", vue_mer: "Vista Mare", vue_mer_desc: "Panorami sul Mediterraneo", plage_a_pieds: "Spiaggia a Piedi", plage_a_pieds_desc: "Le spiagge più belle a pochi passi", pieds_dans_eau: "Sul Mare", pieds_dans_eau_desc: "Il lusso supremo", capacity_2_4: "2-4 persone", capacity_6_8: "6-8 persone", capacity_10plus: "+10 pers" },
+      categories: { title: "La Nostra Selezione", subtitle: "I nostri alloggi", bedrooms_1_2: "1-2 Camere", bedrooms_1_2_desc: "Ideale per una coppia o piccola famiglia", bedrooms_3_4: "3-4 Camere", bedrooms_3_4_desc: "Perfetto per famiglie e gruppi", bedrooms_5plus: "5+ Camere", bedrooms_5plus_desc: "Per grandi soggiorni in famiglia o tra amici", vue_mer: "Vista Mare", vue_mer_desc: "Panorami sul Mediterraneo", plage_a_pieds: "Spiaggia a Piedi", plage_a_pieds_desc: "Le spiagge più belle a pochi passi", pieds_dans_eau: "Sul Mare", pieds_dans_eau_desc: "Il lusso supremo", capacity_2_4: "2-4 persone", capacity_6_8: "6-8 persone", capacity_10plus: "+10 pers" },
       property: { description: "Descrizione", amenities: "Dotazioni", location: "Posizione", availability: "Disponibilità", bookNow: "Prenota ora", contactForInfo: "Contatta", priceFrom: "Da", perNight: "/ notte", totalPrice: "Prezzo totale", nights: "notti", night: "notte", selectDates: "Seleziona le date", guests: "Numero di ospiti" },
       booking: { title: "Completa la prenotazione", summary: "Riepilogo", yourInfo: "I tuoi dati", firstName: "Nome", lastName: "Cognome", email: "Email", phone: "Telefono", specialRequests: "Richieste speciali", confirm: "Conferma", success: "Prenotazione confermata!", successMsg: "Riceverai un'email a breve." },
       conciergerie: {

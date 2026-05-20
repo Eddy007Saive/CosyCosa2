@@ -8,6 +8,7 @@ import { MapPin, Users, Bed, Bath, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProperties, getSiteImages } from '@/lib/api';
+import { PropertyImage } from '@/components/PropertyImage';
 
 const BEDROOM_FILTERS = [
   { id: 'bedrooms_1_2', label: '1 – 2 chambres', min: 1, max: 2 },
@@ -157,9 +158,8 @@ function PropertiesContent() {
 
 function PropertyCard({ property, index, language }: { property: Property; index: number; language: string }) {
   const { t } = useTranslation();
-  const mainImage = property.images?.length > 0
-    ? property.images[0]
-    : DEFAULT_IMAGES[index % DEFAULT_IMAGES.length];
+  const firstValidImage = property.images?.find(img => img && img.trim().length > 0);
+  const mainImage = firstValidImage || DEFAULT_IMAGES[index % DEFAULT_IMAGES.length];
   const description = property.short_description?.[language] || property.short_description?.fr || '';
 
   return (
@@ -169,14 +169,20 @@ function PropertyCard({ property, index, language }: { property: Property; index
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <div className="property-image relative aspect-[4/3]">
-        <img src={mainImage} alt={property.name} className="w-full h-full object-cover" />
-        <div className="absolute top-4 left-4">
+        <PropertyImage
+          src={mainImage}
+          alt={property.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="w-full h-full"
+        />
+        <div className="absolute top-4 left-4 z-10">
           <span className="px-3 py-1 bg-white/90 text-xs uppercase tracking-widest">
             {t(`categories.${property.category}`)}
           </span>
         </div>
         {property.is_showcase && (
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 z-10">
             <span className="px-3 py-1 bg-[#2e2e2e] text-white text-xs uppercase tracking-widest">
               {t('properties.showcase')}
             </span>
