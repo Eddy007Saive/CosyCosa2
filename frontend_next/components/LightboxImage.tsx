@@ -40,7 +40,7 @@ export function LightboxImage({ src, alt, onClick }: Props) {
         src={hdSrc}
         alt={alt}
         onLoad={() => setLoaded(true)}
-        className={`max-w-[95vw] max-h-[90vh] object-contain transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`max-w-[95vw] max-h-[90vh] object-contain transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
   );

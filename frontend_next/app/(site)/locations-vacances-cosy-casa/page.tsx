@@ -174,6 +174,7 @@ function PropertyCard({ property, index, language }: { property: Property; index
           alt={property.name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          priority={index < 3}
           className="w-full h-full"
         />
         <div className="absolute top-4 left-4 z-10">

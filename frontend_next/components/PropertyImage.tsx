@@ -16,16 +16,17 @@ type Props = {
   priority?: boolean;
   onClick?: () => void;
   objectFit?: 'cover' | 'contain';
+  quality?: number;
 };
 
 /**
  * Image avec effet blur-up :
- *   - Mini Cloudinary floutée affichée en background CSS dès le mount
- *   - Image HD chargée par Next/Image en avant-plan, fade-in à la fin du load
- *   - URL non-Cloudinary : pas de blur, juste le fade-in
+ *   - Mini Cloudinary floutée en background CSS dès le mount (parallèle au HD)
+ *   - Image HD chargée par Next/Image, fade-in 300ms à la fin du load
+ *   - URL non-Cloudinary : pas de blur, juste fond gris
  *
- * Pour le carrousel, mets le wrapper en `relative` et passe `fill`.
- * Pour une taille fixe, passe `width` + `height`.
+ * Pour le carrousel/listing : passer `fill` dans un container `relative`.
+ * Quality 65 par défaut = bon compromis taille/qualité pour vignettes.
  */
 export function PropertyImage({
   src,
@@ -39,6 +40,7 @@ export function PropertyImage({
   priority,
   onClick,
   objectFit = 'cover',
+  quality = 65,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
   const isCloudinary = src.includes('res.cloudinary.com');
@@ -50,7 +52,7 @@ export function PropertyImage({
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
-    : { backgroundColor: '#f0f0f0' };
+    : { backgroundColor: '#e5e5e5' };
 
   return (
     <div
@@ -66,7 +68,8 @@ export function PropertyImage({
         height={!fill ? height : undefined}
         sizes={sizes}
         preload={priority}
-        className={`transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
+        quality={quality}
+        className={`transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'} ${imgClassName}`}
         style={{ objectFit }}
         onLoad={() => setLoaded(true)}
       />
