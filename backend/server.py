@@ -196,11 +196,30 @@ async def upload_image(file: UploadFile = File(...)):
     try:
         # Upload to Cloudinary
         import io
-        result = cloudinary.uploader.upload(
-            io.BytesIO(content),
-            folder="cosycasa",
-            resource_type="auto"
-        )
+        is_image = file_ext in {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+        upload_opts = {
+            "folder": "cosycasa",
+            "resource_type": "auto",
+        }
+        if is_image:
+            # Transformation appliquée à l'original stocké : limite la taille max
+            # et compresse intelligemment → réduit le stockage et accélère les futures
+            # transformations à la livraison.
+            upload_opts["transformation"] = [
+                {"width": 2400, "height": 1600, "crop": "limit"},
+                {"quality": "auto:good"},
+                {"fetch_format": "auto"},
+            ]
+            # Pré-génère les variantes courantes en synchrone → 1ère vue instantanée
+            # côté client (les URLs avec ces tailles sont déjà en cache CDN).
+            upload_opts["eager"] = [
+                {"width": 400, "crop": "limit", "quality": "auto", "fetch_format": "auto"},
+                {"width": 800, "crop": "limit", "quality": "auto", "fetch_format": "auto"},
+                {"width": 1200, "crop": "limit", "quality": "auto", "fetch_format": "auto"},
+                {"width": 1920, "crop": "limit", "quality": "auto", "fetch_format": "auto"},
+            ]
+            upload_opts["eager_async"] = False
+        result = cloudinary.uploader.upload(io.BytesIO(content), **upload_opts)
         
         # Get the secure URL from Cloudinary
         image_url = result.get('secure_url')
