@@ -1,15 +1,12 @@
 /**
  * Custom Next.js Image loader pour Cloudinary.
  *
- * Branché via `images.loaderFile` dans next.config.ts.
+ * Comportement (ordre prioritaire) :
+ *   1. URL Cloudinary → extrait public_id et rebuild avec w_${width},q_${q},f_auto,c_limit
+ *   2. URL externe (Airbnb, Unsplash, Pexels…) → PASSTHROUGH STRICT (rien n'est ajouté)
+ *   3. Slot path (sans http) → URL Cloudinary depuis ROOT
  *
- * Comportement :
- *   - URL Cloudinary complète → extrait le public_id, rebuild avec
- *     w_${width},q_${q},f_auto,c_limit
- *   - URL non-Cloudinary (Unsplash, etc.) → passe en l'état
- *   - Slot path (sans http) → préfixé par CLOUD_NAME + transformé
- *
- * Bénéfices : srcset responsive auto + négociation AVIF/WebP/JPG + pas d'upscale.
+ * Bénéfices : srcset responsive auto + AVIF/WebP/JPG par négociation + pas d'upscale.
  */
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? 'dy9gp5pim';
@@ -21,21 +18,25 @@ type LoaderProps = {
 };
 
 export default function cloudinaryLoader({ src, width, quality }: LoaderProps): string {
-  // Cloudinary URL → extraire public_id et reconstruire
-  const cloudinaryMatch = src.match(
-    /^https?:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/(?:.*?\/)?(?:v\d+\/)?(.+?)(?:\.[a-z]+)?$/i
-  );
-  if (cloudinaryMatch) {
-    const publicId = cloudinaryMatch[1];
-    const params = [`w_${width}`, `q_${quality ?? 'auto'}`, 'f_auto', 'c_limit'];
-    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${params.join(',')}/${publicId}`;
+  const q = quality ?? 'auto';
+
+  // 1. URL Cloudinary → reconstruire
+  if (/^https?:\/\/res\.cloudinary\.com\//i.test(src)) {
+    // Capture tout ce qui suit /image/upload/, en sautant les transforms et version
+    const match = src.match(/\/image\/upload\/(?:[^/]*?\/)?(?:v\d+\/)?(.+)$/i);
+    if (match && match[1]) {
+      const publicId = match[1].replace(/\.[a-z]+$/i, '');
+      return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_${width},q_${q},f_auto,c_limit/${publicId}`;
+    }
+    return src;
   }
 
-  // URL externe (Unsplash, Pexels, etc.) → on laisse passer
-  if (/^https?:\/\//.test(src)) return src;
+  // 2. Toute autre URL externe → passthrough strict
+  if (/^https?:\/\//i.test(src)) {
+    return src;
+  }
 
-  // Slot path (rare ici, prévu pour migration future) → Cloudinary URL
-  const cleanSlot = src.replace(/^\/+/, '').replace(/\.(jpe?g|webp|png|avif)$/i, '');
-  const params = [`w_${width}`, `q_${quality ?? 'auto'}`, 'f_auto', 'c_limit'];
-  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${params.join(',')}/${cleanSlot}`;
+  // 3. Slot path (chemin relatif) → URL Cloudinary
+  const cleanSlot = src.replace(/^\/+/, '').replace(/\.(jpe?g|webp|png|avif|gif)$/i, '');
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_${width},q_${q},f_auto,c_limit/${cleanSlot}`;
 }

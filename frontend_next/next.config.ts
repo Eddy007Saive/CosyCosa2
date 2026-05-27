@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "cosycasa.fr" },
       { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "a0.muscache.com" },
     ],
   },
 };
