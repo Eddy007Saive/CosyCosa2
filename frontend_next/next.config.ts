@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cosycasa.fr" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "a0.muscache.com" },
+      { protocol: "https", hostname: "media.xmlcal.com" },
     ],
   },
 };

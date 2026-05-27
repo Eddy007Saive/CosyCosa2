@@ -17,18 +17,18 @@ type LoaderProps = {
   quality?: number;
 };
 
-export default function cloudinaryLoader({ src, width, quality }: LoaderProps): string {
+export default function cloudinaryLoader({ src: rawSrc, width, quality }: LoaderProps): string {
+  const src = (rawSrc ?? '').trim();
   const q = quality ?? 'auto';
 
-  // 1. URL Cloudinary → reconstruire
-  if (/^https?:\/\/res\.cloudinary\.com\//i.test(src)) {
-    // Capture tout ce qui suit /image/upload/, en sautant les transforms et version
-    const match = src.match(/\/image\/upload\/(?:[^/]*?\/)?(?:v\d+\/)?(.+)$/i);
-    if (match && match[1]) {
-      const publicId = match[1].replace(/\.[a-z]+$/i, '');
-      return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_${width},q_${q},f_auto,c_limit/${publicId}`;
-    }
-    return src;
+  // 1. URL Cloudinary → reconstruire (en préservant le cloud d'origine)
+  const cloudinaryMatch = src.match(
+    /^https?:\/\/res\.cloudinary\.com\/([^/]+)\/image\/upload\/(?:[^/]*?\/)?(?:v\d+\/)?(.+)$/i
+  );
+  if (cloudinaryMatch) {
+    const sourceCloud = cloudinaryMatch[1];
+    const publicId = cloudinaryMatch[2].replace(/\.[a-z]+$/i, '');
+    return `https://res.cloudinary.com/${sourceCloud}/image/upload/w_${width},q_${q},f_auto,c_limit/${publicId}`;
   }
 
   // 2. Toute autre URL externe → passthrough strict
