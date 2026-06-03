@@ -170,6 +170,55 @@ async def update_services_pdf(url: str):
     )
     return {"success": True, "message": "Services PDF URL updated"}
 
+# ============== TRENDING CARDS (HOMEPAGE) ==============
+
+DEFAULT_TRENDING_CARDS = [
+    {
+        "image": "",
+        "title": {"fr": "Conciergerie à Lecci", "en": "Concierge in Lecci", "es": "Conserjería en Lecci", "it": "Portineria a Lecci"},
+        "description": {"fr": "", "en": "", "es": "", "it": ""},
+        "link": "/conciergerie-cosy-casa-a-lecci",
+    },
+    {
+        "image": "",
+        "title": {"fr": "Conciergerie à Pinarello", "en": "Concierge in Pinarello", "es": "Conserjería en Pinarello", "it": "Portineria a Pinarello"},
+        "description": {"fr": "", "en": "", "es": "", "it": ""},
+        "link": "/conciergerie-cosy-casa-a-pinarello",
+    },
+    {
+        "image": "",
+        "title": {"fr": "Conciergerie en Corse", "en": "Concierge in Corsica", "es": "Conserjería en Córcega", "it": "Portineria in Corsica"},
+        "description": {"fr": "", "en": "", "es": "", "it": ""},
+        "link": "/conciergerie-cosy-casa-a-corse",
+    },
+]
+
+@api_router.get("/trending")
+async def get_trending_cards():
+    """Get the 3 trending cards displayed on the homepage."""
+    settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
+    cards = settings.get("trending_cards") if settings else None
+    if not cards or len(cards) != 3:
+        return {"cards": DEFAULT_TRENDING_CARDS}
+    return {"cards": cards}
+
+@api_router.put("/trending")
+async def update_trending_cards(cards: List[Dict[str, Any]]):
+    """Update the 3 trending cards (expects exactly 3 entries)."""
+    if not isinstance(cards, list) or len(cards) != 3:
+        raise HTTPException(status_code=400, detail="Exactly 3 trending cards required")
+    await db.site_settings.update_one(
+        {"id": "site_settings"},
+        {
+            "$set": {
+                "trending_cards": cards,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+        upsert=True,
+    )
+    return {"success": True, "message": "Trending cards updated"}
+
 # ============== FILE UPLOAD (CLOUDINARY) ==============
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf'}

@@ -22,6 +22,7 @@ import {
   getAdminProperties, getSyncStatus, syncBeds24,
   adminLogin, getServicesPdf, updateServicesPdf,
   getPartners, createPartner, updatePartner, deletePartner,
+  getTrendingCards, updateTrendingCards,
 } from '@/lib/api';
 import BlogTab from '@/components/admin/BlogTab';
 
@@ -162,6 +163,16 @@ export default function AdminPage() {
   const [servicesPdfUrl, setServicesPdfUrl] = useState('');
   const [savingPdf, setSavingPdf] = useState(false);
 
+  const emptyTrending = () => ({
+    image: '',
+    title: { fr: '', en: '', es: '', it: '' },
+    description: { fr: '', en: '', es: '', it: '' },
+    link: '',
+  });
+  const [trendingCards, setTrendingCards] = useState<any[]>([emptyTrending(), emptyTrending(), emptyTrending()]);
+  const [savingTrending, setSavingTrending] = useState(false);
+  const [uploadingTrendingIndex, setUploadingTrendingIndex] = useState<number | null>(null);
+
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
 
   const [showPropertyModal, setShowPropertyModal] = useState(false);
@@ -205,6 +216,7 @@ export default function AdminPage() {
       loadServicesPdf();
       loadSectors();
       loadPartners();
+      loadTrending();
       loadSyncStatus();
       const interval = setInterval(loadSyncStatus, 60000);
       return () => clearInterval(interval);
@@ -221,6 +233,34 @@ export default function AdminPage() {
     try { setPartners(await getPartners() as any[]); }
     catch { toast.error('Erreur chargement partenaires'); }
     finally { setLoadingPartners(false); }
+  };
+
+  const loadTrending = async () => {
+    try {
+      const data = await getTrendingCards() as { cards: any[] };
+      if (data?.cards?.length === 3) setTrendingCards(data.cards);
+    } catch { /* silent */ }
+  };
+
+  const saveTrending = async () => {
+    setSavingTrending(true);
+    try {
+      await updateTrendingCards(trendingCards);
+      toast.success('Tendances enregistrées');
+    } catch { toast.error('Erreur sauvegarde'); }
+    finally { setSavingTrending(false); }
+  };
+
+  const handleTrendingImageUpload = async (idx: number, file: File) => {
+    setUploadingTrendingIndex(idx);
+    try {
+      const res = await uploadImage(file) as { url: string };
+      const next = [...trendingCards];
+      next[idx] = { ...next[idx], image: res.url };
+      setTrendingCards(next);
+      toast.success('Image uploadée');
+    } catch { toast.error('Upload échoué'); }
+    finally { setUploadingTrendingIndex(null); }
   };
 
   const savePartner = async () => {
@@ -557,6 +597,7 @@ export default function AdminPage() {
             {[
               { key: 'properties', label: 'Propriétés', icon: LayoutDashboard },
               { key: 'site-images', label: 'Images du site', icon: ImageIcon },
+              { key: 'trending', label: 'Tendances', icon: ImageIcon },
               { key: 'pdf-services', label: 'PDF Services', icon: FileText },
               { key: 'sectors', label: 'Secteurs', icon: MapPin },
               { key: 'blog', label: 'Blog', icon: BookOpen },
@@ -798,6 +839,114 @@ export default function AdminPage() {
                 <li>• Vous pouvez aussi coller une URL externe si vous préférez</li>
                 <li>• Cliquez sur <strong>&quot;Enregistrer&quot;</strong> après vos modifications</li>
               </ul>
+            </div>
+          </div>
+        )}
+
+        {/* ——— Trending Cards Tab ——— */}
+        {activeTab === 'trending' && (
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-serif text-2xl text-[#2e2e2e]">Tendances (page d&apos;accueil)</h2>
+                <p className="text-gray-600 mt-1">Les 3 cartes affichées sous la section &quot;Nos tendances&quot;.</p>
+              </div>
+              <Button onClick={saveTrending} disabled={savingTrending} className="bg-[#2e2e2e] text-white hover:bg-black">
+                {savingTrending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Enregistrer
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {trendingCards.map((card, idx) => (
+                <div key={idx} className="border border-gray-200 p-5 space-y-4 bg-white">
+                  <div className="text-xs uppercase tracking-widest text-gray-400">Carte {idx + 1}</div>
+
+                  {/* Image */}
+                  <div>
+                    <Label className="text-xs text-gray-500">Image</Label>
+                    <div className="mt-2 aspect-[3/2] bg-gray-50 border border-gray-200 relative overflow-hidden">
+                      {card.image ? (
+                        <img src={card.image} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Aucune image</div>
+                      )}
+                    </div>
+                    <label className="cursor-pointer mt-2 block">
+                      <div className="h-9 border border-gray-200 hover:bg-gray-50 flex items-center justify-center text-sm gap-2">
+                        {uploadingTrendingIndex === idx
+                          ? <><Loader2 className="w-4 h-4 animate-spin" /> Upload...</>
+                          : <><Upload className="w-4 h-4" /> Uploader une image</>}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        disabled={uploadingTrendingIndex !== null}
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleTrendingImageUpload(idx, f); e.target.value = ''; }}
+                      />
+                    </label>
+                    <Input
+                      value={card.image}
+                      onChange={(e) => { const n = [...trendingCards]; n[idx] = { ...n[idx], image: e.target.value }; setTrendingCards(n); }}
+                      placeholder="URL Cloudinary"
+                      className="text-xs mt-2"
+                    />
+                  </div>
+
+                  {/* Lien */}
+                  <div>
+                    <Label className="text-xs text-gray-500">Lien (URL interne ou externe)</Label>
+                    <Input
+                      value={card.link}
+                      onChange={(e) => { const n = [...trendingCards]; n[idx] = { ...n[idx], link: e.target.value }; setTrendingCards(n); }}
+                      placeholder="/conciergerie-cosy-casa-a-lecci"
+                      className="text-sm mt-1"
+                    />
+                  </div>
+
+                  {/* Titres multilingues */}
+                  <div>
+                    <Label className="text-xs text-gray-500">Titre</Label>
+                    {(['fr', 'en', 'es', 'it'] as const).map((lang) => (
+                      <div key={lang} className="flex items-center gap-2 mt-1">
+                        <span className="text-xs uppercase text-gray-400 w-6 shrink-0">{lang}</span>
+                        <Input
+                          value={card.title?.[lang] || ''}
+                          onChange={(e) => {
+                            const n = [...trendingCards];
+                            n[idx] = { ...n[idx], title: { ...n[idx].title, [lang]: e.target.value } };
+                            setTrendingCards(n);
+                          }}
+                          placeholder={`Titre ${lang.toUpperCase()}`}
+                          className="text-sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Descriptions multilingues */}
+                  <div>
+                    <Label className="text-xs text-gray-500">Description</Label>
+                    {(['fr', 'en', 'es', 'it'] as const).map((lang) => (
+                      <div key={lang} className="flex items-start gap-2 mt-1">
+                        <span className="text-xs uppercase text-gray-400 w-6 shrink-0 pt-2">{lang}</span>
+                        <Textarea
+                          value={card.description?.[lang] || ''}
+                          onChange={(e) => {
+                            const n = [...trendingCards];
+                            n[idx] = { ...n[idx], description: { ...n[idx].description, [lang]: e.target.value } };
+                            setTrendingCards(n);
+                          }}
+                          placeholder={`Description ${lang.toUpperCase()}`}
+                          rows={2}
+                          className="text-sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

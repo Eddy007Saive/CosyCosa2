@@ -68,6 +68,12 @@ export const syncBeds24 = () =>
 export const updateSiteImages = (images: Record<string, string>) =>
   api.put("/settings/images", images).then((r) => r.data);
 
+export const getTrendingCards = () =>
+  api.get("/trending").then((r) => r.data);
+
+export const updateTrendingCards = (cards: any[]) =>
+  api.put("/trending", cards).then((r) => r.data);
+
 export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("file", file);

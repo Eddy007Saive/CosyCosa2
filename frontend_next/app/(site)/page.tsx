@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Search, CalendarCheck, Users, Wrench, Shield, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getSiteImages } from '@/lib/api';
+import { getSiteImages, getTrendingCards } from '@/lib/api';
 
 const DEFAULT_IMAGES = {
   home_hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80',
@@ -21,8 +21,10 @@ const OWNER_SERVICES = [
 ];
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language || 'fr').slice(0, 2);
   const [siteImages, setSiteImages] = useState<Record<string, string>>(DEFAULT_IMAGES);
+  const [trendingCards, setTrendingCards] = useState<any[] | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -38,6 +40,9 @@ export default function HomePage() {
       .then((data: any) => {
         if (data?.images) setSiteImages({ ...DEFAULT_IMAGES, ...data.images });
       })
+      .catch(() => {});
+    getTrendingCards()
+      .then((data: any) => { if (data?.cards) setTrendingCards(data.cards); })
       .catch(() => {});
   }, []);
 
@@ -187,34 +192,42 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Blog */}
+      {/* Blog / Tendances */}
       <section className="orso-section bg-white">
         <div className="orso-container">
           <h2 className="orso-h2 text-center mb-12">{t('blog.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {['lecci', 'pinarello', 'corse'].map((slug, index) => (
-              <Link
-                key={slug}
-                href={`/conciergerie-cosy-casa-a-${slug}`}
-                className="group orso-card opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <div className="aspect-[3/2] bg-[#f5f5f3] overflow-hidden">
-                  <img
-                    src={(siteImages as any)[`blog_${slug}`] || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=60'}
-                    alt={t(`blog.${slug}.title`)}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Cosy Casa</p>
-                  <h3 className="font-serif text-xl text-[#2e2e2e] mb-3 group-hover:underline underline-offset-4">
-                    {t(`blog.${slug}.title`)}
-                  </h3>
-                  <p className="text-sm text-gray-600 font-light leading-relaxed">{t(`blog.${slug}.excerpt`)}</p>
-                </div>
-              </Link>
-            ))}
+            {(trendingCards ?? [null, null, null]).map((card: any, index: number) => {
+              const fallbackSlugs = ['lecci', 'pinarello', 'corse'];
+              const slug = fallbackSlugs[index];
+              const title = card?.title?.[lang] || card?.title?.fr || t(`blog.${slug}.title`);
+              const desc = card?.description?.[lang] || card?.description?.fr || t(`blog.${slug}.excerpt`);
+              const link = card?.link || `/conciergerie-cosy-casa-a-${slug}`;
+              const image = card?.image || (siteImages as any)[`blog_${slug}`] || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=60';
+              return (
+                <Link
+                  key={index}
+                  href={link}
+                  className="group orso-card opacity-0 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 150}ms` }}
+                >
+                  <div className="aspect-[3/2] bg-[#f5f5f3] overflow-hidden">
+                    <img
+                      src={image}
+                      alt={title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Cosy Casa</p>
+                    <h3 className="font-serif text-xl text-[#2e2e2e] mb-3 group-hover:underline underline-offset-4">
+                      {title}
+                    </h3>
+                    <p className="text-sm text-gray-600 font-light leading-relaxed">{desc}</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
