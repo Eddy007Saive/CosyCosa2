@@ -504,16 +504,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                           const today = new Date();
                           today.setHours(0, 0, 0, 0);
                           if (date < today) return true;
-                          // Mode "selection du check-in" : pas de check-in OU range complete (checkOut > checkIn)
-                          //   → un jour bloque (nuit occupee) n'est pas selectionnable.
+                          // Mode "selection du check-in" : pas de check-in OU range complete.
+                          //   Les jours bloques (nuit occupee) ne sont pas selectionnables comme check-in.
                           const rangeComplete = !!(checkIn && checkOut && checkOut.getTime() > checkIn.getTime());
                           if (!checkIn || rangeComplete) return isDateBlocked(date);
-                          // Mode "selection du check-out" (check-in pose, range pas finie) :
-                          //   - date doit etre strictement apres check-in
-                          //   - toutes les nuits entre [checkIn, date-1] doivent etre libres
-                          //   - la date elle-meme PEUT etre bloquee (jour de depart, pas une nuit)
-                          if (date <= checkIn) return true;
-                          return hasBlockedDatesInRange(checkIn, date);
+                          // Mode "selection du check-out" : permissif — on laisse cliquer toute date
+                          //   strictement apres le check-in. Le price-quote de Beds24 confirmera
+                          //   la dispo reelle au moment de la selection (les jours "bloques" calendar
+                          //   ne le sont pas toujours dans l'offers endpoint).
+                          return date <= checkIn;
                         }}
                         locale={locale}
                         numberOfMonths={1}
