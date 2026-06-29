@@ -503,7 +503,16 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                         disabled={(date: Date) => {
                           const today = new Date();
                           today.setHours(0, 0, 0, 0);
-                          return date < today || isDateBlocked(date);
+                          if (date < today) return true;
+                          // Si on est en train de choisir le check-in (rien encore, ou range complete) :
+                          //   un jour bloque (nuit occupee) n'est pas selectionnable.
+                          if (!checkIn || checkOut) return isDateBlocked(date);
+                          // Si on choisit le check-out :
+                          //   - date doit etre apres check-in
+                          //   - toutes les nuits entre [checkIn, date-1] doivent etre libres
+                          //   - la date elle-meme PEUT etre bloquee (jour de depart = pas de nuit occupee)
+                          if (date <= checkIn) return true;
+                          return hasBlockedDatesInRange(checkIn, date);
                         }}
                         locale={locale}
                         numberOfMonths={1}
