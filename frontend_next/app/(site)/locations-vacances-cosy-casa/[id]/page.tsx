@@ -504,13 +504,14 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                           const today = new Date();
                           today.setHours(0, 0, 0, 0);
                           if (date < today) return true;
-                          // Si on est en train de choisir le check-in (rien encore, ou range complete) :
-                          //   un jour bloque (nuit occupee) n'est pas selectionnable.
-                          if (!checkIn || checkOut) return isDateBlocked(date);
-                          // Si on choisit le check-out :
-                          //   - date doit etre apres check-in
+                          // Mode "selection du check-in" : pas de check-in OU range complete (checkOut > checkIn)
+                          //   → un jour bloque (nuit occupee) n'est pas selectionnable.
+                          const rangeComplete = !!(checkIn && checkOut && checkOut.getTime() > checkIn.getTime());
+                          if (!checkIn || rangeComplete) return isDateBlocked(date);
+                          // Mode "selection du check-out" (check-in pose, range pas finie) :
+                          //   - date doit etre strictement apres check-in
                           //   - toutes les nuits entre [checkIn, date-1] doivent etre libres
-                          //   - la date elle-meme PEUT etre bloquee (jour de depart = pas de nuit occupee)
+                          //   - la date elle-meme PEUT etre bloquee (jour de depart, pas une nuit)
                           if (date <= checkIn) return true;
                           return hasBlockedDatesInRange(checkIn, date);
                         }}
