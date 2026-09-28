@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import I18nProvider from './_providers/I18nProvider';
 import LenisProvider from './_providers/LenisProvider';
+import { SITE_URL } from '@/lib/seo';
 
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
@@ -20,7 +21,13 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Cosy Casa - Conciergerie en Corse',
+  // Fixes og:image resolving to localhost:3000 in prod: relative URLs in
+  // `openGraph.images` are resolved against this base.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Cosy Casa - Conciergerie en Corse',
+    template: '%s | Cosy Casa',
+  },
   description: 'Conciergerie de luxe et gestion de locations saisonnières en Corse du Sud - Porto-Vecchio, Lecci, Pinarello.',
   icons: {
     icon: '/favicon.ico',
@@ -32,6 +39,8 @@ export const metadata: Metadata = {
     images: [{ url: '/og-image.png' }],
     locale: 'fr_FR',
     type: 'website',
+    siteName: 'Cosy Casa',
+    url: SITE_URL,
   },
 };
 
