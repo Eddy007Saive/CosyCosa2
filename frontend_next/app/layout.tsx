@@ -42,6 +42,9 @@ export const metadata: Metadata = {
     siteName: 'Cosy Casa',
     url: SITE_URL,
   },
+  verification: {
+    google: 'Dxz59gE6DqbFBSn4L71yKICJ0Am6pcwe6W9m_ifLXDQ',
+  },
 };
 
 export default function RootLayout({
