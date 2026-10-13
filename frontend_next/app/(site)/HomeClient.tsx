@@ -189,7 +189,7 @@ export default function HomePage() {
                   <button
                     key={index}
                     onClick={() => setActiveTestimonial(index)}
-                    className="p-2 -m-2 flex items-center justify-center"
+                    className="p-3 flex items-center justify-center"
                     aria-label={`Testimonial ${index + 1}`}
                   >
                     <span

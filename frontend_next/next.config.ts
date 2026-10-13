@@ -1,10 +1,25 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
   experimental: {
     // Inline le CSS global dans le HTML : supprime la requete CSS bloquante
     // (~560 ms sur la chaine critique d'apres Lighthouse).
     inlineCss: true,
+  },
+  webpack: (config, { webpack }) => {
+    // Audit Lighthouse "Ancien JavaScript" : Next.js embarque d'office
+    // polyfill-module (Array.prototype.at/flat/flatMap, Object.fromEntries/hasOwn,
+    // String trimStart/trimEnd, Promise.finally, Symbol.description), tous
+    // Baseline depuis Safari 15.4 (2022). On le remplace par un module vide.
+    // A retirer si un support iOS < 15.4 devient necessaire.
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /[\/]polyfills[\/]polyfill-module$/,
+        path.join(process.cwd(), "lib", "empty-module.js")
+      )
+    );
+    return config;
   },
   images: {
     // Custom loader Cloudinary : voir lib/cloudinary-loader.ts

@@ -125,10 +125,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-white/50 text-xs uppercase tracking-widest">
+            <p className="text-white/60 text-xs uppercase tracking-widest">
               {currentYear} Cosy Casa. {t('footer.rights')}
             </p>
-            <Link href="/admin" className="text-white/30 hover:text-white/50 text-xs uppercase tracking-widest transition-colors">
+            <Link href="/admin" className="text-white/60 hover:text-white text-xs uppercase tracking-widest transition-colors">
               Admin
             </Link>
           </div>
