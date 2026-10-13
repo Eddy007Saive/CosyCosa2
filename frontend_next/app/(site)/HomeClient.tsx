@@ -69,12 +69,12 @@ export default function HomePage() {
           <p className="text-xs uppercase tracking-[0.3em] text-white/70 mb-6">{t('hero.tagline')}</p>
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">{t('hero.title')}</h1>
           <p className="text-lg md:text-xl font-light text-white/90 mb-10 tracking-wide">{t('hero.subtitle')}</p>
-          <Link href="/contact-conciergerie-cosy-casa">
-            <Button className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-5 rounded-full uppercase tracking-widest text-xs font-medium">
+          <Button asChild className="bg-white text-[#2e2e2e] hover:bg-white/90 px-10 py-5 rounded-full uppercase tracking-widest text-xs font-medium">
+            <Link href="/contact-conciergerie-cosy-casa">
               {t('hero.cta')}
               <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </section>
 
@@ -112,12 +112,12 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center">
-              <Link href="/conciergerie">
-                <Button className="orso-btn-primary">
+              <Button asChild className="orso-btn-primary">
+                <Link href="/conciergerie">
                   {t('owner.cta')}
                   <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -142,12 +142,12 @@ export default function HomePage() {
               <p className="text-lg font-light text-gray-700 mb-4">{t('traveler.desc')}</p>
               <p className="text-lg font-light text-gray-700 mb-4">{t('traveler.desc2')}</p>
               <p className="text-lg font-light text-gray-700 mb-8">{t('traveler.desc3')}</p>
-              <Link href="/locations-vacances-cosy-casa">
-                <Button className="orso-btn-primary">
+              <Button asChild className="orso-btn-primary">
+                <Link href="/locations-vacances-cosy-casa">
                   {t('traveler.cta')}
                   <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -189,9 +189,13 @@ export default function HomePage() {
                   <button
                     key={index}
                     onClick={() => setActiveTestimonial(index)}
-                    className={`h-2 rounded-full transition-all ${index === activeTestimonial ? 'bg-white w-6' : 'bg-white/30 w-2'}`}
+                    className="p-2 -m-2 flex items-center justify-center"
                     aria-label={`Testimonial ${index + 1}`}
-                  />
+                  >
+                    <span
+                      className={`block h-2 rounded-full transition-all ${index === activeTestimonial ? 'bg-white w-6' : 'bg-white/30 w-2'}`}
+                    />
+                  </button>
                 ))}
               </div>
             </div>
@@ -228,7 +232,7 @@ export default function HomePage() {
                     />
                   </div>
                   <div className="p-6">
-                    <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Cosy Casa</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-600 mb-2">Cosy Casa</p>
                     <h3 className="font-serif text-xl text-[#2e2e2e] mb-3 group-hover:underline underline-offset-4">
                       {title}
                     </h3>
@@ -246,12 +250,12 @@ export default function HomePage() {
         <div className="orso-container text-center">
           <div className="w-12 h-px bg-[#2e2e2e] mx-auto mb-8" />
           <h2 className="font-serif text-3xl md:text-4xl text-[#2e2e2e] mb-6">{t('hero.cta')}</h2>
-          <Link href="/contact-conciergerie-cosy-casa">
-            <Button className="orso-btn-primary">
+          <Button asChild className="orso-btn-primary">
+            <Link href="/contact-conciergerie-cosy-casa">
               {t('nav.contact')}
               <ArrowRight className="ml-2 h-4 w-4" strokeWidth={1.5} />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </section>
     </div>

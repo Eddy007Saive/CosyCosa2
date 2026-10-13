@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Menu, X, ChevronDown, Phone, Mail } from 'lucide-react';
@@ -113,7 +114,7 @@ export default function Navbar() {
               </div>
 
               <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-                <img src="/cosycasa-logo.png" alt="Cosy Casa Conciergerie" className="h-14 md:h-16 w-auto brightness-0 invert" />
+                <Image src="/cosycasa-logo.png" alt="Cosy Casa Conciergerie" width={497} height={502} preload unoptimized className="h-14 md:h-16 w-auto brightness-0 invert" />
               </Link>
 
               <div className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest text-white">
@@ -133,7 +134,7 @@ export default function Navbar() {
               <div className="md:hidden ml-auto">
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Ouvrir le menu">
                       <Menu className="h-6 w-6" strokeWidth={1.5} />
                     </Button>
                   </SheetTrigger>
@@ -163,7 +164,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center justify-center h-12">
             {isScrolled && (
               <Link href="/" className="absolute left-6 lg:left-12">
-                <img src="/cosycasa-logo.png" alt="Cosy Casa" className="h-8 w-auto brightness-0 invert" />
+                <Image src="/cosycasa-logo.png" alt="Cosy Casa" width={497} height={502} unoptimized className="h-8 w-auto brightness-0 invert" />
               </Link>
             )}
             {navItems.map((item, index) => {
@@ -210,10 +211,10 @@ export default function Navbar() {
           </div>
 
           <div className={`md:hidden flex items-center justify-between h-12 ${isScrolled ? '' : 'hidden'}`}>
-            <Link href="/"><img src="/cosycasa-logo.png" alt="Cosy Casa" className="h-7 w-auto brightness-0 invert" /></Link>
+            <Link href="/"><Image src="/cosycasa-logo.png" alt="Cosy Casa" width={497} height={502} unoptimized className="h-7 w-auto brightness-0 invert" /></Link>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 h-8 w-8">
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 h-8 w-8" aria-label="Ouvrir le menu">
                   <Menu className="h-5 w-5" strokeWidth={1.5} />
                 </Button>
               </SheetTrigger>
@@ -236,9 +237,9 @@ function MobileMenu({ navItems, mobileDropdown, setMobileDropdown, isActive, i18
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between py-4 border-b border-white/10">
-        <img src="/cosycasa-logo.png" alt="Cosy Casa" className="h-10 w-auto brightness-0 invert" />
+        <Image src="/cosycasa-logo.png" alt="Cosy Casa" width={497} height={502} unoptimized className="h-10 w-auto brightness-0 invert" />
         <SheetClose asChild>
-          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" aria-label="Fermer le menu">
             <X className="h-5 w-5" strokeWidth={1.5} />
           </Button>
         </SheetClose>
