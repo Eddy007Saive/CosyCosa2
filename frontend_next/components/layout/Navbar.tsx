@@ -114,7 +114,7 @@ export default function Navbar() {
               </div>
 
               <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-                <Image src="/cosycasa-logo.png" alt="Cosy Casa Conciergerie" width={497} height={502} preload unoptimized className="h-14 md:h-16 w-auto brightness-0 invert" />
+                <Image src="/cosycasa-logo.png" alt="Cosy Casa Conciergerie" width={497} height={502} preload fetchPriority="high" unoptimized className="h-14 md:h-16 w-auto brightness-0 invert" />
               </Link>
 
               <div className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest text-white">
