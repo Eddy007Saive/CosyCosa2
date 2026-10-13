@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { getSiteImages, getTrendingCards } from '@/lib/api';
 
 const DEFAULT_IMAGES = {
-  home_hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80',
-  home_traveler: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+  home_hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80&auto=format',
+  home_traveler: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80&auto=format',
 };
 
 const OWNER_SERVICES = [
