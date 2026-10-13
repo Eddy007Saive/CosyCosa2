@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Inline le CSS global dans le HTML : supprime la requete CSS bloquante
+    // (~560 ms sur la chaine critique d'apres Lighthouse).
+    inlineCss: true,
+  },
   images: {
     // Custom loader Cloudinary : voir lib/cloudinary-loader.ts
     // → URL Cloudinary rebuild avec srcset responsive + AVIF/WebP auto

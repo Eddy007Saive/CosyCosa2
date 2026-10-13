@@ -59,10 +59,10 @@ export default function HomePage() {
           autoPlay
           loop
           playsInline
-          poster="/hero.gif"
+          poster="/hero-poster.webp"
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="https://res.cloudinary.com/dy9gp5pim/video/upload/v1775121112/Online_Converter_-_Convert_Image_Video_Audio_Document_Files_2_mbzw2c.mp4" type="video/mp4" />
+          <source src="/hero-720.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto opacity-0 animate-fade-in" style={{ animationDelay: '200ms' }}>

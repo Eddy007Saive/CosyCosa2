@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { preconnect } from 'react-dom';
 import { Cormorant_Garamond, Manrope } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
@@ -52,6 +53,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Hints de preconnexion vers les CDN d'images (audit Lighthouse "arborescence du reseau").
+  preconnect('https://images.unsplash.com');
+  preconnect('https://res.cloudinary.com');
+
   return (
     <html lang="fr" className={`${cormorant.variable} ${manrope.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col">

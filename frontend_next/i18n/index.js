@@ -1,6 +1,5 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 const resources = {
   fr: {
@@ -657,22 +656,25 @@ const resources = {
   }
 };
 
+// Initialisation SYNCHRONE en francais (initImmediate: false) pour que le site
+// soit rendu cote serveur : avant, le provider attendait l'evenement
+// 'initialized' (asynchrone) et renvoyait null, donc tout le HTML etait vide
+// jusqu'a l'hydratation (LCP/FCP catastrophiques, voir audit Lighthouse).
+// La detection de langue (querystring/localStorage/navigateur) est faite
+// apres montage dans app/_providers/I18nProvider.tsx, cote client uniquement,
+// pour eviter tout decalage d'hydratation serveur/client.
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
+    lng: 'fr',
     fallbackLng: 'fr',
+    initImmediate: false,
+    react: { useSuspense: false },
     debug: false,
     interpolation: {
       escapeValue: false
     },
-    detection: {
-      order: ['querystring', 'localStorage', 'navigator'],
-      lookupQuerystring: 'lang',
-      lookupLocalStorage: 'cosycasa_language',
-      caches: ['localStorage']
-    }
   });
 
 export default i18n;
