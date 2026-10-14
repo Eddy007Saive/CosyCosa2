@@ -5,9 +5,9 @@ import { getLocalBusinessJsonLd } from '@/lib/seo';
 import HomeClient from './HomeClient';
 
 export const metadata: Metadata = {
-  title: 'Conciergerie de charme à Porto-Vecchio, Corse du Sud',
+  title: 'Conciergerie à Porto-Vecchio, Corse du Sud',
   description:
-    "Cosy Casa, conciergerie haut de gamme et 100% locale à Porto-Vecchio, Lecci, Pinarello : gestion sur mesure pour propriétaires, séjours d'exception pour voyageurs.",
+    "Cosy Casa, votre conciergerie à Porto-Vecchio : haut de gamme et 100% locale, à Lecci et Pinarello. Gestion sur mesure pour propriétaires, séjours d'exception pour voyageurs.",
 };
 
 export default function Page() {

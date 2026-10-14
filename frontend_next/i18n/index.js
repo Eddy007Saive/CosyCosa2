@@ -19,15 +19,15 @@ const resources = {
         book: "Réserver"
       },
       hero: {
-        tagline: "CORSE DU SUD",
-        title: "Votre Conciergerie En Corse du Sud",
+        tagline: "PORTO-VECCHIO · CORSE DU SUD",
+        title: "Votre Conciergerie à Porto-Vecchio, en Corse du Sud",
         subtitle: "Valoriser. Accueillir. Enchanter.",
         cta: "Prendre rendez-vous"
       },
       welcome: {
         tagline: "BIENVENUE",
-        title: "Expert en Location Courte Durée",
-        p1: "Cosy Casa vous propose ses services pour déléguer en toute sérénité et valoriser pleinement votre bien.",
+        title: "Expert en Location Courte Durée à Porto-Vecchio",
+        p1: "Cosy Casa vous propose ses services à Porto-Vecchio et dans tout le golfe pour déléguer en toute sérénité et valoriser pleinement votre bien.",
         p2: "Fini les tracas opérationnels, place à la tranquillité d’esprit. Votre logement est entre de bonnes mains, pour offrir à vos voyageurs une expérience fluide et sans souci"
       },
       owner: {
